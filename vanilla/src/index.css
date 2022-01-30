@@ -1,3 +1,23 @@
+.header__wrapper {
+  display: flex;
+  justify-content: right;
+}
+
+.user-name {
+  color: #fff;
+  font-size: 22px;
+  margin-right: 20px;
+}
+
+button.loginBtn,
+button.logoutBtn {
+  z-index: 0;
+}
+
+button.logoutBtn {
+  margin-left: 20px;
+}
+
 .backgroundDrop {
   display: none;
   position: fixed;
