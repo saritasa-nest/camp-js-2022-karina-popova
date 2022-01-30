@@ -1,4 +1,5 @@
-import {  updateProfile, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
+import { updateProfile, getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
+import './initializeApp';
 import 'firebaseui';
 
 const auth = getAuth();
@@ -7,8 +8,13 @@ const containerForms: any = document.querySelector('.forms');
 const signInForm: any = document.querySelector('.form-auth__sign-in');
 const signUpForm: any = document.querySelector('.form-auth__sign-up');
 const backDrop: any = document.querySelector('.backgroundDrop');
+const userName: any = document.querySelector('.user-name');
+const loginBtn: any = document.querySelector('.loginBtn');
+const logoutBtn: any = document.querySelector('.logoutBtn');
 
 containerForms.addEventListener('click', clickHandler);
+loginBtn.addEventListener('click', clickHandler);
+logoutBtn.addEventListener('click', clickHandler);
 backDrop.addEventListener('click', clickHandler);
 signInForm.addEventListener('submit', (e: any) => signIn(e));
 signUpForm.addEventListener('submit', (e: any) => signUp(e));
@@ -37,8 +43,14 @@ function clickHandler(event: any): void {
 
 onAuthStateChanged(auth, user => {
   if (user) {
+    redactorUserNameHTML(user.displayName);
+    loginBtn.style.display = 'none';
+    logoutBtn.style.display = 'block';
   } else {
+    redactorUserNameHTML('');
     openCloseForm('open-sign-in');
+    loginBtn.style.display = 'block';
+    logoutBtn.style.display = 'none';
   }
 });
 
@@ -53,6 +65,7 @@ function signIn(e: any): void {
   const password = e.target.password.value;
   signInWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
+      redactorUserNameHTML(userCredential.user.displayName);
       openCloseForm('close');
     })
     .catch(error => {
@@ -78,8 +91,17 @@ function signUp(e: any): void {
       updateProfile(user, {
         displayName: name,
       });
+      redactorUserNameHTML(name);
       openCloseForm('close');
     });
+}
+
+/**
+ * Redactor user name HTML.
+ * @param {} loginName Data entered by the user in input.
+ */
+function redactorUserNameHTML(loginName: any): void {
+  userName.textContent = loginName;
 }
 
 /**
