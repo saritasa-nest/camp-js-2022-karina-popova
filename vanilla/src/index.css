@@ -3,7 +3,7 @@
   justify-content: right;
 }
 
-.user-name {
+.userName {
   color: #fff;
   font-size: 22px;
   margin-right: 20px;
@@ -41,12 +41,12 @@ button.logoutBtn {
   transform: translate(-50%, -50%);
 }
 
-.form-auth.open {
+.formAuth.open {
   display: block;
   visibility: visible;
 }
 
-.form-auth {
+.formAuth {
   display: none;
   visibility: hidden;
   min-height: 370px;
@@ -67,7 +67,7 @@ form .row {
   margin-top: 20px;
 }
 
-.btn.btn-cancel,
+.btn.btnCancel,
 .btn.loginBtn,
 .btn.logoutBtn {
   background-color: #fff;
@@ -75,7 +75,7 @@ form .row {
   border: 1px solid #26a69a;
 }
 
-.btn.btn-cancel:hover,
+.btn.btnCancel:hover,
 .btn.loginBtn:hover,
 .btn.logoutBtn:hover {
   color: #fff;

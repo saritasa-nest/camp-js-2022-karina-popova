@@ -5,10 +5,10 @@ import 'firebaseui';
 const auth = getAuth();
 
 const containerForms: any = document.querySelector('.forms');
-const signInForm: any = document.querySelector('.form-auth__sign-in');
-const signUpForm: any = document.querySelector('.form-auth__sign-up');
+const signInForm: any = document.querySelector('.formAuth__signIn');
+const signUpForm: any = document.querySelector('.formAuth__signUp');
 const backDrop: any = document.querySelector('.backgroundDrop');
-const userName: any = document.querySelector('.user-name');
+const userName: any = document.querySelector('.userName');
 const loginBtn: any = document.querySelector('.loginBtn');
 const logoutBtn: any = document.querySelector('.logoutBtn');
 
