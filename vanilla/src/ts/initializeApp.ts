@@ -13,4 +13,5 @@ const firebaseApp = initializeApp({
 });
 
 const db = getFirestore(firebaseApp);
-export default collection(db, 'films');
+const collectionFilmsReference = collection(db, 'films');
+export { collectionFilmsReference };
