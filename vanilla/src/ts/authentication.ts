@@ -4,68 +4,65 @@ import 'firebaseui';
 
 const auth = getAuth();
 
-const containerForms: any = document.querySelector('.forms');
-const signInForm: any = document.querySelector('.formAuth__signIn');
-const signUpForm: any = document.querySelector('.formAuth__signUp');
-const backDrop: any = document.querySelector('.backgroundDrop');
-const userName: any = document.querySelector('.userName');
-const loginBtn: any = document.querySelector('.loginBtn');
-const logoutBtn: any = document.querySelector('.logoutBtn');
+const containerForms = document.querySelector<HTMLDivElement>('.forms');
+const signInForm = document.querySelector<HTMLFormElement>('.formAuth__signIn');
+const signUpForm = document.querySelector<HTMLFormElement>('.formAuth__signUp');
+const backDrop = document.querySelector<HTMLDivElement>('.backgroundDrop');
+const userName = document.querySelector<HTMLHtmlElement>('.userName');
+const loginBtn = document.querySelector<HTMLButtonElement>('.loginBtn');
+const logoutBtn = document.querySelector<HTMLButtonElement>('.logoutBtn');
 
-containerForms.addEventListener('click', clickHandler);
-loginBtn.addEventListener('click', clickHandler);
-logoutBtn.addEventListener('click', clickHandler);
-backDrop.addEventListener('click', clickHandler);
-signInForm.addEventListener('submit', (e: any) => signIn(e));
-signUpForm.addEventListener('submit', (e: any) => signUp(e));
-signInForm.addEventListener('reset', () => openCloseForm('close'));
-signUpForm.addEventListener('reset', () => openCloseForm('close'));
+containerForms?.addEventListener('click', clickHandler);
+loginBtn?.addEventListener('click', clickHandler);
+logoutBtn?.addEventListener('click', clickHandler);
+backDrop?.addEventListener('click', clickHandler);
+signInForm?.addEventListener('submit', (e: Event) => signIn(e));
+signUpForm?.addEventListener('submit', (e: Event) => signUp(e));
+signInForm?.addEventListener('reset', () => openCloseForm('close'));
+signUpForm?.addEventListener('reset', () => openCloseForm('close'));
 
 /**
  * Сlick handler.
- * @param {} event Event - 'click'.
+ * @param event Event - 'click'.
  */
-function clickHandler(event: any): void {
-  const { type } = event.target.dataset;
-  if (type === 'close') {
-    openCloseForm(type);
-  }
-  if (type === 'open-sign-up') {
-    openCloseForm(type);
-  }
-  if (type === 'open-sign-in') {
-    openCloseForm(type);
-  }
+function clickHandler(event: Event): void {
+  const { type } = (event.target as HTMLButtonElement).dataset;
   if (type === 'sign-out') {
     signOut(auth);
+  } else {
+    openCloseForm(type);
   }
 }
 
 onAuthStateChanged(auth, user => {
   if (user) {
-    redactorUserNameHTML(user.displayName);
-    loginBtn.style.display = 'none';
-    logoutBtn.style.display = 'block';
+    updateDisplayUserName(user.displayName);
+    if (loginBtn && logoutBtn) {
+      loginBtn.style.display = 'none';
+      logoutBtn.style.display = 'block';
+    }
   } else {
-    redactorUserNameHTML('');
+    updateDisplayUserName('');
     openCloseForm('open-sign-in');
-    loginBtn.style.display = 'block';
-    logoutBtn.style.display = 'none';
+    if (loginBtn && logoutBtn) {
+      loginBtn.style.display = 'block';
+      logoutBtn.style.display = 'none';
+    }
   }
 });
 
 /**
  * Sign In.
  * Sign in a user, login change in HTML.
- * @param {} e Event - submit form "sign in".
+ * @param e Event - submit form "sign in".
  */
-function signIn(e: any): void {
+function signIn(e: Event): void {
   e.preventDefault();
-  const email = e.target.email.value;
-  const password = e.target.password.value;
+  const email = (e.target as HTMLFormElement).email.value;
+  const password = (e.target as HTMLFormElement).password.value;
   signInWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
-      redactorUserNameHTML(userCredential.user.displayName);
+      updateDisplayUserName(userCredential.user.displayName);
       openCloseForm('close');
     })
     .catch(error => {
@@ -78,51 +75,56 @@ function signIn(e: any): void {
 /**
  * Sign Up.
  * Sign up a user, add displayName in Firebase, login change in HTML.
- * @param {} e Event - submit form "sign up".
+ * @param e Event - submit form "sign up".
  */
-function signUp(e: any): void {
+function signUp(e: Event): void {
   e.preventDefault();
-  const email = e.target.email.value;
-  const password = e.target.password.value;
-  const name = e.target.userName.value;
+  const email = (e.target as HTMLFormElement).email.value;
+  const password = (e.target as HTMLFormElement).password.value;
+  const name = (e.target as HTMLFormElement).userName.value;
   createUserWithEmailAndPassword(auth, email, password)
     .then(userCredential => {
       const { user } = userCredential;
       updateProfile(user, {
         displayName: name,
       });
-      redactorUserNameHTML(name);
+      updateDisplayUserName(name);
       openCloseForm('close');
     });
 }
 
 /**
  * Redactor user name HTML.
- * @param {} loginName Data entered by the user in input.
+ * @param loginName Data entered by the user in input.
  */
-function redactorUserNameHTML(loginName: any): void {
-  userName.textContent = loginName;
+function updateDisplayUserName(loginName: string | null): void {
+  (userName as HTMLHtmlElement).textContent = loginName;
+
 }
 
 /**
  * Open or close form.
  * Open or close form on click.
- * @param {} type Type of event ('open-sign-in','open-sign-up','close').
+ * @param type Type of event ('open-sign-in','open-sign-up','close').
  */
-function openCloseForm(type: any): void {
-  if (type === 'open-sign-in') {
-    signUpForm.classList.remove('open');
-    signInForm.classList.add('open');
-    backDrop.classList.add('open');
-  }
-  if (type === 'open-sign-up') {
-    signUpForm.classList.add('open');
-    signInForm.classList.remove('open');
-    backDrop.classList.add('open');
-  }
-  if (type === 'close') {
-    signUpForm.classList.remove('open');
-    signInForm.classList.remove('open');
-    backDrop.classList.remove('open');
+function openCloseForm(type: string | undefined): void {
+  switch (type) {
+    case 'open-sign-in':
+      signUpForm?.classList.remove('open');
+      signInForm?.classList.add('open');
+      backDrop?.classList.add('open');
+      break;
+    case 'open-sign-up':
+      signUpForm?.classList.add('open');
+      signInForm?.classList.remove('open');
+      backDrop?.classList.add('open');
+      break;
+    case 'close':
+      signUpForm?.classList.remove('open');
+      signInForm?.classList.remove('open');
+      backDrop?.classList.remove('open');
+      break;
+    default:
+      break;
   }
 }
