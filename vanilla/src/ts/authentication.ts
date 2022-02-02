@@ -11,6 +11,8 @@ const backDrop = document.querySelector<HTMLDivElement>('.backgroundDrop');
 const userName = document.querySelector<HTMLHtmlElement>('.userName');
 const loginBtn = document.querySelector<HTMLButtonElement>('.loginBtn');
 const logoutBtn = document.querySelector<HTMLButtonElement>('.logoutBtn');
+const errorSignInForm = signInForm?.querySelector<HTMLHtmlElement>('.error');
+const errorSignUpForm = signUpForm?.querySelector<HTMLHtmlElement>('.error');
 
 containerForms?.addEventListener('click', clickHandler);
 loginBtn?.addEventListener('click', clickHandler);
@@ -64,11 +66,11 @@ function signIn(e: Event): void {
     .then(userCredential => {
       updateDisplayUserName(userCredential.user.displayName);
       openCloseForm('close');
+      setError(errorSignInForm, '');
     })
     .catch(error => {
       const errorMessage = error.message;
-      // eslint-disable-next-line no-alert
-      alert(errorMessage);
+      setError(errorSignInForm, errorMessage);
     });
 }
 
@@ -90,6 +92,11 @@ function signUp(e: Event): void {
       });
       updateDisplayUserName(name);
       openCloseForm('close');
+      setError(errorSignUpForm, '');
+    })
+    .catch(error => {
+      const errorMessage = error.message;
+      setError(errorSignUpForm, errorMessage);
     });
 }
 
@@ -100,6 +107,17 @@ function signUp(e: Event): void {
 function updateDisplayUserName(loginName: string | null): void {
   (userName as HTMLHtmlElement).textContent = loginName;
 
+}
+
+/**
+ * Redactor error message HTML.
+ * @param element Element error.
+ * @param errorMessage Error message.
+ */
+function setError(element: HTMLHtmlElement | null | undefined, errorMessage: string | null): void {
+  if (element) {
+    (element as HTMLHtmlElement).textContent = errorMessage;
+  }
 }
 
 /**
@@ -123,6 +141,10 @@ function openCloseForm(type: string | undefined): void {
       signUpForm?.classList.remove('open');
       signInForm?.classList.remove('open');
       backDrop?.classList.remove('open');
+      signUpForm?.reset();
+      signInForm?.reset();
+      setError(errorSignUpForm, '');
+      setError(errorSignInForm, '');
       break;
     default:
       break;
