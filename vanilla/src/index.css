@@ -23,6 +23,8 @@
 /* Form styles */
 
 .forms {
+  /* Override library styles */
+  z-index: 2;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -76,6 +78,11 @@ form .row {
   display: block;
 }
 
+button.btn-flat{
+  display: flex;
+  align-items: center;
+}
+
 /* Buttons styles */
 
 button.loginBtn,
@@ -104,4 +111,13 @@ button.logoutBtn {
 .btn.loginBtn:hover,
 .btn.logoutBtn:hover {
   color: var(--main-color);
+}
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+.pagination .material-icons {
+  font-size: 30px;
 }
