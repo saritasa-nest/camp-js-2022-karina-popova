@@ -17,7 +17,7 @@ const container = document.querySelector<Element>('tbody');
  * @param {Settings} settings Films container and collection reference.
  * @param PageArrow
  */
-export async function renderFilms(pageArrow?: PageArrow): Promise<void> {
+export async function renderFilms(pageArrow: PageArrow = PageArrow.Next): Promise<void> {
   const collectionLimitFilmsReference = getQueryLimit(pageArrow);
   const docsFilms = await getDocsFilms(collectionLimitFilmsReference);
   const films = await getFilms(collectionLimitFilmsReference);

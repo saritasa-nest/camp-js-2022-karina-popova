@@ -1,8 +1,10 @@
 import { PageArrow } from '../enum/enum';
 import {
   DocumentData,
-  endBefore,
+  endAt,
   limit,
+  limitToLast,
+  orderBy,
   Query,
   query,
   startAt,
@@ -10,7 +12,7 @@ import {
 import { collectionFilmsReference } from '../ts/initializeApp';
 import { lastDocFilm, pageLimit } from '../films/renderFilms';
 
-export function getQueryLimit(pageArrow?: PageArrow): Query<DocumentData> {
+export function getQueryLimit(pageArrow: PageArrow): Query<DocumentData> {
   if (pageArrow == PageArrow.Next) {
     return lastDocFilm
       ? query(
@@ -21,11 +23,11 @@ export function getQueryLimit(pageArrow?: PageArrow): Query<DocumentData> {
       : query(collectionFilmsReference, limit(pageLimit + 1));
   } else {
     return lastDocFilm
-      ? query(
-          collectionFilmsReference,
-          limit(pageLimit + 1),
-          endBefore(lastDocFilm)
-        )
-      : query(collectionFilmsReference, limit(pageLimit + 1));
+    ? query(
+        collectionFilmsReference,
+        limit(pageLimit + 1),
+        endAt(lastDocFilm)
+      )
+    : query(collectionFilmsReference, orderBy('pk'), limitToLast(pageLimit + 1));
   }
 }
