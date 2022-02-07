@@ -1,0 +1,13 @@
+/* Header styles */
+
+.header__wrapper {
+  display: flex;
+  justify-content: right;
+}
+
+.userName {
+  margin-right: 20px;
+
+  color: var(--main-color);
+  font-size: 1.5rem;
+}
