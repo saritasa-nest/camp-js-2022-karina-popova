@@ -16,7 +16,7 @@ export async function getFilms(collectionFilmsReference: CollectionReference | Q
   querySnapshot.forEach(doc => {
     const item: Film = {
       id: doc.id,
-      created: new Date(doc.data().fields.created).toLocaleDateString('en-GB'),
+      created: new Date(doc.data().fields.created),
       director: doc.data().fields.director,
       edited: new Date(doc.data().fields.edited),
       openingCrawl: doc.data().fields.episode_id,

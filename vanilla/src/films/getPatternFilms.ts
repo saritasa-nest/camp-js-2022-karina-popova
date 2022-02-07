@@ -12,7 +12,7 @@ export function getPatternFilms(catalogFilms: Film[]): string {
         <tr>
         <td>${film.title}</td>
         <td>${film.director}</td>
-        <td>${film.created}</td>
+        <td>${film.created.toLocaleDateString('en-GB')}</td>
         </tr>`,
     )
     .join('');

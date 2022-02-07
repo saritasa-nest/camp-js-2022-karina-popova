@@ -5,13 +5,13 @@ export interface Film {
   id: string;
 
   /** The date or string format of the time that this resource was created.*/
-  created: string | Date;
+  created: Date;
 
   /** The name of the director of this film.*/
   director: string;
 
   /** The date format of the time that this resource was edited.*/
-  edited: string | Date;
+  edited: Date;
 
   /** The opening paragraphs at the beginning of this film.*/
   openingCrawl: string;
@@ -20,7 +20,7 @@ export interface Film {
   producer: string;
 
   /** The date or string format of film release at original creator country.*/
-  releaseDate: string | Date;
+  releaseDate: Date;
 
   /** The title of this film.*/
   title: string;
