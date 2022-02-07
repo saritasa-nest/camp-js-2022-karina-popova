@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+  <link rel="stylesheet" href="./index.css" />
+  <title>App</title>
+  <script type="module" defer src="./index.ts"></script>
+</head>
+
+<body>
+  <header class="header">
+    <div class="card-panel teal lighten-2 ">
+      <div class="container header__wrapper">
+        <div class="userName"></div>
+        <button type="button" class="waves-effect waves-light btn loginBtn" data-type="open-sign-in">
+          sign in
+        </button>
+        <button type="button" class="waves-effect waves-light btn logoutBtn" data-type="sign-out">
+          sign out
+        </button>
+      </div>
+    </div>
+  </header>
+  <div class="backgroundDrop" data-type="close"></div>
+  <div class="forms">
+    <form class="col s12 formAuth formAuth__signIn">
+      <button type="button" class="btn-flat" data-type="open-sign-up">
+        sign up
+        <em class="material-icons right" data-type="open-sign-up"> east </em>
+      </button>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="email_inline" type="email" class="validate" name="email" />
+          <label for="email_inline">Email</label>
+          <span class="helper-text" data-error="Email is invalid"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="password_inline" type="password" class="validate" name="password" />
+          <label for="password_inline">Password</label>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button type="reset" class="waves-effect waves-light btn btnCancel">
+          cancel
+        </button>
+        <button type="submit" class="waves-effect waves-light btn">
+          sign in
+        </button>
+      </div>
+      <span class="error"></span>
+    </form>
+    <form class="col s12 formAuth formAuth__signUp" method="post">
+      <button type="button" class="btn-flat" data-type="open-sign-in">
+        sign in
+        <em class="material-icons right" data-type="open-sign-in">east</em>
+      </button>
+      <span class="error"></span>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="first_name" type="text" class="validate" name="userName" />
+          <label for="first_name">First Name</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="email" type="email" class="validate" name="email" />
+          <label for="email">Email</label>
+          <span class="helper-text" data-error="Email is invalid" data-success="right"></span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="password" type="password" class="validate" name="password" />
+          <label for="password">Password</label>
+        </div>
+      </div>
+      <div class="buttons">
+        <button type="reset" class="waves-effect waves-light btn btnCancel">
+          cancel
+        </button>
+        <button type="submit" class="waves-effect waves-light btn">
+          sign up
+        </button>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>
