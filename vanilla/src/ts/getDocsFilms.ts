@@ -7,9 +7,8 @@ import {
 } from 'firebase/firestore';
 
 /**
- * QuerySnapshot: QuerySnapshot, film: DocumentData, id: string
- * Film.
- * @param collectionFilmsReference Film.
+ * Fetches collection documents by reference on firebase.
+ * @param collectionFilmsReference The type of this Firestore reference.
  */
 export async function getDocsFilms(
   collectionFilmsReference: CollectionReference | Query,

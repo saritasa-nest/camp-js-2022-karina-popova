@@ -1,5 +1,5 @@
 import { lastDocFilm, renderFilms } from '../films/renderFilms';
-import { PageArrow } from '../enum/enum';
+import { ChangePage } from '../enum/enum';
 
 const nextButton = document.querySelector<Element>('.next-button');
 const prevButton = document.querySelector<Element>('.prev-button');
@@ -7,32 +7,31 @@ const page = document.querySelector<HTMLElement>('.number-page');
 
 let numberPage = 1;
 
-nextButton?.addEventListener('click', () => pagination(PageArrow.Next));
-prevButton?.addEventListener('click', () => pagination(PageArrow.Prev));
+nextButton?.addEventListener('click', () => pagination(ChangePage.Next));
+prevButton?.addEventListener('click', () => pagination(ChangePage.Prev));
 
 /**
- * Pagination.
- * @param pageArrow Page arrow.
+ * Stops or continues pagination.
+ * @param changePage Next or prev page.
  */
-export async function pagination(pageArrow: PageArrow): Promise<void> {
+export async function pagination(changePage: ChangePage): Promise<void> {
   if (
-    (pageArrow === PageArrow.Next && lastDocFilm === null) ||
-    (pageArrow === PageArrow.Prev && numberPage === 1)
+    (changePage === ChangePage.Next && lastDocFilm === null) ||
+    (changePage === ChangePage.Prev && numberPage === 1)
   ) {
     return;
   }
-  await renderFilms(pageArrow).then(() => {
-    editNumberPage(pageArrow);
-    updateВuttonsPagination();
-  });
+  await renderFilms(changePage);
+  editNumberPage(changePage);
+  updateВuttonsPagination();
 }
 
 /**
  * Edit number page.
- * @param pageArrow Page arrow.
+ * @param changePage Page arrow.
  */
-export function editNumberPage(pageArrow: PageArrow): void {
-  if (pageArrow === PageArrow.Next) {
+export function editNumberPage(changePage: ChangePage): void {
+  if (changePage === ChangePage.Next) {
     numberPage++;
   } else {
     numberPage--;

@@ -3,7 +3,7 @@ import { Film } from './film';
 /**
  * Get films catalog pattern.
  * @param catalogFilms Array catalog films.
- * @returns Films list.
+ * @returns List of films in string format.
  */
 export function getPatternFilms(catalogFilms: Film[]): string {
   return catalogFilms

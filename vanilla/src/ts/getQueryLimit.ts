@@ -9,29 +9,29 @@ import {
   startAt,
 } from 'firebase/firestore';
 
-import { PageArrow } from '../enum/enum';
+import { ChangePage } from '../enum/enum';
 import { collectionFilmsReference } from '../ts/initializeApp';
-import { lastDocFilm, pageLimit } from '../films/renderFilms';
+import { lastDocFilm, PAGE_LIMIT } from '../films/renderFilms';
 
 /**
  * Get query taking into account the limit and sorting.
- * @param pageArrow Page switching direction.
+ * @param changePage Page switching direction.
  */
-export function getQueryLimit(pageArrow: PageArrow): Query<DocumentData> {
-  if (pageArrow === PageArrow.Next) {
+export function getQueryLimit(changePage: ChangePage): Query<DocumentData> {
+  if (changePage === ChangePage.Next) {
     return lastDocFilm ?
       query(
         collectionFilmsReference,
-        limit(pageLimit + 1),
+        limit(PAGE_LIMIT + 1),
         startAt(lastDocFilm),
-      ) : query(collectionFilmsReference, limit(pageLimit + 1));
+      ) : query(collectionFilmsReference, limit(PAGE_LIMIT + 1));
   }
   return lastDocFilm ?
     query(
       collectionFilmsReference,
-      limit(pageLimit + 1),
+      limit(PAGE_LIMIT + 1),
       endAt(lastDocFilm),
     ) :
-    query(collectionFilmsReference, orderBy('pk'), limitToLast(pageLimit + 1));
+    query(collectionFilmsReference, orderBy('pk'), limitToLast(PAGE_LIMIT + 1));
 
 }
