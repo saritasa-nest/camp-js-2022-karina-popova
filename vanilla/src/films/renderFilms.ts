@@ -4,22 +4,22 @@ import {
 } from 'firebase/firestore';
 
 import { getDocsFilms } from '../ts/getDocsFilms';
-import { PageArrow } from '../enum/enum';
+import { ChangePage } from '../enum/enum';
 import { getQueryLimit } from '../ts/getQueryLimit';
 
 import { getFilms } from './getFilms';
 import { getPatternFilms } from './getPatternFilms';
 
-export const pageLimit = 3;
+export const PAGE_LIMIT = 3;
 export let lastDocFilm: QueryDocumentSnapshot<DocumentData> | null = null;
 const container = document.querySelector<Element>('tbody');
 
 /**
  * Display films.
- * @param pageArrow Page switching direction.
+ * @param changePage Page switching direction.
  */
-export async function renderFilms(pageArrow: PageArrow = PageArrow.Next): Promise<void> {
-  const collectionLimitFilmsReference = getQueryLimit(pageArrow);
+export async function renderFilms(changePage: ChangePage = ChangePage.Next): Promise<void> {
+  const collectionLimitFilmsReference = getQueryLimit(changePage);
   const docsFilms = await getDocsFilms(collectionLimitFilmsReference);
   const films = await getFilms(collectionLimitFilmsReference);
 
@@ -29,10 +29,10 @@ export async function renderFilms(pageArrow: PageArrow = PageArrow.Next): Promis
 
   container?.insertAdjacentHTML(
     'afterbegin',
-    getPatternFilms(films.slice(0, pageLimit)),
+    getPatternFilms(films.slice(0, PAGE_LIMIT)),
   );
 
   if (lastDocFilm !== undefined) {
-    lastDocFilm = docsFilms.docs[pageLimit] ?? null;
+    lastDocFilm = docsFilms.docs[PAGE_LIMIT] ?? null;
   }
 }
