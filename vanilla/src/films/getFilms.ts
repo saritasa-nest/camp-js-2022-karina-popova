@@ -11,20 +11,20 @@ import { Film } from './film';
  * @returns Promise<Film[]>.
  */
 export async function getFilms(collectionFilmsReference: CollectionReference | Query): Promise<Film[]> {
-  const films: Film[] = [];
   const querySnapshot = await getDocsFilms(collectionFilmsReference);
-  querySnapshot.forEach(doc => {
-    const item: Film = {
-      id: doc.id,
-      created: new Date(doc.data().fields.created),
-      director: doc.data().fields.director,
-      edited: new Date(doc.data().fields.edited),
-      openingCrawl: doc.data().fields.episode_id,
-      producer: doc.data().fields.producer,
-      releaseDate: doc.data().fields.release_date,
-      title: doc.data().fields.title,
-    };
-    films.push(item);
-  });
+
+  const films = querySnapshot.docs.map(doc => {
+      const item: Film = {
+        id: doc.id,
+        created: new Date(doc.data().fields.created),
+        director: doc.data().fields.director,
+        edited: new Date(doc.data().fields.edited),
+        openingCrawl: doc.data().fields.episode_id,
+        producer: doc.data().fields.producer,
+        releaseDate: doc.data().fields.release_date,
+        title: doc.data().fields.title,
+      };
+      return item;
+    });
   return films;
 }
