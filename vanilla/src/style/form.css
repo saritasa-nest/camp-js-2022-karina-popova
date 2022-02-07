@@ -1,0 +1,59 @@
+/* Form styles */
+form {
+  /* form should be unavailable when opening backgroundDrop */
+  z-index: 1;
+}
+
+.forms {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.formAuth.open {
+  display: block;
+}
+
+.formAuth {
+  display: none;
+
+  min-height: 370px;
+  padding: 30px;
+
+  text-align: right;
+
+  border-radius: var(--border-radius);
+  background-color: var(--main-color);
+  box-shadow: 0 0 25px var(--shadow-color);
+}
+
+form .row {
+  margin-bottom: 0;
+}
+
+.error {
+  display: flex;
+  max-width: 250px;
+
+  color: var(--error-color);
+  text-align: center;
+}
+
+.backgroundDrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: var(--hide-color);
+}
+
+.backgroundDrop.open {
+  display: block;
+}

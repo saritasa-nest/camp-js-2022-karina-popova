@@ -1,0 +1,29 @@
+/* Buttons styles */
+
+button.loginBtn,
+button.logoutBtn {
+  /* buttons should be unavailable when opening forms */
+  z-index: 0;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-evenly;
+
+  margin-top: 20px;
+}
+
+.btn.btnCancel,
+.btn.loginBtn,
+.btn.logoutBtn {
+  border: 1px solid var(--accent-color);
+
+  background-color: var(--main-color);
+  color: var(--accent-color);
+}
+
+.btn.btnCancel:hover,
+.btn.loginBtn:hover,
+.btn.logoutBtn:hover {
+  color: var(--main-color);
+}
