@@ -23,7 +23,7 @@ export async function pagination(pageArrow: PageArrow): Promise<void> {
   }
   await renderFilms(pageArrow).then(() => {
     editNumberPage(pageArrow);
-    disabledВutton();
+    updateВuttonsPagination();
   });
 }
 
@@ -45,7 +45,7 @@ export function editNumberPage(pageArrow: PageArrow): void {
 /**
  * Edit next and prev button.
  */
-export function disabledВutton(): void {
+export function updateВuttonsPagination(): void {
   if (numberPage === 1) {
     prevBtn?.classList.add('disabled');
     prevBtn?.classList.remove('waves-effect');
