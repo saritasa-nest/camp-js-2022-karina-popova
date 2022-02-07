@@ -2,26 +2,26 @@
 export interface Film {
 
   /** Сollection document id .*/
-  id: string;
+  readonly id: string;
 
   /** The date or string format of the time that this resource was created.*/
-  created: Date;
+  readonly created: Date;
 
   /** The name of the director of this film.*/
-  director: string;
+  readonly director: string;
 
   /** The date format of the time that this resource was edited.*/
-  edited: Date;
+  readonly edited: Date;
 
   /** The opening paragraphs at the beginning of this film.*/
-  openingCrawl: string;
+  readonly openingCrawl: string;
 
   /** The name(s) of the producer(s) of this film. Comma separated.*/
-  producer: string;
+  readonly producer: string;
 
   /** The date or string format of film release at original creator country.*/
-  releaseDate: Date;
+  readonly releaseDate: Date;
 
   /** The title of this film.*/
-  title: string;
+  readonly title: string;
 }
