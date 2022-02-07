@@ -12,7 +12,7 @@ prevBtn?.addEventListener('click', () => pagination(PageArrow.Prev));
 
 /**
  * Pagination.
- * @param {PageArrow} pageArrow Page arrow.
+ * @param pageArrow Page arrow.
  */
 export async function pagination(pageArrow: PageArrow): Promise<void> {
   if (
@@ -29,7 +29,7 @@ export async function pagination(pageArrow: PageArrow): Promise<void> {
 
 /**
  * Edit number page.
- * @param {PageArrow} pageArrow Page arrow.
+ * @param pageArrow Page arrow.
  */
 export function editNumberPage(pageArrow: PageArrow): void {
   if (pageArrow === PageArrow.Next) {
@@ -42,6 +42,9 @@ export function editNumberPage(pageArrow: PageArrow): void {
   }
 }
 
+/**
+ * Edit next and prev button.
+ */
 export function disabledВutton(): void {
   if (numberPage === 1) {
     prevBtn?.classList.add('disabled');

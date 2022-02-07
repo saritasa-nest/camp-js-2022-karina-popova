@@ -12,7 +12,7 @@ import {
  * @param collectionFilmsReference Film.
  */
 export async function getDocsFilms(
-  collectionFilmsReference: CollectionReference | Query
+  collectionFilmsReference: CollectionReference | Query,
 ): Promise<QuerySnapshot<DocumentData>> {
   const querySnapshot = await getDocs(collectionFilmsReference);
   return querySnapshot;

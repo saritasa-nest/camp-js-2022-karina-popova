@@ -8,7 +8,7 @@ import { Film } from './film';
  * Get array films.
  * @param collectionFilmsReference A CollectionReference object can be used for adding documents,
  *  getting document references, and querying for documents.
- * @returns {Promise<Film[]>} Promise<Film[]>.
+ * @returns Promise<Film[]>.
  */
 export async function getFilms(collectionFilmsReference: CollectionReference | Query): Promise<Film[]> {
   const films: Film[] = [];
