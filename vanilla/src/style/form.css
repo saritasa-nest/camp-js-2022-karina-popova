@@ -5,17 +5,18 @@ form {
 }
 
 .forms {
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
 }
 
-.formAuth.open {
+form.open {
   display: block;
 }
 
-.formAuth {
+form {
   display: none;
 
   min-height: 370px;
@@ -56,4 +57,6 @@ form .row {
 
 .backgroundDrop.open {
   display: block;
+  /* backgroundDrop should be vailable when opening backgroundDrop */
+  z-index: 1;
 }

@@ -1,14 +1,14 @@
 import { lastDocFilm, renderFilms } from '../films/renderFilms';
 import { PageArrow } from '../enum/enum';
 
-const nextBtn = document.querySelector<Element>('.nextBtn');
-const prevBtn = document.querySelector<Element>('.prevBtn');
-const page = document.querySelector<HTMLElement>('.numberPage > a');
+const nextButton = document.querySelector<Element>('.next-button');
+const prevButton = document.querySelector<Element>('.prev-button');
+const page = document.querySelector<HTMLElement>('.number-page');
 
 let numberPage = 1;
 
-nextBtn?.addEventListener('click', () => pagination(PageArrow.Next));
-prevBtn?.addEventListener('click', () => pagination(PageArrow.Prev));
+nextButton?.addEventListener('click', () => pagination(PageArrow.Next));
+prevButton?.addEventListener('click', () => pagination(PageArrow.Prev));
 
 /**
  * Pagination.
@@ -47,17 +47,17 @@ export function editNumberPage(pageArrow: PageArrow): void {
  */
 export function updateВuttonsPagination(): void {
   if (numberPage === 1) {
-    prevBtn?.classList.add('disabled');
-    prevBtn?.classList.remove('waves-effect');
+    prevButton?.classList.add('disabled');
+    prevButton?.classList.remove('waves-effect');
   } else {
-    prevBtn?.classList.remove('disabled');
-    prevBtn?.classList.add('waves-effect');
+    prevButton?.classList.remove('disabled');
+    prevButton?.classList.add('waves-effect');
   }
   if (lastDocFilm !== null) {
-    nextBtn?.classList.add('waves-effect');
-    nextBtn?.classList.remove('disabled');
+    nextButton?.classList.add('waves-effect');
+    nextButton?.classList.remove('disabled');
   } else {
-    nextBtn?.classList.remove('waves-effect');
-    nextBtn?.classList.add('disabled');
+    nextButton?.classList.remove('waves-effect');
+    nextButton?.classList.add('disabled');
   }
 }

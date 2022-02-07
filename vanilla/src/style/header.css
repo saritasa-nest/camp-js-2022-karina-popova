@@ -1,11 +1,11 @@
 /* Header styles */
 
-.header__wrapper {
+.header-wrapper {
   display: flex;
   justify-content: right;
 }
 
-.userName {
+.user-name {
   margin-right: 20px;
 
   color: var(--main-color);

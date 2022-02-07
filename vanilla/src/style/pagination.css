@@ -1,0 +1,16 @@
+.pagination{
+  display: flex;
+}
+
+.pagination button.btn{
+  /* buttons should be unavailable when opening forms */
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+span.number-page{
+  padding:0 10px;
+  font-size: 1.5rem;
+}
