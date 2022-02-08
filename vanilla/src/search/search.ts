@@ -1,0 +1,20 @@
+import { renderFilms } from '../films/renderFilms';
+import { resetNumberPage, updateВuttonsPagination } from '../pagination/pagination';
+
+const searchButton = document.querySelector<HTMLButtonElement>('.search__button');
+const searchInput = document.querySelector<HTMLInputElement>('.search__input');
+
+export let searchText = '';
+
+searchButton?.addEventListener('click', async() => {
+  if (searchInput === null) {
+    return;
+  }
+
+  // const searchText = searchInput.value;
+  searchText = searchInput.value;
+
+  await renderFilms();
+  resetNumberPage();
+  updateВuttonsPagination();
+});

@@ -42,6 +42,16 @@ export function editNumberPage(paginationDirection: PaginationDirection): void {
 }
 
 /**
+ * Reset number page.
+ */
+export function resetNumberPage(): void {
+  numberPage = 1;
+  if (page?.textContent) {
+    page.textContent = numberPage.toString();
+  }
+}
+
+/**
  * Edit next and prev button.
  */
 export function updateВuttonsPagination(): void {

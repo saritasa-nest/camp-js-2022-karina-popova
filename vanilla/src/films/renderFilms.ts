@@ -7,19 +7,30 @@ import { getDocuments } from '../ts/getDocuments';
 import { PaginationDirection } from '../enum/enum';
 import { getQueryLimit } from '../ts/getQueryLimit';
 
+import { getQuerySearch } from '../ts/getQuerySearch';
+
+import { searchText } from '../search/search';
+
 import { getFilms } from './getFilms';
 import { getPatternFilms } from './getPatternFilms';
 
-export const PAGE_LIMIT = 3;
-export let lastDocFilm: QueryDocumentSnapshot<DocumentData> | null = null;
+export const PAGE_LIMIT = 2;
 const container = document.querySelector<Element>('tbody');
+
+export let lastDocFilm: QueryDocumentSnapshot<DocumentData> | null = null;
+export let firstDocFilm: QueryDocumentSnapshot<DocumentData> | null = null;
 
 /**
  * Display films.
  * @param paginationDirection Page switching direction.
  */
 export async function renderFilms(paginationDirection: PaginationDirection = PaginationDirection.Next): Promise<void> {
-  const collectionLimitFilmsReference = getQueryLimit(paginationDirection);
+  // const collectionLimitFilmsReference = getQueryLimit(changePage);
+  // const collectionLimitFilmsReference = getQuerySearch(changePage, searchText);
+  const collectionLimitFilmsReference = searchText === '' ?
+    getQueryLimit(paginationDirection) :
+    getQuerySearch(paginationDirection, searchText);
+
   const docsFilms = await getDocuments(collectionLimitFilmsReference);
   const films = await getFilms(collectionLimitFilmsReference);
 
@@ -34,5 +45,8 @@ export async function renderFilms(paginationDirection: PaginationDirection = Pag
 
   if (lastDocFilm !== undefined) {
     lastDocFilm = docsFilms.docs[PAGE_LIMIT] ?? null;
+  }
+  if (firstDocFilm !== undefined) {
+    firstDocFilm = docsFilms.docs[0] ?? null;
   }
 }
