@@ -13,7 +13,7 @@ import { collectionFilmsReference } from './initializeApp';
  */
 export function getQuerySearch(paginationDirection: PaginationDirection, searchText: string): Query<DocumentData> {
   if (paginationDirection === PaginationDirection.Next) {
-    const a = lastDocFilm ?
+    return lastDocFilm ?
       query(
         collectionFilmsReference,
         limit(PAGE_LIMIT + 1),
@@ -29,7 +29,6 @@ export function getQuerySearch(paginationDirection: PaginationDirection, searchT
         where('fields.title', '>=', searchText),
         where('fields.title', '<=', `${searchText}~`),
       );
-    return a;
   }
   return firstDocFilm ?
     query(
