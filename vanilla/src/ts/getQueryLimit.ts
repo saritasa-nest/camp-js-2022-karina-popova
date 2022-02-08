@@ -11,7 +11,9 @@ import {
 
 import { PaginationDirection } from '../enum/enum';
 import { collectionFilmsReference } from '../ts/initializeApp';
-import { lastDocFilm, PAGE_LIMIT } from '../films/renderFilms';
+import { firstDocFilm, lastDocFilm, PAGE_LIMIT } from '../films/renderFilms';
+
+const DEFAULT_ORDER = 'pk';
 
 /**
  * Get query taking into account the limit and sorting.
@@ -23,15 +25,25 @@ export function getQueryLimit(paginationDirection: PaginationDirection): Query<D
       query(
         collectionFilmsReference,
         limit(PAGE_LIMIT + 1),
+        orderBy(DEFAULT_ORDER),
         startAt(lastDocFilm),
-      ) : query(collectionFilmsReference, limit(PAGE_LIMIT + 1));
+      ) : query(
+        collectionFilmsReference,
+        limit(PAGE_LIMIT + 1),
+        orderBy(DEFAULT_ORDER),
+      );
   }
-  return lastDocFilm ?
+  return firstDocFilm ?
     query(
       collectionFilmsReference,
-      limit(PAGE_LIMIT + 1),
-      endAt(lastDocFilm),
+      orderBy(DEFAULT_ORDER),
+      limitToLast(PAGE_LIMIT + 1),
+      endAt(firstDocFilm),
     ) :
-    query(collectionFilmsReference, orderBy('pk'), limitToLast(PAGE_LIMIT + 1));
+    query(
+      collectionFilmsReference,
+      limitToLast(PAGE_LIMIT + 1),
+      orderBy(DEFAULT_ORDER),
+    );
 
 }
