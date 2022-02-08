@@ -14,7 +14,7 @@ import { searchText } from '../search/search';
 import { getFilms } from './getFilms';
 import { getPatternFilms } from './getPatternFilms';
 
-export const PAGE_LIMIT = 2;
+export const PAGE_LIMIT = 3;
 const container = document.querySelector<Element>('tbody');
 
 export let lastDocFilm: QueryDocumentSnapshot<DocumentData> | null = null;
@@ -25,8 +25,6 @@ export let firstDocFilm: QueryDocumentSnapshot<DocumentData> | null = null;
  * @param paginationDirection Page switching direction.
  */
 export async function renderFilms(paginationDirection: PaginationDirection = PaginationDirection.Next): Promise<void> {
-  // const collectionLimitFilmsReference = getQueryLimit(changePage);
-  // const collectionLimitFilmsReference = getQuerySearch(changePage, searchText);
   const collectionLimitFilmsReference = searchText === '' ?
     getQueryLimit(paginationDirection) :
     getQuerySearch(paginationDirection, searchText);

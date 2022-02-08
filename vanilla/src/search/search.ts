@@ -11,7 +11,6 @@ searchButton?.addEventListener('click', async() => {
     return;
   }
 
-  // const searchText = searchInput.value;
   searchText = searchInput.value;
 
   await renderFilms();

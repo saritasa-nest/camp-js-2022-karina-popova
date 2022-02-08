@@ -5,6 +5,12 @@ import { firstDocFilm, lastDocFilm, PAGE_LIMIT } from '../films/renderFilms';
 
 import { collectionFilmsReference } from './initializeApp';
 
+/**
+ * Get query taking into account the limit, sorting and search.
+ * @param paginationDirection Page switching direction.
+ * @param searchText Search filter text.
+ * @returns
+ */
 export function getQuerySearch(paginationDirection: PaginationDirection, searchText: string): Query<DocumentData> {
   if (paginationDirection === PaginationDirection.Next) {
     const a = lastDocFilm ?
