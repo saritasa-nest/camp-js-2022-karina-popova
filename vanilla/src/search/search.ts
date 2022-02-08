@@ -1,4 +1,4 @@
-import { renderFilms } from '../films/renderFilms';
+import { renderFilms, resetDocFilms } from '../films/renderFilms';
 import { resetNumberPage, updateВuttonsPagination } from '../pagination/pagination';
 
 const searchButton = document.querySelector<HTMLButtonElement>('.search__button');
@@ -13,6 +13,7 @@ searchButton?.addEventListener('click', async() => {
 
   searchText = searchInput.value;
 
+  resetDocFilms();
   await renderFilms();
   resetNumberPage();
   updateВuttonsPagination();

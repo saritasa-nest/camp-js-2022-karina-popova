@@ -48,3 +48,9 @@ export async function renderFilms(paginationDirection: PaginationDirection = Pag
     firstDocFilm = docsFilms.docs[0] ?? null;
   }
 }
+
+/** Resets document film cursor, to fetch data from the beginning.  */
+export function resetDocFilms(): void {
+  lastDocFilm = null;
+  firstDocFilm = null;
+}
