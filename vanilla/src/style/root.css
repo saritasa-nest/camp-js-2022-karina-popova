@@ -1,7 +1,7 @@
 :root {
-  --hide-color: rgba(0, 0, 0, 0.274);
+  --hide-color: rgba(0, 0, 0, 0.27);
   --accent-color: #26a69a;
-  --main-color: #fff;
+  --main-color: #ffffff;
   --shadow-color: rgba(0, 0, 0, 0.2);
   --error-color: red;
   --border-radius: 15px;

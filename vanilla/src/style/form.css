@@ -1,8 +1,4 @@
 /* Form styles */
-form {
-  /* form should be unavailable when opening backgroundDrop */
-  z-index: 1;
-}
 
 .forms {
   position: absolute;
@@ -18,7 +14,8 @@ form.open {
 
 form {
   display: none;
-
+  /* form should be unavailable when opening backgroundDrop */
+  z-index: 1;
   min-height: 370px;
   padding: 30px;
 
