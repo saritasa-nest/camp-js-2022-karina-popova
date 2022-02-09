@@ -1,7 +1,7 @@
 /* Buttons styles */
 
-button.loginBtn,
-button.logoutBtn {
+button.login-button,
+button.logout-button {
   /* buttons should be unavailable when opening forms */
   z-index: 0;
 }
@@ -13,17 +13,17 @@ button.logoutBtn {
   margin-top: 20px;
 }
 
-.btn.btnCancel,
-.btn.loginBtn,
-.btn.logoutBtn {
+.btn.btn-cancel,
+.btn.login-button,
+.btn.logout-button {
   border: 1px solid var(--accent-color);
 
   background-color: var(--main-color);
   color: var(--accent-color);
 }
 
-.btn.btnCancel:hover,
-.btn.loginBtn:hover,
-.btn.logoutBtn:hover {
+.btn.btn-cancel:hover,
+.btn.login-button:hover,
+.btn.logout-button:hover {
   color: var(--main-color);
 }

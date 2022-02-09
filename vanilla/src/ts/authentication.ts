@@ -5,18 +5,18 @@ import 'firebaseui';
 const auth = getAuth();
 
 const containerForms = document.querySelector<HTMLDivElement>('.forms');
-const signInForm = document.querySelector<HTMLFormElement>('.formAuth__signIn');
-const signUpForm = document.querySelector<HTMLFormElement>('.formAuth__signUp');
+const signInForm = document.querySelector<HTMLFormElement>('.form-sign-in');
+const signUpForm = document.querySelector<HTMLFormElement>('.form-sign-up');
 const backDrop = document.querySelector<HTMLDivElement>('.backgroundDrop');
-const userName = document.querySelector<HTMLHtmlElement>('.userName');
-const loginBtn = document.querySelector<HTMLButtonElement>('.loginBtn');
-const logoutBtn = document.querySelector<HTMLButtonElement>('.logoutBtn');
+const userName = document.querySelector<HTMLHtmlElement>('.user-name');
+const loginButton = document.querySelector<HTMLButtonElement>('.login-button');
+const logoutButton = document.querySelector<HTMLButtonElement>('.logout-button');
 const errorSignInForm = signInForm?.querySelector<HTMLHtmlElement>('.error');
 const errorSignUpForm = signUpForm?.querySelector<HTMLHtmlElement>('.error');
 
 containerForms?.addEventListener('click', clickHandler);
-loginBtn?.addEventListener('click', clickHandler);
-logoutBtn?.addEventListener('click', clickHandler);
+loginButton?.addEventListener('click', clickHandler);
+logoutButton?.addEventListener('click', clickHandler);
 backDrop?.addEventListener('click', clickHandler);
 signInForm?.addEventListener('submit', (e: Event) => signIn(e));
 signUpForm?.addEventListener('submit', (e: Event) => signUp(e));
@@ -39,16 +39,16 @@ function clickHandler(event: Event): void {
 onAuthStateChanged(auth, user => {
   if (user) {
     updateDisplayUserName(user.displayName);
-    if (loginBtn && logoutBtn) {
-      loginBtn.style.display = 'none';
-      logoutBtn.style.display = 'block';
+    if (loginButton && logoutButton) {
+      loginButton.style.display = 'none';
+      logoutButton.style.display = 'block';
     }
   } else {
     updateDisplayUserName('');
     openCloseForm('open-sign-in');
-    if (loginBtn && logoutBtn) {
-      loginBtn.style.display = 'block';
-      logoutBtn.style.display = 'none';
+    if (loginButton && logoutButton) {
+      loginButton.style.display = 'block';
+      logoutButton.style.display = 'none';
     }
   }
 });
