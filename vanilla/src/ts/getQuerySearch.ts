@@ -7,6 +7,7 @@ import { collectionFilmsReference } from './initializeApp';
 
 const SEARCH_FIELD = 'fields.title';
 const DEFAULT_ORDER = SEARCH_FIELD;
+const FIREBASE_SEARCH_SYMBOL = '~';
 
 /**
  * Get query taking into account the limit, sorting and search.
@@ -23,14 +24,14 @@ export function getQuerySearch(paginationDirection: PaginationDirection, searchT
         orderBy(DEFAULT_ORDER),
         startAt(lastDocFilm),
         where(SEARCH_FIELD, '>=', searchText),
-        where(SEARCH_FIELD, '<=', `${searchText}~`),
+        where(SEARCH_FIELD, '<=', `${searchText}${FIREBASE_SEARCH_SYMBOL}`),
       ) :
       query(
         collectionFilmsReference,
         limit(PAGE_LIMIT + 1),
         orderBy(DEFAULT_ORDER),
         where(SEARCH_FIELD, '>=', searchText),
-        where(SEARCH_FIELD, '<=', `${searchText}~`),
+        where(SEARCH_FIELD, '<=', `${searchText}${FIREBASE_SEARCH_SYMBOL}`),
       );
   }
   return firstDocFilm ?
@@ -40,14 +41,14 @@ export function getQuerySearch(paginationDirection: PaginationDirection, searchT
       orderBy(DEFAULT_ORDER),
       endAt(firstDocFilm),
       where(SEARCH_FIELD, '>=', searchText),
-      where(SEARCH_FIELD, '<=', `${searchText}~`),
+      where(SEARCH_FIELD, '<=', `${searchText}${FIREBASE_SEARCH_SYMBOL}`),
     ) :
     query(
       collectionFilmsReference,
       limitToLast(PAGE_LIMIT + 1),
       orderBy(DEFAULT_ORDER),
       where(SEARCH_FIELD, '>=', searchText),
-      where(SEARCH_FIELD, '<=', `${searchText}~`),
+      where(SEARCH_FIELD, '<=', `${searchText}${FIREBASE_SEARCH_SYMBOL}`),
     );
 
 }
