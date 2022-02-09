@@ -5,7 +5,7 @@ import { Film } from './film';
  * @param catalogFilms Array catalog films.
  * @returns List of films in string format.
  */
-export function getPatternFilms(catalogFilms: Film[]): string {
+export function getPatternFilms(catalogFilms: readonly Film[]): string {
   return catalogFilms
     .map(
       film => `

@@ -1,37 +1,37 @@
 import { lastDocFilm, renderFilms } from '../films/renderFilms';
-import { ChangePage } from '../enum/enum';
+import { PaginationDirection } from '../enum/enum';
 
-const nextButton = document.querySelector<Element>('.next-button');
-const prevButton = document.querySelector<Element>('.prev-button');
+const nextButton = document.querySelector<HTMLButtonElement>('.next-button');
+const prevButton = document.querySelector<HTMLButtonElement>('.prev-button');
 const page = document.querySelector<HTMLElement>('.number-page');
 
 let numberPage = 1;
 
-nextButton?.addEventListener('click', () => pagination(ChangePage.Next));
-prevButton?.addEventListener('click', () => pagination(ChangePage.Prev));
+nextButton?.addEventListener('click', () => handlePagination(PaginationDirection.Next));
+prevButton?.addEventListener('click', () => handlePagination(PaginationDirection.Prev));
 
 /**
  * Stops or continues pagination.
- * @param changePage Next or prev page.
+ * @param paginationDirection Next or prev page.
  */
-export async function pagination(changePage: ChangePage): Promise<void> {
+export async function handlePagination(paginationDirection: PaginationDirection): Promise<void> {
   if (
-    (changePage === ChangePage.Next && lastDocFilm === null) ||
-    (changePage === ChangePage.Prev && numberPage === 1)
+    (paginationDirection === PaginationDirection.Next && lastDocFilm === null) ||
+    (paginationDirection === PaginationDirection.Prev && numberPage === 1)
   ) {
     return;
   }
-  await renderFilms(changePage);
-  editNumberPage(changePage);
+  await renderFilms(paginationDirection);
+  editNumberPage(paginationDirection);
   updateВuttonsPagination();
 }
 
 /**
  * Edit number page.
- * @param changePage Page arrow.
+ * @param paginationDirection Page arrow.
  */
-export function editNumberPage(changePage: ChangePage): void {
-  if (changePage === ChangePage.Next) {
+export function editNumberPage(paginationDirection: PaginationDirection): void {
+  if (paginationDirection === PaginationDirection.Next) {
     numberPage++;
   } else {
     numberPage--;

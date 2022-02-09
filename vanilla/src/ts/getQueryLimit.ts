@@ -9,16 +9,16 @@ import {
   startAt,
 } from 'firebase/firestore';
 
-import { ChangePage } from '../enum/enum';
+import { PaginationDirection } from '../enum/enum';
 import { collectionFilmsReference } from '../ts/initializeApp';
 import { lastDocFilm, PAGE_LIMIT } from '../films/renderFilms';
 
 /**
  * Get query taking into account the limit and sorting.
- * @param changePage Page switching direction.
+ * @param paginationDirection Page switching direction.
  */
-export function getQueryLimit(changePage: ChangePage): Query<DocumentData> {
-  if (changePage === ChangePage.Next) {
+export function getQueryLimit(paginationDirection: PaginationDirection): Query<DocumentData> {
+  if (paginationDirection === PaginationDirection.Next) {
     return lastDocFilm ?
       query(
         collectionFilmsReference,

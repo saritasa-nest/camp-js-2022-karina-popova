@@ -1,30 +1,29 @@
-import { CollectionReference, Query } from 'firebase/firestore';
+import { CollectionReference, DocumentData, Query } from 'firebase/firestore';
 
-import { getDocsFilms } from '../ts/getDocsFilms';
+import { getDocuments } from '../ts/getDocuments';
 
 import { Film } from './film';
 
 /**
- * Get array films.
- * @param collectionFilmsReference A CollectionReference object can be used for adding documents,
+ * Get array of films.
+ * @param collectionReference A CollectionReference object can be used for adding documents,
  *  getting document references, and querying for documents.
- * @returns Promise<Film[]>.
  */
-export async function getFilms(collectionFilmsReference: CollectionReference | Query): Promise<Film[]> {
-  const querySnapshot = await getDocsFilms(collectionFilmsReference);
+export async function getFilms(collectionReference: CollectionReference<DocumentData> | Query<DocumentData>): Promise<Film[]> {
+  const querySnapshot = await getDocuments(collectionReference);
 
-  const films = querySnapshot.docs.map(doc => {
-      const item: Film = {
-        id: doc.id,
-        created: new Date(doc.data().fields.created),
-        director: doc.data().fields.director,
-        edited: new Date(doc.data().fields.edited),
-        openingCrawl: doc.data().fields.episode_id,
-        producer: doc.data().fields.producer,
-        releaseDate: doc.data().fields.release_date,
-        title: doc.data().fields.title,
-      };
-      return item;
-    });
-  return films;
+  return querySnapshot.docs.map(doc => {
+    const { fields } = doc.data();
+    const item: Film = {
+      id: doc.id,
+      created: new Date(fields.created),
+      director: fields.director,
+      edited: new Date(fields.edited),
+      openingCrawl: fields.episode_id,
+      producer: fields.producer,
+      releaseDate: fields.release_date,
+      title: fields.title,
+    };
+    return item;
+  });
 }

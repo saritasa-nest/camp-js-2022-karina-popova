@@ -3,8 +3,8 @@ import {
   QueryDocumentSnapshot,
 } from 'firebase/firestore';
 
-import { getDocsFilms } from '../ts/getDocsFilms';
-import { ChangePage } from '../enum/enum';
+import { getDocuments } from '../ts/getDocuments';
+import { PaginationDirection } from '../enum/enum';
 import { getQueryLimit } from '../ts/getQueryLimit';
 
 import { getFilms } from './getFilms';
@@ -16,11 +16,11 @@ const container = document.querySelector<Element>('tbody');
 
 /**
  * Display films.
- * @param changePage Page switching direction.
+ * @param paginationDirection Page switching direction.
  */
-export async function renderFilms(changePage: ChangePage = ChangePage.Next): Promise<void> {
-  const collectionLimitFilmsReference = getQueryLimit(changePage);
-  const docsFilms = await getDocsFilms(collectionLimitFilmsReference);
+export async function renderFilms(paginationDirection: PaginationDirection = PaginationDirection.Next): Promise<void> {
+  const collectionLimitFilmsReference = getQueryLimit(paginationDirection);
+  const docsFilms = await getDocuments(collectionLimitFilmsReference);
   const films = await getFilms(collectionLimitFilmsReference);
 
   if (container) {

@@ -1,6 +1,5 @@
 import {
   CollectionReference,
-  DocumentData,
   getDocs,
   Query,
   QuerySnapshot,
@@ -10,9 +9,8 @@ import {
  * Fetches collection documents by reference on firebase.
  * @param collectionFilmsReference The type of this Firestore reference.
  */
-export async function getDocsFilms(
-  collectionFilmsReference: CollectionReference | Query,
-): Promise<QuerySnapshot<DocumentData>> {
-  const querySnapshot = await getDocs(collectionFilmsReference);
-  return querySnapshot;
+export function getDocuments<T>(
+  collectionFilmsReference: CollectionReference<T> | Query<T>,
+): Promise<QuerySnapshot<T>> {
+  return getDocs(collectionFilmsReference);
 }
