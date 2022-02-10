@@ -18,8 +18,6 @@ const FIREBASE_SEARCH_SYMBOL = '~';
 export function getQuerySearch(paginationDirection: PaginationDirection, searchText: string): Query<DocumentData> {
   const { firstDocFilm, lastDocFilm } = StoreService.getStore();
 
-  console.log(firstDocFilm);
-
   if (paginationDirection === PaginationDirection.Next) {
     return lastDocFilm ?
       query(

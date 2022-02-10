@@ -1,8 +1,3 @@
-import {
-  DocumentData,
-  QueryDocumentSnapshot,
-} from 'firebase/firestore';
-
 import { getDocuments } from '../ts/getDocuments';
 import { PaginationDirection } from '../enum/PaginationDirection';
 import { getQueryLimit } from '../ts/getQueryLimit';
