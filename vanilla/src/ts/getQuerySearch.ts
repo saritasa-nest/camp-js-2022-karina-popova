@@ -1,7 +1,8 @@
 import { DocumentData, endAt, limit, limitToLast, orderBy, query, Query, startAt, where } from 'firebase/firestore';
 
-import { PaginationDirection } from '../enum/enum';
-import { firstDocFilm, lastDocFilm, PAGE_LIMIT } from '../films/renderFilms';
+import { PaginationDirection } from '../enum/PaginationDirection';
+import { PAGE_LIMIT } from '../films/renderFilms';
+import { StoreService } from '../services/StoreService';
 
 import { collectionFilmsReference } from './initializeApp';
 
@@ -13,9 +14,12 @@ const FIREBASE_SEARCH_SYMBOL = '~';
  * Get query taking into account the limit, sorting and search.
  * @param paginationDirection Page switching direction.
  * @param searchText Search filter text.
- * @returns
  */
 export function getQuerySearch(paginationDirection: PaginationDirection, searchText: string): Query<DocumentData> {
+  const { firstDocFilm, lastDocFilm } = StoreService.getStore();
+
+  console.log(firstDocFilm);
+
   if (paginationDirection === PaginationDirection.Next) {
     return lastDocFilm ?
       query(

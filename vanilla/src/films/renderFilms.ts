@@ -4,12 +4,12 @@ import {
 } from 'firebase/firestore';
 
 import { getDocuments } from '../ts/getDocuments';
-import { PaginationDirection } from '../enum/enum';
+import { PaginationDirection } from '../enum/PaginationDirection';
 import { getQueryLimit } from '../ts/getQueryLimit';
 
 import { getQuerySearch } from '../ts/getQuerySearch';
 
-import { searchText } from '../search/search';
+import { StoreService } from '../services/StoreService';
 
 import { getFilms } from './getFilms';
 import { getPatternFilms } from './getPatternFilms';
@@ -17,14 +17,13 @@ import { getPatternFilms } from './getPatternFilms';
 export const PAGE_LIMIT = 3;
 const container = document.querySelector<Element>('tbody');
 
-export let lastDocFilm: QueryDocumentSnapshot<DocumentData> | null = null;
-export let firstDocFilm: QueryDocumentSnapshot<DocumentData> | null = null;
-
 /**
  * Display films.
  * @param paginationDirection Page switching direction.
  */
 export async function renderFilms(paginationDirection: PaginationDirection = PaginationDirection.Next): Promise<void> {
+  const { searchText } = StoreService.getStore();
+
   const collectionLimitFilmsReference = searchText === '' ?
     getQueryLimit(paginationDirection) :
     getQuerySearch(paginationDirection, searchText);
@@ -41,16 +40,16 @@ export async function renderFilms(paginationDirection: PaginationDirection = Pag
     getPatternFilms(films.slice(0, PAGE_LIMIT)),
   );
 
-  if (lastDocFilm !== undefined) {
-    lastDocFilm = docsFilms.docs[PAGE_LIMIT] ?? null;
-  }
-  if (firstDocFilm !== undefined) {
-    firstDocFilm = docsFilms.docs[0] ?? null;
-  }
+  StoreService.setStore({
+    lastDocFilm: docsFilms.docs[PAGE_LIMIT] ?? null,
+    firstDocFilm: docsFilms.docs[0] ?? null,
+  });
 }
 
 /** Resets document film cursor, to fetch data from the beginning.  */
 export function resetDocFilms(): void {
-  lastDocFilm = null;
-  firstDocFilm = null;
+  StoreService.setStore({
+    lastDocFilm: null,
+    firstDocFilm: null,
+  });
 }

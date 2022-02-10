@@ -9,9 +9,10 @@ import {
   startAt,
 } from 'firebase/firestore';
 
-import { PaginationDirection } from '../enum/enum';
+import { PaginationDirection } from '../enum/PaginationDirection';
 import { collectionFilmsReference } from '../ts/initializeApp';
-import { firstDocFilm, lastDocFilm, PAGE_LIMIT } from '../films/renderFilms';
+import { PAGE_LIMIT } from '../films/renderFilms';
+import { StoreService } from '../services/StoreService';
 
 const DEFAULT_ORDER = 'pk';
 
@@ -20,6 +21,8 @@ const DEFAULT_ORDER = 'pk';
  * @param paginationDirection Page switching direction.
  */
 export function getQueryLimit(paginationDirection: PaginationDirection): Query<DocumentData> {
+  const { firstDocFilm, lastDocFilm } = StoreService.getStore();
+
   if (paginationDirection === PaginationDirection.Next) {
     return lastDocFilm ?
       query(
