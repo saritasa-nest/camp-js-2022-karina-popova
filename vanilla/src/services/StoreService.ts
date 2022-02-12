@@ -4,13 +4,13 @@ import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 export interface Store {
 
   /** Search query that used when searching. */
-  searchText: string;
+  readonly searchText: string;
 
   /** Cursor of the last document of the page, used for pagination. */
-  lastDocFilm: QueryDocumentSnapshot<DocumentData> | null;
+  readonly lastDocFilm: QueryDocumentSnapshot<DocumentData> | null;
 
   /** Cursor of the first document of the page, used for pagination. */
-  firstDocFilm: QueryDocumentSnapshot<DocumentData> | null;
+  readonly firstDocFilm: QueryDocumentSnapshot<DocumentData> | null;
 }
 
 /** Store service. */
@@ -23,10 +23,12 @@ export class StoreService {
 
   /** Get store object. */
   public static getStore(): Store {
+    // TS can't properly get types of spreaded classes.
+    /* eslint-disable prefer-object-spread */
     return {
       searchText: this._searchText,
-      lastDocFilm: this._lastDocFilm,
-      firstDocFilm: this._firstDocFilm,
+      lastDocFilm: Object.assign({}, this._lastDocFilm),
+      firstDocFilm: Object.assign({}, this._firstDocFilm),
     };
   }
 
