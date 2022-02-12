@@ -9,29 +9,44 @@ import {
   startAt,
 } from 'firebase/firestore';
 
-import { PaginationDirection } from '../enum/enum';
+import { PaginationDirection } from '../enum/PaginationDirection';
 import { collectionFilmsReference } from '../ts/initializeApp';
-import { lastDocFilm, PAGE_LIMIT } from '../films/renderFilms';
+import { PAGE_LIMIT } from '../films/renderFilms';
+import { StoreService } from '../services/StoreService';
+
+const DEFAULT_ORDER = 'pk';
 
 /**
  * Get query taking into account the limit and sorting.
  * @param paginationDirection Page switching direction.
  */
 export function getQueryLimit(paginationDirection: PaginationDirection): Query<DocumentData> {
+  const { firstDocFilm, lastDocFilm } = StoreService.getStore();
+
   if (paginationDirection === PaginationDirection.Next) {
     return lastDocFilm ?
       query(
         collectionFilmsReference,
         limit(PAGE_LIMIT + 1),
+        orderBy(DEFAULT_ORDER),
         startAt(lastDocFilm),
-      ) : query(collectionFilmsReference, limit(PAGE_LIMIT + 1));
+      ) : query(
+        collectionFilmsReference,
+        limit(PAGE_LIMIT + 1),
+        orderBy(DEFAULT_ORDER),
+      );
   }
-  return lastDocFilm ?
+  return firstDocFilm ?
     query(
       collectionFilmsReference,
-      limit(PAGE_LIMIT + 1),
-      endAt(lastDocFilm),
+      orderBy(DEFAULT_ORDER),
+      limitToLast(PAGE_LIMIT + 1),
+      endAt(firstDocFilm),
     ) :
-    query(collectionFilmsReference, orderBy('pk'), limitToLast(PAGE_LIMIT + 1));
+    query(
+      collectionFilmsReference,
+      limitToLast(PAGE_LIMIT + 1),
+      orderBy(DEFAULT_ORDER),
+    );
 
 }

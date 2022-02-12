@@ -1,5 +1,6 @@
-import { lastDocFilm, renderFilms } from '../films/renderFilms';
-import { PaginationDirection } from '../enum/enum';
+import { renderFilms } from '../films/renderFilms';
+import { PaginationDirection } from '../enum/PaginationDirection';
+import { StoreService } from '../services/StoreService';
 
 const nextButton = document.querySelector<HTMLButtonElement>('.next-button');
 const prevButton = document.querySelector<HTMLButtonElement>('.prev-button');
@@ -15,6 +16,8 @@ prevButton?.addEventListener('click', () => handlePagination(PaginationDirection
  * @param paginationDirection Next or prev page.
  */
 export async function handlePagination(paginationDirection: PaginationDirection): Promise<void> {
+  const { lastDocFilm } = StoreService.getStore();
+
   if (
     (paginationDirection === PaginationDirection.Next && lastDocFilm === null) ||
     (paginationDirection === PaginationDirection.Prev && numberPage === 1)
@@ -42,9 +45,21 @@ export function editNumberPage(paginationDirection: PaginationDirection): void {
 }
 
 /**
+ * Reset number page.
+ */
+export function resetNumberPage(): void {
+  numberPage = 1;
+  if (page?.textContent) {
+    page.textContent = numberPage.toString();
+  }
+}
+
+/**
  * Edit next and prev button.
  */
 export function updateВuttonsPagination(): void {
+  const { lastDocFilm } = StoreService.getStore();
+
   if (numberPage === 1) {
     prevButton?.classList.add('disabled');
     prevButton?.classList.remove('waves-effect');
