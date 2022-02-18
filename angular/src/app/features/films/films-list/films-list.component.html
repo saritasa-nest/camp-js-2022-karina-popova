@@ -1,0 +1,29 @@
+<h2>{{ tableTitle }}</h2>
+<div class="catalog">
+  <div class="container">
+    <table class="card-panel" aria-label="films catalog">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Director</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let film of films$ | async">
+        <div *ngIf='film'>
+          <div>{{ film.title }}</div>
+        </div>
+
+      </tbody>
+    </table>
+    <div class="pagination">
+      <button type="button" class="waves-effect btn prev-button disabled">
+        <span class="material-icons">chevron_left</span>
+      </button>
+      <span class="active number-page">1</span>
+      <button type="button" class="waves-effect btn next-button">
+        <span class="material-icons">chevron_right</span>
+      </button>
+    </div>
+  </div>
+</div>
