@@ -13,7 +13,8 @@ export class FilmMapper implements IMapperFromDto<FilmDTO, Film> {
   public fromDto(data: FilmDTO): Film {
     const { fields } = data;
     return {
-      created: new Date(fields.created),
+      id: data.id,
+      created: new Date(fields.created).toLocaleDateString('en-GB'),
       director: fields.director,
       title: fields.title,
       edited: new Date(fields.edited),

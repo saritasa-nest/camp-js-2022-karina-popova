@@ -2,7 +2,7 @@
 export interface Film {
 
   /** The date resource was created.*/
-  readonly created: Date;
+  readonly created: Date | string;
 
   /** The name of the director of this film.*/
   readonly director: string;
@@ -21,4 +21,7 @@ export interface Film {
 
   /** The title of this film.*/
   readonly title: string;
+
+  /** Film id.*/
+  readonly id: string;
 }

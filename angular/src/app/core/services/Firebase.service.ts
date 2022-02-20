@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
-import { __values } from 'tslib';
 
 import { Film } from '../models/Film';
 
@@ -36,7 +35,11 @@ export class Service {
    * Service.
    */
   public fetchFilms(): Observable<Film[]> {
-    return this.refCollection.valueChanges().pipe(map(filmsDto => filmsDto.map(filmDto => this.filmMapper.fromDto(filmDto))));
+    return this.refCollection.snapshotChanges().pipe(map(filmsDto => filmsDto.map(filmDto => {
+        const data = filmDto.payload.doc.data() as FilmDTO;
+        const { id } = filmDto.payload.doc;
+        return this.filmMapper.fromDto({ ...data, id });
+    })));
   }
 
 }

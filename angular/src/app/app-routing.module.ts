@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: 'films',
-    loadChildren: () => import('./features/films/films.module').then(m => m.FilmsModule),
+    loadChildren: () => import('./features/films/filmsManagement.component.module').then(m => m.FilmsModule),
   },
   { path: '**', redirectTo: 'films' },
 ];
