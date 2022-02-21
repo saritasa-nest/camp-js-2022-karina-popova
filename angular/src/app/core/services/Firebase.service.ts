@@ -5,7 +5,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/comp
 import { Film } from '../models/Film';
 
 import { FilmMapper } from './mappers/Film.mapper';
-import { FilmDTO } from './mappers/dto/Film/FilmDTO';
+import { FilmDTO } from './mappers/dto/Film/film.dto';
 
 /**
  * Service.

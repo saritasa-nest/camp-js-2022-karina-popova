@@ -1,11 +1,8 @@
-<div class="card-panel teal lighten-2 ">
-  <div class="container header-wrapper">
-    <div class="user-name"></div>
-    <button type="button" class="waves-effect waves-light btn login-button" data-type="open-sign-in">
-      sign in
-    </button>
-    <button type="button" class="waves-effect waves-light btn logout-button" data-type="sign-out">
-      sign out
-    </button>
-  </div>
+<div *ngIf=" user$ | async as user; else showLogin">
+  <h1>Hello {{ user.email }}!</h1>
+  <button (click)="1">Logout</button>
 </div>
+<ng-template #showLogin>
+  <p>Please login.</p>
+  <button (click)="1">Login with Google</button>
+</ng-template>

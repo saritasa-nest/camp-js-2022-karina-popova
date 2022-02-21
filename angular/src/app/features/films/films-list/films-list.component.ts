@@ -15,7 +15,6 @@ export class FilmsListComponent implements OnInit {
 
   @Input()
   public tableTitle = '';
-  displayedColumns: string[] = ['Title', 'Director', 'Created'];
 
   public readonly films$: Observable<Film[]>;
 

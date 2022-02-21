@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /**  DTO describing the film.*/
 export interface FilmDTO {
 
@@ -7,7 +8,7 @@ export interface FilmDTO {
   /** Film pk .*/
   readonly pk: number;
 
-  /** Film id .*/
+  /** Film information .*/
   readonly fields: {
 
     /** The date resource was created.*/

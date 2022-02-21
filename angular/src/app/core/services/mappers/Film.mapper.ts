@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Film } from '../../models/Film';
 
-import { FilmDTO } from './dto/Film/FilmDTO';
+import { FilmDTO } from './dto/Film/film.dto';
 import { IMapperFromDto } from './mapper';
 
 @Injectable({
