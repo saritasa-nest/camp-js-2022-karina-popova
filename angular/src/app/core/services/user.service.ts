@@ -1,29 +1,32 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 
-import { UserMapper } from './mappers/user.mapper';
+import UserCredential = firebase.auth.UserCredential;
 
 /** * dsfdsfdsf.*/
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  public constructor(
+  private constructor(
     private auth: AngularFireAuth,
-    private readonly userMapper: UserMapper,
-  ) {}
+  ) { }
 
   public getUser(): Observable<firebase.User | null> {
     return this.auth.user;
   }
 
-  // public login(email: 'alex@mail.ru', password: '123456'): Observable<User> {
-  //   return this.auth.signInWithEmailAndPassword(email, password);
-  // }
+  public login(email: string, password: string): Observable<UserCredential> {
+    return from(this.auth.signInWithEmailAndPassword(email, password));
+  }
 
-  public logout() {
+  public signUp(email: string, password: string): Observable<UserCredential> {
+    return from(this.auth.createUserWithEmailAndPassword(email, password));
+  }
+
+  public logout(): void {
     this.auth.signOut();
   }
 }

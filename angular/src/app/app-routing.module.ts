@@ -3,14 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'auth',
-    loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule),
+    path: '',
+    loadChildren: () => import('./features/login/login.module').then(m => m.LoginModule),
   },
-  {
-    path: 'films',
-    loadChildren: () => import('./features/films/filmsManagement.component.module').then(m => m.FilmsModule),
-  },
-  { path: '**', redirectTo: 'films' },
+  { path: '**', redirectTo: '' },
 ];
 
 /** App routing module. */
