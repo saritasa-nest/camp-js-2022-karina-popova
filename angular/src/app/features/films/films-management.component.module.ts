@@ -3,17 +3,17 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { FilmsListComponent } from './films-list/films-list.component';
+import { FilmComponent } from './film/film.component';
 
 const routes: Routes = [
   {
     path: '',
     component: FilmsListComponent,
   },
-  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
-  declarations: [FilmsListComponent],
+  declarations: [FilmComponent, FilmsListComponent],
   imports: [CommonModule, RouterModule.forChild(routes)],
 })
-export class FilmsModule { }
+export class FilmsModule {}

@@ -14,13 +14,13 @@ export class FilmMapper implements IMapperFromDto<FilmDTO, Film> {
     const { fields } = data;
     return {
       id: data.id,
-      created: new Date(fields.created).toLocaleDateString('en-GB'),
+      created: fields.created,
       director: fields.director,
       title: fields.title,
-      edited: new Date(fields.edited),
+      edited: fields.edited,
       openingCrawl: fields.opening_crawl,
       producer: fields.producer,
-      releaseDate: new Date(fields.release_date),
+      releaseDate:fields.release_date,
     };
   }
 }

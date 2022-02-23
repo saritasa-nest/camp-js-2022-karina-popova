@@ -3,7 +3,8 @@
   <div class="container">
     <table mat-table class="mat-elevation-z8">
       <div *ngFor="let film of films$ | async">
-        <ng-container matColumnDef="Title">
+        <sw-film [film]="film"></sw-film>
+        <!-- <ng-container matColumnDef="Title">
           <th mat-header-cell>Title</th>
           <td mat-cell>{{ film.title }}</td>
         </ng-container>
@@ -16,7 +17,7 @@
           <td mat-cell>{{ film.created }}</td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr> -->
       </div>
     </table>
   </div>
