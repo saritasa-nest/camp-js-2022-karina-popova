@@ -14,8 +14,8 @@ export class UserService {
     private auth: AngularFireAuth,
   ) { }
 
-  public getUser(): Observable<firebase.User | null> {
-    return this.auth.user;
+  public getUser(): AngularFireAuth {
+    return this.auth;
   }
 
   public login(email: string, password: string): Observable<UserCredential> {

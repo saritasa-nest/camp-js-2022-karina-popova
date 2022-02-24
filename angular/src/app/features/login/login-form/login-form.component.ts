@@ -14,29 +14,23 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class LoginFormComponent implements OnInit {
   public hide = false;
 
-  @Input()
-  public readonly user$: Observable<firebase.User | null>;
-
-  public constructor(
-    private fb: FormBuilder,
-    public userService: UserService,
-  ) {
-    this.user$ = userService.getUser();
+  public constructor(private fb: FormBuilder, public userService: UserService) {
+  }
+  ngOnInit(): void {
   }
 
-  loginForm: FormGroup = this.fb.group({
+  public loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
-
-  public ngOnInit(): void {
-
-  }
 
   public onLogin(): void {
     if (!this.loginForm.valid) {
       return;
     }
-    this.userService.login(this.loginForm.value.email, this.loginForm.value.password);
+    this.userService.login(
+      this.loginForm.value.email,
+      this.loginForm.value.password,
+    );
   }
 }

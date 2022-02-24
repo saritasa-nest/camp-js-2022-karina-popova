@@ -1,4 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Film } from '../../../core/models/Film';
@@ -12,9 +16,7 @@ import { Service } from '../../../core/services/Firebase.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilmsListComponent implements OnInit {
-
-  @Input()
-  public tableTitle = '';
+  public tableTitle = 'Films';
 
   public readonly films$: Observable<Film[]>;
 
@@ -23,6 +25,5 @@ export class FilmsListComponent implements OnInit {
   }
 
   /** @inheritdoc */
-  public ngOnInit(): void {
-  }
+  public ngOnInit(): void {}
 }

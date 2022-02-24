@@ -1,1 +1,15 @@
-<p>header works!</p>
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span routerLink="">SW-FILMS</span>
+    <div class="header-wrapper">
+      <div *ngIf="user.user | async as user; else signOutBtn">
+        {{ user.email }}
+        <button mat-raised-button (click)="signOut()">Sign out</button>
+      </div>
+      <ng-template #signOutBtn>
+        <button mat-raised-button routerLink="/login">Sign In</button>
+        <button mat-raised-button routerLink="/login/register">Sign Up</button>
+      </ng-template>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
