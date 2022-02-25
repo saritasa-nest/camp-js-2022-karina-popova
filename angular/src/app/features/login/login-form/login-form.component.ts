@@ -1,10 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-
-import { Observable } from 'rxjs';
-import firebase from 'firebase/compat';
-import { UserService } from 'src/app/core/services/user.service';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { FirebaseError } from 'firebase/app';
+import { ReplaySubject, Subject } from 'rxjs';
+import { UserService } from 'src/app/core/services/user.service';
 
+/** Login form. */
 @Component({
   selector: 'sw-login',
   templateUrl: './login-form.component.html',
@@ -12,18 +13,31 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginFormComponent implements OnInit {
+  /** Attribute to hide the password. */
   public hide = false;
 
-  public constructor(private fb: FormBuilder, public userService: UserService) {
-  }
-  ngOnInit(): void {
+  /** Error message. */
+  public errorMessage$: Subject<FirebaseError | null> = new ReplaySubject<FirebaseError | null>();
+
+  /** Login form. */
+  public loginForm!: FormGroup;
+
+  public constructor(
+    private readonly fb: FormBuilder,
+    private readonly userService: UserService,
+    private readonly router: Router,
+  ) {
   }
 
-  public loginForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-  });
+  /** @inheritdoc */
+  public ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+    });
+  }
 
+  /** User authorization. */
   public onLogin(): void {
     if (!this.loginForm.valid) {
       return;
@@ -31,6 +45,15 @@ export class LoginFormComponent implements OnInit {
     this.userService.login(
       this.loginForm.value.email,
       this.loginForm.value.password,
-    );
+    ).subscribe({
+      error: (errors: FirebaseError) => {
+        console.log(errors);
+        this.errorMessage$.next(errors);
+      },
+      complete: () => {
+        this.errorMessage$.next(null);
+        this.router.navigate(['films']);
+      },
+    });
   }
 }

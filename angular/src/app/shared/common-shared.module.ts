@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 
-import { HeaderComponent } from './header/header.component';
+import { HeaderComponent } from './components/header/header.component';
 
 /** Shared module. */
 @NgModule({
@@ -21,4 +21,4 @@ import { HeaderComponent } from './header/header.component';
     MatButtonModule,
   ],
 })
-export class SharedModule {}
+export class CommonSharedModule {}

@@ -24,7 +24,7 @@
           required
         />
         <button
-        type="button"
+          type="button"
           mat-icon-button
           matSuffix
           (click)="hide = !hide"
@@ -39,6 +39,9 @@
           Password is required
         </mat-error>
       </mat-form-field>
+      <mat-error class="form-error">
+        {{ errorMessage$ | async | handingError }}
+      </mat-error>
       <button mat-flat-button color="primary">Sign in</button>
     </form>
     <div routerLink="register" class="button-row">Create New Account</div>

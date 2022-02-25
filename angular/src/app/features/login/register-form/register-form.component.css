@@ -18,3 +18,8 @@ form {
 .button-row{
   cursor: pointer;
 }
+
+.form-error {
+  text-align: center;
+  margin-bottom: 20px;
+}

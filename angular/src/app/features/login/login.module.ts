@@ -6,7 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { CommonSharedModule } from 'src/app/shared/common-shared.module';
+
+import { HandingErrorPipe } from 'src/app/shared/pipes/handing-error.pipe';
 
 import { LoginFormComponent } from './login-form/login-form.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
@@ -23,7 +25,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [LoginFormComponent, RegisterFormComponent],
+  declarations: [LoginFormComponent, RegisterFormComponent, HandingErrorPipe],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -32,7 +34,7 @@ const routes: Routes = [
     MatInputModule,
     ReactiveFormsModule,
     MatIconModule,
-    SharedModule,
+    CommonSharedModule,
   ],
 })
 export class LoginModule { }

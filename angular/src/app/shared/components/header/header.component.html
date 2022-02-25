@@ -2,11 +2,11 @@
   <mat-toolbar-row>
     <span routerLink="">SW-FILMS</span>
     <div class="header-wrapper">
-      <div *ngIf="user.user | async as user; else signOutBtn">
+      <div *ngIf="user.user | async as user; else linksAuthorization ">
         {{ user.email }}
         <button mat-raised-button (click)="signOut()">Sign out</button>
       </div>
-      <ng-template #signOutBtn>
+      <ng-template #linksAuthorization>
         <button mat-raised-button routerLink="/login">Sign In</button>
         <button mat-raised-button routerLink="/login/register">Sign Up</button>
       </ng-template>

@@ -7,18 +7,18 @@
       name="registerForm"
       [formGroup]="registerForm"
     >
-    <mat-form-field appearance="outline">
-      <mat-label>Name</mat-label>
-      <input
-        formControlName="name"
-        matInput
-        placeholder="Enter your name"
-        required
-      />
-      <mat-error *ngIf="!registerForm.controls['name'].valid">
-        Name is required
-      </mat-error>
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input
+          formControlName="name"
+          matInput
+          placeholder="Enter your name"
+          required
+        />
+        <mat-error *ngIf="!registerForm.controls['name'].valid">
+          Name is required
+        </mat-error>
+      </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
         <input
@@ -40,7 +40,7 @@
           required
         />
         <button
-        type="button"
+          type="button"
           mat-icon-button
           matSuffix
           (click)="hide = !hide"
@@ -55,8 +55,11 @@
           Password is required
         </mat-error>
       </mat-form-field>
+      <mat-error class = "form-error">
+        {{ errorMessage$ | async | handingError}}
+      </mat-error>
       <button mat-flat-button color="primary">Sign up</button>
     </form>
-    <div routerLink="/login" class="button-row">Sign in</div>
+    <div routerLink="/login" class="button-row">Go to Sign In</div>
   </mat-card-content>
 </mat-card>
