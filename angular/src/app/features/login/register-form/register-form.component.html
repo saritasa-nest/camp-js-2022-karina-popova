@@ -1,65 +1,58 @@
-<sw-header></sw-header>
-<mat-card>
-  <mat-card-content>
-    <h2>Sign up</h2>
-    <form
-      (ngSubmit)="onSignUp()"
-      name="registerForm"
-      [formGroup]="registerForm"
-    >
-      <mat-form-field appearance="outline">
-        <mat-label>Name</mat-label>
-        <input
-          formControlName="name"
-          matInput
-          placeholder="Enter your name"
-          required
-        />
-        <mat-error *ngIf="!registerForm.controls['name'].valid">
-          Name is required
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input
-          formControlName="email"
-          matInput
-          placeholder="Enter email address"
-          required
-        />
-        <mat-error *ngIf="!registerForm.controls['email'].valid">
-          Email is required
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <input
-          formControlName="password"
-          matInput
-          [type]="hide ? 'password' : 'text'"
-          required
-        />
-        <button
-          type="button"
-          mat-icon-button
-          matSuffix
-          (click)="hide = !hide"
-          [attr.aria-label]="'Hide Password'"
-          [attr.aria-pressed]="hide"
-        >
-          <mat-icon>
-            {{ hide ? "visibility_off" : "visibility" }}
-          </mat-icon>
-        </button>
-        <mat-error *ngIf="!registerForm.controls['password'].valid">
-          Password is required
-        </mat-error>
-      </mat-form-field>
-      <mat-error class = "form-error">
-        {{ errorMessage$ | async | handingError}}
+<mat-dialog-content>
+  <h2>Sign up</h2>
+  <form (ngSubmit)="onSignUp()" name="registerForm" [formGroup]="registerForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input
+        formControlName="displayName"
+        matInput
+        placeholder="Enter your name"
+        required
+      />
+      <mat-error *ngIf="!registerForm.controls['displayName'].valid">
+        Name is required
       </mat-error>
-      <button mat-flat-button color="primary">Sign up</button>
-    </form>
-    <div routerLink="/login" class="button-row">Go to Sign In</div>
-  </mat-card-content>
-</mat-card>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input
+        formControlName="email"
+        matInput
+        placeholder="Enter email address"
+        required
+      />
+      <mat-error *ngIf="!registerForm.controls['email'].valid">
+        Email is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input
+        formControlName="password"
+        matInput
+        [type]="hide ? 'password' : 'text'"
+        required
+      />
+      <button
+        type="button"
+        mat-icon-button
+        matSuffix
+        (click)="hide = !hide"
+        [attr.aria-label]="'Hide Password'"
+        [attr.aria-pressed]="hide"
+      >
+        <mat-icon>
+          {{ hide ? "visibility_off" : "visibility" }}
+        </mat-icon>
+      </button>
+      <mat-error *ngIf="!registerForm.controls['password'].valid">
+        Password is required
+      </mat-error>
+    </mat-form-field>
+    <mat-error class="form-error">
+      {{ errorMessage$ | async | handingError }}
+    </mat-error>
+    <button mat-flat-button color="primary">Sign up</button>
+  </form>
+  <div (click)="openDialogSignIn()" class="button-row">Go to Sign In</div>
+</mat-dialog-content>

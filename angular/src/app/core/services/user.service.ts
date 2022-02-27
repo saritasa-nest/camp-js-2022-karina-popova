@@ -22,8 +22,13 @@ export class UserService {
     return from(this.auth.signInWithEmailAndPassword(email, password));
   }
 
-  public signUp(email: string, password: string): Observable<UserCredential> {
-    return from(this.auth.createUserWithEmailAndPassword(email, password));
+  public signUp(email: string, password: string, displayName: string): Observable<UserCredential> {
+    const signUp$ = from(this.auth.createUserWithEmailAndPassword(email, password));
+    signUp$.subscribe(userInfo =>
+      userInfo.user?.updateProfile({
+        displayName,
+      }));
+    return signUp$;
   }
 
   public logout(): void {

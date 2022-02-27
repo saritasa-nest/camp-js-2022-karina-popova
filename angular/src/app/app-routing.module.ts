@@ -3,16 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'films',
-    loadChildren: () => import('./features/films/films-management.component.module').then(m => m.FilmsModule),
-  },
-  {
-    path: 'login',
-    loadChildren: () => import('./features/login/login.module').then(m => m.LoginModule),
+    path: '',
+    loadChildren: () =>
+      import('./features/films/films-management.component.module').then(
+        m => m.FilmsModule,
+      ),
   },
   {
     path: '**',
-    redirectTo: 'films',
+    redirectTo: '',
   },
 ];
 
@@ -21,4 +20,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

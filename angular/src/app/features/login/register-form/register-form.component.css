@@ -1,8 +1,4 @@
-mat-card {
-  max-width: 300px;
-  margin: 50px auto;
-}
-mat-card-content {
+mat-dialog-content {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;

@@ -1,9 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { FirebaseError } from 'firebase/app';
 import { ReplaySubject, Subject } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
+
+import { RegisterFormComponent } from '../register-form/register-form.component';
 
 /** Login form. */
 @Component({
@@ -26,6 +29,7 @@ export class LoginFormComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly userService: UserService,
     private readonly router: Router,
+    private dialog: MatDialog,
   ) {
   }
 
@@ -35,6 +39,11 @@ export class LoginFormComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
+  }
+
+  public openDialogSignUp(): void {
+    this.dialog.closeAll();
+    this.dialog.open(RegisterFormComponent);
   }
 
   /** User authorization. */
@@ -47,12 +56,11 @@ export class LoginFormComponent implements OnInit {
       this.loginForm.value.password,
     ).subscribe({
       error: (errors: FirebaseError) => {
-        console.log(errors);
         this.errorMessage$.next(errors);
       },
       complete: () => {
         this.errorMessage$.next(null);
-        this.router.navigate(['films']);
+        this.dialog.closeAll();
       },
     });
   }
