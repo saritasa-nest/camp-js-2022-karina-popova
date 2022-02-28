@@ -1,6 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { FirebaseError } from 'firebase/app';
 import { ReplaySubject, Subject } from 'rxjs';
@@ -22,14 +21,13 @@ export class LoginFormComponent implements OnInit {
   /** Error message. */
   public errorMessage$: Subject<FirebaseError | null> = new ReplaySubject<FirebaseError | null>();
 
-  /** Login form. */
+  /** Group of all login form fields.*/
   public loginForm!: FormGroup;
 
   public constructor(
     private readonly fb: FormBuilder,
     private readonly userService: UserService,
-    private readonly router: Router,
-    private dialog: MatDialog,
+    private readonly dialog: MatDialog,
   ) {
   }
 
@@ -41,7 +39,8 @@ export class LoginFormComponent implements OnInit {
     });
   }
 
-  public openDialogSignUp(): void {
+  /** Opening a sign up form.*/
+  public openSignUpDialog(): void {
     this.dialog.closeAll();
     this.dialog.open(RegisterFormComponent);
   }
@@ -51,7 +50,7 @@ export class LoginFormComponent implements OnInit {
     if (!this.loginForm.valid) {
       return;
     }
-    this.userService.login(
+    this.userService.signIn(
       this.loginForm.value.email,
       this.loginForm.value.password,
     ).subscribe({

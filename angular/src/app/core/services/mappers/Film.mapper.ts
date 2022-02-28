@@ -5,11 +5,12 @@ import { Film } from '../../models/Film';
 import { FilmDTO } from './dto/Film/film.dto';
 import { IMapperFromDto } from './mapper';
 
+/** Film mapper. */
 @Injectable({
   providedIn: 'root',
 })
 export class FilmMapper implements IMapperFromDto<FilmDTO, Film> {
-
+  /** @inheritdoc */
   public fromDto(data: FilmDTO): Film {
     const { fields } = data;
     return {
@@ -20,7 +21,7 @@ export class FilmMapper implements IMapperFromDto<FilmDTO, Film> {
       edited: fields.edited,
       openingCrawl: fields.opening_crawl,
       producer: fields.producer,
-      releaseDate:fields.release_date,
+      releaseDate: fields.release_date,
     };
   }
 }

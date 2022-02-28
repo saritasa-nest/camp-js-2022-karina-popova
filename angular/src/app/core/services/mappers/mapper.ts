@@ -14,9 +14,8 @@ export interface IMapperFromDto<TDto, TModel> {
  */
 export interface IMapperToDto<TModel, TDto> {
 
-   /**
+  /**
    * Maps from Domain to DTO model.
    */
   toDto: (data: TModel) => TDto;
 }
-

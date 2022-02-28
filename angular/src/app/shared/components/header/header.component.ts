@@ -1,15 +1,17 @@
 import {
   Component,
-  OnInit,
   ChangeDetectionStrategy,
   Input,
+  OnInit,
 } from '@angular/core';
 import { UserService } from 'src/app/core/services/user.service';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginFormComponent } from 'src/app/features/login/login-form/login-form.component';
 import { RegisterFormComponent } from 'src/app/features/login/register-form/register-form.component';
+import { User } from 'src/app/core/models/user';
+import { Observable } from 'rxjs';
 
+/** Page header.*/
 @Component({
   selector: 'sw-header',
   templateUrl: './header.component.html',
@@ -17,26 +19,33 @@ import { RegisterFormComponent } from 'src/app/features/login/register-form/regi
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
+  /** User.*/
   @Input()
-  public user: AngularFireAuth;
+  public user$: Observable<User | null>;
 
   public constructor(
-    public userService: UserService,
-    public dialog: MatDialog,
+    private readonly userService: UserService,
+    private readonly dialog: MatDialog,
   ) {
-    this.user = this.userService.getUser();
+    this.user$ = this.userService.user$;
   }
 
+  /** @inheritdoc */
+  public ngOnInit(): void {
+    this.user$ = this.userService.getCurrentUser();
+  }
+
+  /** Opening a login form.*/
   public openDialogSignIn(): void {
     this.dialog.open(LoginFormComponent);
   }
 
+  /** Opening a sign up form.*/
   public openDialogSignUp(): void {
     this.dialog.open(RegisterFormComponent);
   }
 
-  ngOnInit(): void {}
-
+  /** Logout user profile.*/
   public signOut(): void {
     this.userService.logout();
   }

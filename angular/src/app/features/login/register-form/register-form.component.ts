@@ -4,7 +4,6 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { FirebaseError } from 'firebase/app';
 import { ReplaySubject, Subject } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
@@ -20,19 +19,18 @@ import { LoginFormComponent } from '../login-form/login-form.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterFormComponent implements OnInit {
-  /** Attribute to hide the password. */
+  /** Attribute to hide the password.*/
   public hide = false;
 
   /** Error message. */
   public errorMessage$: Subject<FirebaseError | null> = new ReplaySubject<FirebaseError | null>();
 
-  /** Registration form. */
+  /** Group of all registration form fields.*/
   public registerForm!: FormGroup;
 
   public constructor(
     private readonly fb: FormBuilder,
     private readonly userService: UserService,
-    private readonly router: Router,
     private readonly dialog: MatDialog,
   ) { }
 
@@ -45,7 +43,8 @@ export class RegisterFormComponent implements OnInit {
     });
   }
 
-  public openDialogSignIn(): void {
+  /** Opening a login form.*/
+  public openSignInDialog(): void {
     this.dialog.closeAll();
     this.dialog.open(LoginFormComponent);
   }

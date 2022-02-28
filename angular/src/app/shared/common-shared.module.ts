@@ -5,10 +5,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 
 import { HeaderComponent } from './components/header/header.component';
+import { HandingErrorPipe } from './pipes/handing-error.pipe';
 
 /** Shared module. */
 @NgModule({
-  declarations: [HeaderComponent],
+  declarations: [HeaderComponent, HandingErrorPipe],
   imports: [
     CommonModule,
     MatToolbarModule,
@@ -17,6 +18,7 @@ import { HeaderComponent } from './components/header/header.component';
   ],
   exports: [
     HeaderComponent,
+    HandingErrorPipe,
     MatToolbarModule,
     MatButtonModule,
   ],

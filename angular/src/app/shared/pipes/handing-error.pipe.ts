@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { FirebaseError } from 'firebase/app';
 
+/** * Handling registration and login errors.*/
 @Pipe({
   name: 'handingError',
 })

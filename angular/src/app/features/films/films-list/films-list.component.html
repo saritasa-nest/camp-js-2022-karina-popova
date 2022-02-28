@@ -5,20 +5,6 @@
     <table mat-table class="mat-elevation-z8">
       <div *ngFor="let film of films$ | async">
         <sw-film [film]="film"></sw-film>
-        <!-- <ng-container matColumnDef="Title">
-          <th mat-header-cell>Title</th>
-          <td mat-cell>{{ film.title }}</td>
-        </ng-container>
-        <ng-container matColumnDef="Director">
-          <th mat-header-cell>Director</th>
-          <td mat-cell>{{ film.director }}</td>
-        </ng-container>
-        <ng-container matColumnDef="Created">
-          <th mat-header-cell>Created</th>
-          <td mat-cell>{{ film.created }}</td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr> -->
       </div>
     </table>
   </div>

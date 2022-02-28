@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -9,21 +8,21 @@ import { Film } from '../../../core/models/Film';
 
 import { Service } from '../../../core/services/Firebase.service';
 
+/** Films list.*/
 @Component({
   selector: 'sw-films-list',
   templateUrl: './films-list.component.html',
   styleUrls: ['./films-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilmsListComponent implements OnInit {
+export class FilmsListComponent {
+  /** Films table name.*/
   public tableTitle = 'Films';
 
+  /** Films.*/
   public readonly films$: Observable<Film[]>;
 
-  public constructor(service: Service) {
-    this.films$ = service.fetchFilms();
+  public constructor(private readonly service: Service) {
+    this.films$ = this.service.fetchFilms();
   }
-
-  /** @inheritdoc */
-  public ngOnInit(): void {}
 }

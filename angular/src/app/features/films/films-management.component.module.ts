@@ -15,6 +15,7 @@ const routes: Routes = [
   },
 ];
 
+/** Functions for managing the films list.*/
 @NgModule({
   declarations: [FilmComponent, FilmsListComponent],
   imports: [CommonModule, RouterModule.forChild(routes), CommonSharedModule, LoginModule],
