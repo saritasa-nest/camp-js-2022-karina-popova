@@ -1,3 +1,20 @@
 :host {
   display: block;
 }
+.container{
+  margin: 50px 50px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+table {
+  width: 100%;
+}
+
+.mat-row {
+  cursor: pointer;
+}
+
+.mat-row:hover {
+  background-color: #8f858521;
+}
