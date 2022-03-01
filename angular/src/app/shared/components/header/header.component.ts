@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
     private readonly userService: UserService,
     private readonly dialog: MatDialog,
   ) {
-    this.user$ = this.userService.user$;
+    this.user$ = new Observable();
   }
 
   /** @inheritdoc */

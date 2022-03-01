@@ -2,18 +2,6 @@
   <h2>Sign up</h2>
   <form (ngSubmit)="onSignUp()" name="registerForm" [formGroup]="registerForm">
     <mat-form-field appearance="outline">
-      <mat-label>Name</mat-label>
-      <input
-        formControlName="displayName"
-        matInput
-        placeholder="Enter your name"
-        required
-      />
-      <mat-error *ngIf="!registerForm.controls['displayName'].valid">
-        Name is required
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
       <input
         formControlName="email"

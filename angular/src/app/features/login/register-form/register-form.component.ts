@@ -37,7 +37,6 @@ export class RegisterFormComponent implements OnInit {
   /** @inheritdoc */
   public ngOnInit(): void {
     this.registerForm = this.fb.group({
-      displayName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
@@ -57,7 +56,6 @@ export class RegisterFormComponent implements OnInit {
     this.userService.signUp(
       this.registerForm.value.email,
       this.registerForm.value.password,
-      this.registerForm.value.displayName,
     ).subscribe({
       error: (errors: FirebaseError) => {
         this.errorMessage$.next(errors);

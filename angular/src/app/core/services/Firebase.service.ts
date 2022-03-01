@@ -8,7 +8,7 @@ import { FilmMapper } from './mappers/Film.mapper';
 import { FilmDTO } from './mappers/dto/Film/film.dto';
 
 /**
- * Service.
+ * Firebase service.
  */
 @Injectable({
   providedIn: 'root',
@@ -16,23 +16,19 @@ import { FilmDTO } from './mappers/dto/Film/film.dto';
 export class Service {
 
   /**
-   * Service.
+   * Firestore collection link.
    */
   public refCollection: AngularFirestoreCollection<FilmDTO>;
 
-  /**
-   * @param firestore Service.
-   * @param filmMapper Service.
-   */
   public constructor(
-    private firestore: AngularFirestore,
+    private readonly firestore: AngularFirestore,
     private readonly filmMapper: FilmMapper,
   ) {
     this.refCollection = this.firestore.collection('films');
   }
 
   /**
-   * Service.
+   * List of all films with information.
    */
   public fetchFilms(): Observable<Film[]> {
     return this.refCollection.snapshotChanges().pipe(map(filmsDto => filmsDto.map(filmDto => {

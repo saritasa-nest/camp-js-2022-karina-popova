@@ -3,7 +3,7 @@
     <span routerLink="">SW-FILMS</span>
     <div class="header-wrapper">
       <div *ngIf="user$ | async as user; else linksAuthorization">
-        {{ user.displayName }}
+        {{ user.email }}
         <button mat-raised-button (click)="signOut()">Sign out</button>
       </div>
       <ng-template #linksAuthorization>
