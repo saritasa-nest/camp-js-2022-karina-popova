@@ -8,7 +8,6 @@ import { CommonSharedModule } from 'src/app/shared/common-shared.module';
 import { LoginModule } from '../login/login.module';
 
 import { FilmsListComponent } from './films-list/films-list.component';
-import { FilmComponent } from './film/film.component';
 
 const routes: Routes = [
   {
@@ -19,7 +18,7 @@ const routes: Routes = [
 
 /** Functions for managing the films list.*/
 @NgModule({
-  declarations: [FilmComponent, FilmsListComponent],
+  declarations: [FilmsListComponent],
   imports: [CommonModule, RouterModule.forChild(routes), CommonSharedModule, LoginModule, MatTableModule, MatPaginatorModule],
 })
 export class FilmsModule {}
