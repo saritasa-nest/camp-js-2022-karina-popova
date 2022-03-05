@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import firebase from 'firebase/compat';
 
-import { Film } from '../models/Film';
-
-import { FilmMapper } from './mappers/Film.mapper';
-import { FilmDTO } from './mappers/dto/Film/film.dto';
+import DocumentData = firebase.firestore.DocumentData;
 
 /**
  * Firebase service.
@@ -13,29 +11,21 @@ import { FilmDTO } from './mappers/dto/Film/film.dto';
 @Injectable({
   providedIn: 'root',
 })
-export class Service {
-
-  /**
-   * Firestore collection link.
-   */
-  public refCollection: AngularFirestoreCollection<FilmDTO>;
+export class FirebaseService {
 
   public constructor(
     private readonly firestore: AngularFirestore,
-    private readonly filmMapper: FilmMapper,
   ) {
-    this.refCollection = this.firestore.collection('films');
   }
 
   /**
-   * List of all films with information.
+   * List of all document data.
+   * @param path Path to collection.
    */
-  public fetchFilms(): Observable<Film[]> {
-    return this.refCollection.snapshotChanges().pipe(map(filmsDto => filmsDto.map(filmDto => {
-        const data = filmDto.payload.doc.data() as FilmDTO;
-        const { id } = filmDto.payload.doc;
-        return this.filmMapper.fromDto({ ...data, id });
-    })));
+  public fetchDocumentData(path: string): Observable<readonly DocumentData[]> {
+    return this.firestore.collection(path).snapshotChanges()
+      .pipe(map(documentsDto => documentsDto.map(
+        documentDto => documentDto.payload.doc,
+      )));
   }
-
 }

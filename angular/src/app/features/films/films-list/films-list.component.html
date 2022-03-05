@@ -1,11 +1,15 @@
 <sw-header></sw-header>
-<h2>{{ tableTitle }}</h2>
 <div class="catalog">
   <div class="container">
     <table mat-table class="mat-elevation-z8">
-      <div *ngFor="let film of films$ | async">
+      <caption>
+        {{
+          tableTitle
+        }}
+      </caption>
+      <tr *ngFor="let film of films$ | async; trackBy: trackByFn">
         <sw-film [film]="film"></sw-film>
-      </div>
+      </tr>
     </table>
   </div>
 </div>

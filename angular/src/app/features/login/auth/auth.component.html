@@ -1,0 +1,52 @@
+<mat-dialog-content>
+  <div class="form-wrapper">
+    <h2>{{ title }}</h2>
+    <form (ngSubmit)="submitForm()" [formGroup]="authForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input
+          formControlName="email"
+          matInput
+          placeholder="Enter email address"
+          required
+        />
+        <mat-error *ngIf="!authForm.controls['email'].valid">
+          Email is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          formControlName="password"
+          matInput
+          [type]="hide ? 'password' : 'text'"
+          required
+        />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="hide = !hide"
+          [attr.aria-label]="'Hide Password'"
+          [attr.aria-pressed]="hide"
+        >
+          <mat-icon>
+            {{ hide ? "visibility_off" : "visibility" }}
+          </mat-icon>
+        </button>
+        <mat-error *ngIf="!authForm.controls['password'].valid">
+          Password is required
+        </mat-error>
+      </mat-form-field>
+      <mat-error class="form-error">
+        {{ errorMessage$ | async | handingError }}
+      </mat-error>
+      <button type="submit" mat-flat-button color="primary">
+        {{ nameButton }}
+      </button>
+    </form>
+    <button type="button" (click)="openDialog()" class="button-row button-link">
+      {{ nameLink }}
+    </button>
+  </div>
+</mat-dialog-content>

@@ -2,11 +2,9 @@ import {
   Component,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Film } from 'src/app/core/models/film';
 
-import { Film } from '../../../core/models/Film';
-
-import { Service } from '../../../core/services/Firebase.service';
+import { FilmsService } from 'src/app/core/services/Films.service';
 
 /** Films list.*/
 @Component({
@@ -17,12 +15,18 @@ import { Service } from '../../../core/services/Firebase.service';
 })
 export class FilmsListComponent {
   /** Films table name.*/
-  public tableTitle = 'Films';
+  public readonly tableTitle = 'Films';
 
   /** Films.*/
-  public readonly films$: Observable<Film[]>;
+  public films$ = this.filmsService.fetchFilms();
 
-  public constructor(private readonly service: Service) {
-    this.films$ = this.service.fetchFilms();
+  public constructor(private readonly filmsService: FilmsService) {}
+
+  /** Get a unique film id.
+   * @param index Film index.
+   * @param film Film.
+   */
+  public trackByFn(index: number, film: Film): string {
+    return film.id;
   }
 }

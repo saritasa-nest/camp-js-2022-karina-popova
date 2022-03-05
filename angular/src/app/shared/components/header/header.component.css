@@ -2,17 +2,15 @@
   display: block;
 }
 
-mat-toolbar-row {
-  display: flex;
-  justify-content: space-between;
-}
-
 .header-wrapper {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
 }
 
-.header-wrapper * + *{
-  margin-left: 20px;
+.user-menu {
+  width: 10%;
+  display: flex;
+  justify-content: space-between;
 }

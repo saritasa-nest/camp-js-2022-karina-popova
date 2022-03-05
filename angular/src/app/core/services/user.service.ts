@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { from, map, Observable } from 'rxjs';
+import { FirebaseError } from 'firebase/app';
+import { catchError, defer, map, Observable, throwError } from 'rxjs';
+
+import { AppError } from '../models/app-error';
 
 import { User } from '../models/user';
 
@@ -27,9 +30,14 @@ export class UserService {
    * @param password - User's current password.
    */
   public signIn(email: string, password: string): Observable<User | null> {
-    const signIn$ = from(this.auth.signInWithEmailAndPassword(email, password))
-      .pipe(map(userCredentil => userCredentil.user ? this.userMapper.fromDto(userCredentil.user) : null));
-    return signIn$;
+    return defer(() => this.auth.signInWithEmailAndPassword(email, password))
+      .pipe(
+        catchError((firebaseError: FirebaseError) => {
+          const { message, code } = firebaseError;
+          return throwError(() => new AppError(message, code));
+        }),
+        map(userCredential => userCredential.user ? this.userMapper.fromDto(userCredential.user) : null),
+      );
   }
 
   /**
@@ -38,9 +46,14 @@ export class UserService {
    * @param password - User password.
    */
   public signUp(email: string, password: string): Observable<User | null> {
-    const signUp$ = from(this.auth.createUserWithEmailAndPassword(email, password))
-      .pipe(map(userCredentil => userCredentil.user ? this.userMapper.fromDto(userCredentil.user) : null));
-    return signUp$;
+    return defer(() => this.auth.createUserWithEmailAndPassword(email, password))
+      .pipe(
+        catchError((firebaseError: FirebaseError) => {
+          const { message, code } = firebaseError;
+          return throwError(() => new AppError(message, code));
+        }),
+        map(userCredential => userCredential.user ? this.userMapper.fromDto(userCredential.user) : null),
+      );
   }
 
   /** Logout user profile. */

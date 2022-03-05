@@ -1,27 +1,26 @@
 import { Injectable } from '@angular/core';
 
-import { Film } from '../../models/Film';
+import { Film } from '../../models/film';
 
-import { FilmDTO } from './dto/Film/film.dto';
+import { FilmDto } from './dto/Film/film.dto';
 import { IMapperFromDto } from './mapper';
 
 /** Film mapper. */
 @Injectable({
   providedIn: 'root',
 })
-export class FilmMapper implements IMapperFromDto<FilmDTO, Film> {
+export class FilmMapper implements IMapperFromDto<FilmDto, Film> {
   /** @inheritdoc */
-  public fromDto(data: FilmDTO): Film {
-    const { fields } = data;
+  public fromDto({ id, fields }: FilmDto): Film {
     return {
-      id: data.id,
-      created: fields.created,
+      id,
+      created: new Date(fields.created),
       director: fields.director,
       title: fields.title,
-      edited: fields.edited,
+      edited: new Date(fields.edited),
       openingCrawl: fields.opening_crawl,
-      producer: fields.producer,
-      releaseDate: fields.release_date,
+      producer: fields.producer.split(','),
+      releaseDate: new Date(fields.release_date),
     };
   }
 }

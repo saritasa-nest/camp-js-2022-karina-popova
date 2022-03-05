@@ -9,10 +9,11 @@ import { CommonSharedModule } from 'src/app/shared/common-shared.module';
 
 import { LoginFormComponent } from './login-form/login-form.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
+import { AuthComponent } from './auth/auth.component';
 
 /** Features that allow to register and log in.*/
 @NgModule({
-  declarations: [LoginFormComponent, RegisterFormComponent],
+  declarations: [LoginFormComponent, RegisterFormComponent, AuthComponent],
   imports: [
     MatDialogModule,
     CommonModule,

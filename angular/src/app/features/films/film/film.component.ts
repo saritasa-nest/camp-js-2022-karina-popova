@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { Film } from 'src/app/core/models/Film';
+import { Film } from 'src/app/core/models/film';
 
 /** Film. */
 @Component({

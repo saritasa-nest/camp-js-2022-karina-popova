@@ -1,5 +1,5 @@
-/** Film.*/
-export interface Film {
+/**  DTO describing film fields.*/
+export interface FilmFieldsDto {
 
   /** The date resource was created.*/
   readonly created: string;
@@ -11,17 +11,15 @@ export interface Film {
   readonly edited: string;
 
   /** The opening paragraphs at the beginning of this film.*/
-  readonly openingCrawl: string;
+  readonly opening_crawl: string;
 
   /** The name(s) of the producer(s) of this film. Comma separated.*/
   readonly producer: string;
 
   /** The date release at original creator country.*/
-  readonly releaseDate: string;
+  readonly release_date: string;
 
   /** The title of this film.*/
   readonly title: string;
 
-  /** Film id.*/
-  readonly id: string;
 }

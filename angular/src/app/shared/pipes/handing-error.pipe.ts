@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { FirebaseError } from 'firebase/app';
+import { AppError } from 'src/app/core/models/app-error';
 
 /** * Handling registration and login errors.*/
 @Pipe({
@@ -10,7 +10,7 @@ export class HandingErrorPipe implements PipeTransform {
    * .
    * @param value Error.
    */
-  public transform(value: FirebaseError | null): string {
+  public transform(value: AppError | null): string {
     switch (value?.code) {
       case 'auth/email-already-in-use':
         return 'Email already in use';
@@ -22,6 +22,8 @@ export class HandingErrorPipe implements PipeTransform {
         return 'Invalid password';
       case 'auth/user-not-found':
         return 'User not found';
+      case 'auth/wrong-password':
+        return 'Wrong password';
       default:
         return '';
     }

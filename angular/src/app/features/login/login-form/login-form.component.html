@@ -1,46 +1,6 @@
-<mat-dialog-content>
-      <h2>Sign in</h2>
-      <form (ngSubmit)="onLogin()" name="loginForm" [formGroup]="loginForm">
-        <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
-          <input
-            formControlName="email"
-            matInput
-            placeholder="Enter email address"
-            required
-          />
-          <mat-error *ngIf="!loginForm.controls['email'].valid">
-            Email is required
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label>Password</mat-label>
-          <input
-            formControlName="password"
-            matInput
-            [type]="hide ? 'password' : 'text'"
-            required
-          />
-          <button
-            type="button"
-            mat-icon-button
-            matSuffix
-            (click)="hide = !hide"
-            [attr.aria-label]="'Hide Password'"
-            [attr.aria-pressed]="hide"
-          >
-            <mat-icon>
-              {{ hide ? "visibility_off" : "visibility" }}
-            </mat-icon>
-          </button>
-          <mat-error *ngIf="!loginForm.controls['password'].valid">
-            Password is required
-          </mat-error>
-        </mat-form-field>
-        <mat-error class="form-error">
-          {{ errorMessage$ | async | handingError }}
-        </mat-error>
-        <button mat-flat-button color="primary">Sign in</button>
-      </form>
-      <div (click)="openSignUpDialog()" class="button-row">Create New Account</div>
-</mat-dialog-content>
+<sw-auth
+  (sendForm)="onLogin($event)"
+  (clickOpenDialog)="openSignUpDialog()"
+  [errorMessage$]="errorMessage$"
+  [nameLink]="nameLink"
+></sw-auth>

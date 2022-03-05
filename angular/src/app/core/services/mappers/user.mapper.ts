@@ -14,7 +14,7 @@ export class UserMapper implements IMapperFromDto<UserDto, User> {
   public fromDto(dto: UserDto): User {
     return {
       id: dto.uid,
-      displayName: dto.displayName,
+      userName: dto.displayName,
       email: dto.email,
     };
   }

@@ -1,13 +1,9 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectionStrategy,
-} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FirebaseError } from 'firebase/app';
-import { ReplaySubject, Subject } from 'rxjs';
+import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { ReplaySubject, Subject, takeUntil } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
+import { AppError } from 'src/app/core/models/app-error';
 
 import { LoginFormComponent } from '../login-form/login-form.component';
 
@@ -15,31 +11,33 @@ import { LoginFormComponent } from '../login-form/login-form.component';
 @Component({
   selector: 'sw-register-form',
   templateUrl: './register-form.component.html',
-  styleUrls: ['./register-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterFormComponent implements OnInit {
-  /** Attribute to hide the password.*/
-  public hide = false;
+export class RegisterFormComponent implements OnDestroy {
+  /** Form name. */
+  public title = 'Sign up';
+
+  /** Submit button name. */
+  public nameButton = 'Sign up';
+
+  /** Link to go to another form. */
+  public nameLink = 'Go to Sign In';
 
   /** Error message. */
-  public errorMessage$: Subject<FirebaseError | null> = new ReplaySubject<FirebaseError | null>();
+  public readonly errorMessage$: Subject<AppError | null> =
+    new ReplaySubject<AppError | null>();
 
-  /** Group of all registration form fields.*/
-  public registerForm!: FormGroup;
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   public constructor(
-    private readonly fb: FormBuilder,
     private readonly userService: UserService,
     private readonly dialog: MatDialog,
   ) { }
 
   /** @inheritdoc */
-  public ngOnInit(): void {
-    this.registerForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
+  public ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   /** Opening a login form.*/
@@ -48,22 +46,24 @@ export class RegisterFormComponent implements OnInit {
     this.dialog.open(LoginFormComponent);
   }
 
-  /** User registration.*/
-  public onSignUp(): void {
-    if (!this.registerForm.valid) {
+  /** User registration.
+   * @param registerForm Form.
+   */
+  public onSignUp(registerForm: FormGroup): void {
+    if (!registerForm.valid) {
       return;
     }
-    this.userService.signUp(
-      this.registerForm.value.email,
-      this.registerForm.value.password,
-    ).subscribe({
-      error: (errors: FirebaseError) => {
-        this.errorMessage$.next(errors);
-      },
-      complete: () => {
-        this.errorMessage$.next(null);
-        this.dialog.closeAll();
-      },
-    });
+    this.userService
+      .signUp(registerForm.value.email, registerForm.value.password)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        error: (errors: AppError) => {
+          this.errorMessage$.next(errors);
+        },
+        complete: () => {
+          this.errorMessage$.next(null);
+          this.dialog.closeAll();
+        },
+      });
   }
 }

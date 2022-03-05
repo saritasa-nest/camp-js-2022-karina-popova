@@ -1,3 +1,5 @@
-<td>{{ film?.title }}</td>
-<td>{{ film?.director }}</td>
-<td>{{ film?.created | date:'d.LL.YYYY'}}</td>
+<ng-container *ngIf="film !== null">
+  <td>{{ film.title }}</td>
+  <td>{{ film.producer }}</td>
+  <td>{{ film.created | date: "d.LL.YYYY" }}</td>
+</ng-container>

@@ -4,8 +4,8 @@ export interface User {
   /** User ID. */
   readonly id: string;
 
-  /** User name. */
-  readonly displayName: string | null;
+  /** Username. */
+  readonly userName: string | null;
 
   /** Email. */
   readonly email: string | null;
