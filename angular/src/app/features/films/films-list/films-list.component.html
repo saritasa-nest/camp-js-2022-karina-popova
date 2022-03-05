@@ -1,15 +1,22 @@
 <sw-header></sw-header>
 <div class="catalog">
   <div class="container">
-    <table mat-table class="mat-elevation-z8">
+    <table mat-table class="mat-elevation-z8 demo-table" [dataSource]="films$">
       <caption>
         {{
           tableTitle
         }}
       </caption>
-      <tr *ngFor="let film of films$ | async; trackBy: trackByFn">
-        <sw-film [film]="film"></sw-film>
-      </tr>
+      <mat-text-column name="title"></mat-text-column>
+      <mat-text-column name="director"></mat-text-column>
+      <ng-container matColumnDef="created">
+        <th mat-header-cell *matHeaderCellDef>Created</th>
+        <td mat-cell *matCellDef="let film">
+          {{ film.created | date: "d.LL.YYYY" }}
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </div>
 </div>

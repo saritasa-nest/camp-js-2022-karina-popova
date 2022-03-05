@@ -20,6 +20,9 @@ export class FilmsListComponent {
   /** Films.*/
   public films$ = this.filmsService.fetchFilms();
 
+  /** Films table column headings.*/
+  public displayedColumns: string[] = ['title', 'director', 'created'];
+
   public constructor(private readonly filmsService: FilmsService) {}
 
   /** Get a unique film id.
