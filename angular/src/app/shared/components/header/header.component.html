@@ -1,14 +1,22 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <span routerLink="">SW-FILMS</span>
-    <div class="header-wrapper">
-      <div *ngIf="user$ | async as user; else linksAuthorization">
-        {{ user.email }}
-        <button mat-raised-button (click)="signOut()">Sign out</button>
+    <div class="header-wrapper container">
+      <span routerLink="/">SW-FILMS</span>
+      <div class="user-menu">
+        <div *ngIf="user$ | async as user; else linksAuthorization">
+          {{ user.email }}
+          <button type="button" mat-raised-button (click)="signOut()">
+            Sign out
+          </button>
+        </div>
       </div>
       <ng-template #linksAuthorization>
-        <button mat-raised-button (click)="openDialogSignIn()">Sign In</button>
-        <button mat-raised-button (click)="openDialogSignUp()">Sign Up</button>
+        <button type="button" mat-raised-button (click)="openDialogSignIn()">
+          Sign In
+        </button>
+        <button type="button" mat-raised-button (click)="openDialogSignUp()">
+          Sign Up
+        </button>
       </ng-template>
     </div>
   </mat-toolbar-row>

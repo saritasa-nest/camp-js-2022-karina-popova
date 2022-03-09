@@ -1,7 +1,7 @@
 :host {
   display: block;
 }
-.container{
+.container {
   margin: 50px 50px;
   display: flex;
   justify-content: center;

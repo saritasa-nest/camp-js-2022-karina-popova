@@ -1,15 +1,11 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  Input,
-  OnInit,
 } from '@angular/core';
 import { UserService } from 'src/app/core/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginFormComponent } from 'src/app/features/login/login-form/login-form.component';
 import { RegisterFormComponent } from 'src/app/features/login/register-form/register-form.component';
-import { User } from 'src/app/core/models/user';
-import { Observable } from 'rxjs';
 
 /** Page header.*/
 @Component({
@@ -18,21 +14,14 @@ import { Observable } from 'rxjs';
   styleUrls: ['./header.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   /** User.*/
-  @Input()
-  public user$: Observable<User | null>;
+  public readonly user$ = this.userService.getCurrentUser();
 
   public constructor(
     private readonly userService: UserService,
     private readonly dialog: MatDialog,
   ) {
-    this.user$ = new Observable();
-  }
-
-  /** @inheritdoc */
-  public ngOnInit(): void {
-    this.user$ = this.userService.getCurrentUser();
   }
 
   /** Opening a login form.*/

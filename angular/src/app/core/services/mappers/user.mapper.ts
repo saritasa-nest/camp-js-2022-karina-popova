@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { User } from '../../models/user';
 
-import { UserDto } from './dto/User/user.dto';
+import { UserDto } from './dto/user/user.dto';
 import { IMapperFromDto } from './mapper';
 
 /** User mapper. */
@@ -14,7 +14,6 @@ export class UserMapper implements IMapperFromDto<UserDto, User> {
   public fromDto(dto: UserDto): User {
     return {
       id: dto.uid,
-      displayName: dto.displayName,
       email: dto.email,
     };
   }

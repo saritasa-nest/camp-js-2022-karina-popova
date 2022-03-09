@@ -3,11 +3,9 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { Observable } from 'rxjs';
+import { Film } from 'src/app/core/models/film';
 
-import { Film } from '../../../core/models/Film';
-
-import { Service } from '../../../core/services/Firebase.service';
+import { FilmsService } from 'src/app/core/services/films.service';
 
 /** Films list.*/
 @Component({
@@ -18,7 +16,7 @@ import { Service } from '../../../core/services/Firebase.service';
 })
 export class FilmsListComponent {
   /** Films.*/
-  public films$: Observable<Film[]>;
+  public films$ = this.filmsService.fetchFilms();
 
   /** Number of films per page.*/
   public pageSize = 1;
@@ -27,14 +25,13 @@ export class FilmsListComponent {
   public pageSizeOptions = [this.pageSize, 5, 20];
 
   /** Number of films in the collection. */
-  public length: Observable<number>;
+  // public length: Observable<number>;
 
   /** Films table column headings.*/
   public displayedColumns: string[] = ['title', 'director', 'created'];
 
-  public constructor(private readonly service: Service) {
-    this.films$ = this.service.fetchFilms(this.pageSize);
-    this.length = this.service.getLengthCollection();
+  public constructor(private readonly filmsService: FilmsService) {
+    // this.length = this.filmsService.getLengthCollection();
   }
 
   /** Changing pagination parameters by the user.
@@ -45,13 +42,19 @@ export class FilmsListComponent {
     const { pageSize } = event;
     if (this.pageSize !== pageSize) {
       this.pageSize = pageSize;
-      this.films$ = this.service.fetchFilms(this.pageSize);
+
+      // this.films$ = this.filmsService.fetchFilms(this.pageSize);
       return;
     }
     if (event.previousPageIndex !== undefined && event.previousPageIndex < event.pageIndex) {
-      this.films$ = this.service.nextPage(pageSize);
+      // this.films$ = this.filmsService.nextPage(pageSize);
     } else {
-      this.films$ = this.service.prevPage(pageSize);
+      // this.films$ = this.filmsService.prevPage(pageSize);
     }
+
+  }
+
+  public trackByFn(index: number, film: Film): string {
+    return film.id;
   }
 }

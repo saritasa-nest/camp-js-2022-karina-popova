@@ -4,23 +4,26 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 
+import { LoginModule } from '../features/login/login.module';
+
 import { HeaderComponent } from './components/header/header.component';
-import { HandingErrorPipe } from './pipes/handing-error.pipe';
+import { MainPageComponent } from './components/main-page/main-page.component';
 
 /** Shared module. */
 @NgModule({
-  declarations: [HeaderComponent, HandingErrorPipe],
+  declarations: [HeaderComponent, MainPageComponent],
   imports: [
     CommonModule,
     MatToolbarModule,
     MatButtonModule,
     RouterModule,
+    LoginModule,
   ],
   exports: [
     HeaderComponent,
-    HandingErrorPipe,
+    MainPageComponent,
     MatToolbarModule,
     MatButtonModule,
   ],
 })
-export class CommonSharedModule {}
+export class CommonSharedModule { }
