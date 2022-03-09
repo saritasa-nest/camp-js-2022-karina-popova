@@ -5,7 +5,6 @@ import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
-import { CommonSharedModule } from 'src/app/shared/common-shared.module';
 
 import { LoginFormComponent } from './login-form/login-form.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
@@ -21,7 +20,6 @@ import { AuthComponent } from './auth/auth.component';
     MatInputModule,
     ReactiveFormsModule,
     MatIconModule,
-    CommonSharedModule,
   ],
 })
 export class LoginModule { }

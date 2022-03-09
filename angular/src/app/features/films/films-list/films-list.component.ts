@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { Film } from 'src/app/core/models/film';
 
-import { FilmsService } from 'src/app/core/services/Films.service';
+import { FilmsService } from 'src/app/core/services/films.service';
 
 /** Films list.*/
 @Component({
@@ -23,7 +23,7 @@ export class FilmsListComponent {
   /** Films table column headings.*/
   public displayedColumns: string[] = ['title', 'director', 'created'];
 
-  public constructor(private readonly filmsService: FilmsService) {}
+  public constructor(private readonly filmsService: FilmsService) { }
 
   /** Get a unique film id.
    * @param index Film index.

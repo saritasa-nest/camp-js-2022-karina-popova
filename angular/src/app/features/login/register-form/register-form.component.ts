@@ -15,19 +15,19 @@ import { LoginFormComponent } from '../login-form/login-form.component';
 })
 export class RegisterFormComponent implements OnDestroy {
   /** Form name. */
-  public title = 'Sign up';
+  public readonly title = 'Sign up';
 
   /** Submit button name. */
-  public nameButton = 'Sign up';
+  public readonly nameButton = 'Sign up';
 
   /** Link to go to another form. */
-  public nameLink = 'Go to Sign In';
+  public readonly nameLink = 'Go to Sign In';
 
   /** Error message. */
   public readonly errorMessage$: Subject<AppError | null> =
     new ReplaySubject<AppError | null>();
 
-  private destroy$: Subject<boolean> = new Subject<boolean>();
+  private readonly destroy$: Subject<boolean> = new Subject<boolean>();
 
   public constructor(
     private readonly userService: UserService,

@@ -24,8 +24,10 @@ export class FirebaseService {
    */
   public fetchDocumentData(path: string): Observable<readonly DocumentData[]> {
     return this.firestore.collection(path).snapshotChanges()
-      .pipe(map(documentsDto => documentsDto.map(
-        documentDto => documentDto.payload.doc,
-      )));
+      .pipe(
+        map(documentsDto => documentsDto.map(
+          documentDto => documentDto.payload.doc,
+        )),
+      );
   }
 }

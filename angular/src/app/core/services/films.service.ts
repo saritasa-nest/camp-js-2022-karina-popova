@@ -3,9 +3,9 @@ import { map, Observable } from 'rxjs';
 
 import { Film } from '../models/film';
 
-import { FirebaseService } from './Firebase.service';
-import { FilmDto } from './mappers/dto/Film/film.dto';
-import { FilmMapper } from './mappers/Film.mapper';
+import { FirebaseService } from './firebase.service';
+import { FilmDto } from './mappers/dto/film/film.dto';
+import { FilmMapper } from './mappers/film.mapper';
 
 /**
  * Film service.
@@ -24,10 +24,13 @@ export class FilmsService {
    * List of all films with information.
    */
   public fetchFilms(): Observable<readonly Film[]> {
-    return this.firebaseService.fetchDocumentData('films').pipe(map(filmsDto => filmsDto.map(filmDto => {
-        const data = filmDto['data']() as FilmDto;
-        const { id } = filmDto;
-        return this.filmMapper.fromDto({ ...data, id });
-      })));
+    return this.firebaseService.fetchDocumentData('films')
+      .pipe(
+        map(filmsDto => filmsDto.map(filmDto => {
+          const data = filmDto['data']() as FilmDto;
+          const { id } = filmDto;
+          return this.filmMapper.fromDto({ ...data, id });
+        })),
+      );
   }
 }

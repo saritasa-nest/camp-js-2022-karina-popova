@@ -4,8 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { CommonSharedModule } from 'src/app/shared/common-shared.module';
 
-import { LoginModule } from '../login/login.module';
-
 import { FilmsListComponent } from './films-list/films-list.component';
 
 const routes: Routes = [
@@ -18,6 +16,6 @@ const routes: Routes = [
 /** Functions for managing the films list.*/
 @NgModule({
   declarations: [FilmsListComponent],
-  imports: [CommonModule, RouterModule.forChild(routes), CommonSharedModule, LoginModule, MatTableModule],
+  imports: [CommonModule, RouterModule.forChild(routes), CommonSharedModule, MatTableModule],
 })
-export class FilmsModule {}
+export class FilmsModule { }

@@ -5,7 +5,7 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('./features/films/films-management.component.module').then(
+      import('./features/films/films.component.module').then(
         m => m.FilmsModule,
       ),
   },

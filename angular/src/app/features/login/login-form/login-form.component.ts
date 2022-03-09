@@ -26,7 +26,7 @@ export class LoginFormComponent implements OnDestroy {
   public constructor(
     private readonly userService: UserService,
     private readonly dialog: MatDialog,
-  ) {}
+  ) { }
 
   /** @inheritdoc */
   public ngOnDestroy(): void {

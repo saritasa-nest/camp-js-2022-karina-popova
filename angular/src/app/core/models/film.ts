@@ -13,7 +13,7 @@ export interface Film {
   /** The opening paragraphs at the beginning of this film.*/
   readonly openingCrawl: string;
 
-  /** The name(s) of the producer(s) of this film. Comma separated.*/
+  /** The name(s) of the producer(s) of this film. */
   readonly producer: string[];
 
   /** The date release at original creator country.*/

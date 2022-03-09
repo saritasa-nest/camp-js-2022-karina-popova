@@ -6,8 +6,6 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ReplaySubject, Subject } from 'rxjs';
-import { AppError } from 'src/app/core/models/app-error';
 
 /** Authorization form. */
 @Component({
@@ -39,10 +37,6 @@ export class AuthComponent {
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
 
-  /** Error message. */
-  @Input()
-  public errorMessage$: Subject<AppError | null> = new ReplaySubject<AppError | null>();
-
   /** Form submit. */
   @Output()
   public sendForm = new EventEmitter();
@@ -51,7 +45,7 @@ export class AuthComponent {
   @Output()
   public clickOpenDialog = new EventEmitter();
 
-  public constructor(private readonly fb: FormBuilder) {}
+  public constructor(private readonly fb: FormBuilder) { }
 
   /** Emits an event containing a form. */
   public submitForm(): void {
