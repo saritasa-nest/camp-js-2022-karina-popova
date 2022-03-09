@@ -33,9 +33,9 @@ export class AuthComponent {
   /** Form field validator. */
   @Input()
   public authForm: FormGroup = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+  });
 
   /** Form submit. */
   @Output()

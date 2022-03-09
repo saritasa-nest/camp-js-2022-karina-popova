@@ -5,6 +5,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CommonSharedModule } from 'src/app/shared/common-shared.module';
 
+import { MatSortModule } from '@angular/material/sort';
+
+import { MatInputModule } from '@angular/material/input';
+
+import { MatIconModule } from '@angular/material/icon';
+
 import { FilmsListComponent } from './films-list/films-list.component';
 
 const routes: Routes = [
@@ -17,6 +23,15 @@ const routes: Routes = [
 /** Functions for managing the films list.*/
 @NgModule({
   declarations: [FilmsListComponent],
-  imports: [CommonModule, RouterModule.forChild(routes), CommonSharedModule, MatTableModule, MatPaginatorModule],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    CommonSharedModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatInputModule,
+    MatIconModule,
+  ],
 })
 export class FilmsModule { }
