@@ -2,15 +2,15 @@
 <div class="catalog">
   <div class="container">
     <mat-form-field class="example-form-field" appearance="fill">
-      <mat-label>Clearable input</mat-label>
-      <input
-        [value]="value"
-        matInput
-        type="text"
-        placeholder="Search"
-        (keyup)="changeSearchOptions($event)"
-      />
-      <button matSuffix mat-icon-button aria-label="Clear" (click)="value = ''">
+      <mat-label>Search film</mat-label>
+      <input matInput type="text" [(ngModel)]="value" #searchInput />
+      <button
+        *ngIf="value"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="value = ''"
+      >
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>

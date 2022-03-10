@@ -26,8 +26,8 @@ export class FilmsService {
    * List of all films with information.
    * @param _options Pagination options.
    */
-  public fetchFilms(_options: PageEvent & Sort): Observable<readonly Film[]> {
-    return this.firebaseService.fetchDocumentData('films', _options)
+  public fetchFilms(_options: PageEvent & Sort, searchValue: string): Observable<readonly Film[]> {
+    return this.firebaseService.fetchDocumentData('films', _options, searchValue)
       .pipe(
         map(filmsDto => filmsDto.map(filmDto => {
           const data = filmDto['data']() as FilmDto;

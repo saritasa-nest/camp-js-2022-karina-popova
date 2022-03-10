@@ -30,7 +30,7 @@ export class FirebaseService {
    * @param path Path to collection.
    * @param _options Pagination options.
    */
-  public fetchDocumentData(path: string, _options: PageEvent & Sort): Observable<readonly DocumentData[]> {
+  public fetchDocumentData(path: string, _options: PageEvent & Sort, value: string): Observable<readonly DocumentData[]> {
     return this.firestore.collection(path, refCollection => this.getQueryConstraint(refCollection, _options))
       .snapshotChanges()
       .pipe(

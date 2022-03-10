@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 
 import { MatIconModule } from '@angular/material/icon';
 
+import { FormsModule } from '@angular/forms';
+
 import { FilmsListComponent } from './films-list/films-list.component';
 
 const routes: Routes = [
@@ -32,6 +34,7 @@ const routes: Routes = [
     MatSortModule,
     MatInputModule,
     MatIconModule,
+    FormsModule,
   ],
 })
 export class FilmsModule { }

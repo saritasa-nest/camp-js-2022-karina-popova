@@ -1,10 +1,14 @@
 import {
   Component,
   ChangeDetectionStrategy,
+  ElementRef,
+  ViewChild,
+  OnInit,
+  AfterViewInit,
 } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
-import { BehaviorSubject, combineLatest, switchMap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, fromEvent, map, Observable, switchMap } from 'rxjs';
 import { Film } from 'src/app/core/models/film';
 
 import { FilmsService } from 'src/app/core/services/films.service';
@@ -16,7 +20,9 @@ import { FilmsService } from 'src/app/core/services/films.service';
   styleUrls: ['./films-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilmsListComponent {
+export class FilmsListComponent implements AfterViewInit {
+  @ViewChild('searchInput') public searchInput!: ElementRef<HTMLInputElement>;
+
   /** Number of films per page.*/
   public pageSize = 1;
 
@@ -31,6 +37,8 @@ export class FilmsListComponent {
 
   public value = '';
 
+  private searchOption$ = new BehaviorSubject(this.value);
+
   private paginationOptions$ = new BehaviorSubject({
     length: 6,
     pageIndex: 0,
@@ -43,15 +51,23 @@ export class FilmsListComponent {
     direction: 'asc',
   } as Sort);
 
-  private allRenderOptions = combineLatest([this.paginationOptions$, this.sortOptions$]);
+  private allRenderOptions = combineLatest([this.paginationOptions$, this.sortOptions$, this.searchOption$]);
 
   /** Films.*/
   public films$ = this.allRenderOptions.pipe(
-    switchMap(([paginationOptions, sortOptions]) =>
-      this.filmsService.fetchFilms({ ...paginationOptions, ...sortOptions })),
+    switchMap(([paginationOptions, sortOptions, searchOption]) =>
+      this.filmsService.fetchFilms({ ...paginationOptions, ...sortOptions }, searchOption)),
   );
 
   public constructor(private readonly filmsService: FilmsService) { }
+
+  public ngAfterViewInit(): void {
+    fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+      map((i: Event) => (i.currentTarget as HTMLInputElement).value),
+      debounceTime(500),
+    )
+      .subscribe(value => this.searchOption$.next(value));
+  }
 
   /** Changing pagination parameters by the user.
    * @param event Change event object that is emitted when
@@ -60,8 +76,8 @@ export class FilmsListComponent {
   public changePaginationOptions(event: PageEvent): void {
     this.paginationOptions$.next(event);
     this.films$ = this.allRenderOptions.pipe(
-      switchMap(([paginationOptions, sortOptions]) =>
-        this.filmsService.fetchFilms({ ...paginationOptions, ...sortOptions })),
+      switchMap(([paginationOptions, sortOptions, searchOption]) =>
+        this.filmsService.fetchFilms({ ...paginationOptions, ...sortOptions }, searchOption)),
     );
   }
 
@@ -72,14 +88,9 @@ export class FilmsListComponent {
   public changeSortOptions(event: Sort): void {
     this.sortOptions$.next(event);
     this.films$ = this.allRenderOptions.pipe(
-      switchMap(([paginationOptions, sortOptions]) =>
-        this.filmsService.fetchFilms({ ...paginationOptions, ...sortOptions })),
+      switchMap(([paginationOptions, sortOptions, searchOption]) =>
+        this.filmsService.fetchFilms({ ...paginationOptions, ...sortOptions }, searchOption)),
     );
-  }
-
-  public changeSearchOptions(event: Event) {
-    console.log(event);
-
   }
 
   /** Get a unique film id.
