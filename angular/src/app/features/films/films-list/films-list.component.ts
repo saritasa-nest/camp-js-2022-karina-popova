@@ -18,18 +18,18 @@ export class FilmsListComponent {
   public readonly tableTitle = 'Films';
 
   /** Films.*/
-  public films$ = this.filmsService.fetchFilms();
+  public readonly films$ = this.filmsService.fetchFilms();
 
   /** Films table column headings.*/
-  public displayedColumns: string[] = ['title', 'director', 'created'];
+  public readonly displayedColumns: string[] = ['title', 'director', 'created'];
 
   public constructor(private readonly filmsService: FilmsService) { }
 
   /** Get a unique film id.
-   * @param index Film index.
+   * @param _index Film index.
    * @param film Film.
    */
-  public trackByFn(index: number, film: Film): string {
+  public trackByFn(_index: number, film: Film): string {
     return film.id;
   }
 }

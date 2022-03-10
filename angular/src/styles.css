@@ -1,4 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --font-color: #ffffff;
+  --hover-color: #8f858521;
+  --reset-color: transparent;
+}
 
 html,
 body {
@@ -12,4 +17,11 @@ body {
 .container {
   max-width: 1800px;
   margin: 0 auto;
+}
+
+.button-link {
+  cursor: pointer;
+  background-color: var(--reset-color);
+  border: none;
+  color: var(--font-color);
 }

@@ -15,7 +15,7 @@ import { RegisterFormComponent } from '../register-form/register-form.component'
 })
 export class LoginFormComponent implements OnDestroy {
   /** Link to go to another form. */
-  public nameLink = 'Create New Account';
+  public readonly nameLink = 'Create New Account';
 
   /** Error message. */
   public readonly errorMessage$: Subject<AppError | null> =

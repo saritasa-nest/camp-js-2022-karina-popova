@@ -4,7 +4,6 @@ import { map, Observable } from 'rxjs';
 import { Film } from '../models/film';
 
 import { FirebaseService } from './firebase.service';
-import { FilmDto } from './mappers/dto/film/film.dto';
 import { FilmMapper } from './mappers/film.mapper';
 
 /**
@@ -27,7 +26,7 @@ export class FilmsService {
     return this.firebaseService.fetchDocumentData('films')
       .pipe(
         map(filmsDto => filmsDto.map(filmDto => {
-          const data = filmDto['data']() as FilmDto;
+          const data = filmDto['data']();
           const { id } = filmDto;
           return this.filmMapper.fromDto({ ...data, id });
         })),

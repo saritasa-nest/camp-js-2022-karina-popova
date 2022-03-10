@@ -13,7 +13,7 @@ const routes: Routes = [
   },
 ];
 
-/** Functions for managing the films list.*/
+/** Functions for working with the films table.*/
 @NgModule({
   declarations: [FilmsListComponent],
   imports: [CommonModule, RouterModule.forChild(routes), CommonSharedModule, MatTableModule],

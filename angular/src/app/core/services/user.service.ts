@@ -29,11 +29,11 @@ export class UserService {
    * @param email - User's current email.
    * @param password - User's current password.
    */
-  public signIn(email: string, password: string): Observable<User | null | AppError> {
+  public signIn(email: string, password: string): Observable<User | null> {
     return defer(() => this.auth.signInWithEmailAndPassword(email, password))
       .pipe(
         map(userCredential => userCredential.user ? this.userMapper.fromDto(userCredential.user) : null),
-        catchError((error: FirebaseError) => throwError(() => this.handingError(error))),
+        catchError((error: FirebaseError) => throwError(() => this.matchErrorMessage(error))),
       );
   }
 
@@ -42,11 +42,11 @@ export class UserService {
    * @param email - User email.
    * @param password - User password.
    */
-  public signUp(email: string, password: string): Observable<User | null | AppError> {
+  public signUp(email: string, password: string): Observable<User | null> {
     return defer(() => this.auth.createUserWithEmailAndPassword(email, password))
       .pipe(
         map(userCredential => userCredential.user ? this.userMapper.fromDto(userCredential.user) : null),
-        catchError((error: FirebaseError) => throwError(() => this.handingError(error))),
+        catchError((error: FirebaseError) => throwError(() => this.matchErrorMessage(error))),
       );
   }
 
@@ -58,7 +58,7 @@ export class UserService {
   /** Error handling.
    * @param error Firebase error.
    */
-  public handingError(error: FirebaseError): AppError {
+  public matchErrorMessage(error: FirebaseError): AppError {
     switch (error.code) {
       case 'auth/email-already-in-use':
         return new AppError('Email already in use');
