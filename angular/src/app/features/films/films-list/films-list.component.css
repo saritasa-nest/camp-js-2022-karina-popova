@@ -7,8 +7,10 @@
   justify-content: center;
   flex-direction: column;
 }
-table {
+
+.table-film {
   width: 100%;
+  margin-top: 50px;
 }
 
 .mat-row {

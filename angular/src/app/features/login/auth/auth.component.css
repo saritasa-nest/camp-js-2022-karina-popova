@@ -6,19 +6,7 @@
   align-items: center;
 }
 
-form {
+.form-auth {
   display: flex;
   flex-direction: column;
-}
-
-.button-link {
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  color: #ffffff;
-}
-
-.form-error {
-  text-align: center;
-  margin-bottom: 20px;
 }

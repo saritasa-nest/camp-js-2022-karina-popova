@@ -26,24 +26,16 @@ export class AuthComponent {
   @Input()
   public nameButton = 'Sign in';
 
-  /** Link to go to another form. */
-  @Input()
-  public nameLink = '';
-
   /** Form field validator. */
   @Input()
   public authForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-  });
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+    });
 
   /** Form submit. */
   @Output()
   public sendForm = new EventEmitter();
-
-  /** Open another form. */
-  @Output()
-  public clickOpenDialog = new EventEmitter();
 
   public constructor(private readonly fb: FormBuilder) { }
 
@@ -52,8 +44,4 @@ export class AuthComponent {
     this.sendForm.emit(this.authForm);
   }
 
-  /** Form open event. */
-  public openDialog(): void {
-    this.clickOpenDialog.emit();
-  }
 }

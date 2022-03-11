@@ -3,13 +3,12 @@ import { Injectable } from '@angular/core';
 import { Film } from '../../models/film';
 
 import { FilmDto } from './dto/film/film.dto';
-import { IMapperFromDto } from './mapper';
 
 /** Film mapper. */
 @Injectable({
   providedIn: 'root',
 })
-export class FilmMapper implements IMapperFromDto<FilmDto, Film> {
+export class FilmMapper {
   /** @inheritdoc */
   public fromDto({ id, fields }: FilmDto): Film {
     return {
