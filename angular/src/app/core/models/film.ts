@@ -24,4 +24,10 @@ export interface Film {
 
   /** Film id.*/
   readonly id: string;
+
+  /** The episode number of this film. */
+  readonly episodeId: number;
+
+  /** Number of planets that are in this film. */
+  readonly planets: number[];
 }

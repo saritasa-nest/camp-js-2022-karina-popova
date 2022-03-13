@@ -16,7 +16,7 @@ import { RegisterFormComponent } from 'src/app/features/login/register-form/regi
 })
 export class HeaderComponent {
   /** User.*/
-  public readonly user$ = this.userService.getCurrentUser();
+  public readonly user$ = this.userService.currentUser$;
 
   public constructor(
     private readonly userService: UserService,

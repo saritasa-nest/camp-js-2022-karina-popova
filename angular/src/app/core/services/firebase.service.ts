@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { AngularFirestore, CollectionReference, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
+import { Action, AngularFirestore, AngularFirestoreDocument, CollectionReference, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat';
 
 import { Path } from '../models/pathFields';
@@ -37,7 +37,7 @@ export class FirebaseService {
    * @param options Pagination options.
    * @param pathField Path to a field with nested fields in the document data.
    */
-  public fetchDocumentData(path: string, options: TableOptions, pathField: Path): Observable<readonly DocumentData[]> {
+  public fetchDocumentsData(path: string, options: TableOptions, pathField: Path): Observable<readonly DocumentData[]> {
     return this.firestones.collection(path, refCollection => this.getQueryConstraint(refCollection, options, pathField))
       .snapshotChanges()
       .pipe(
@@ -48,6 +48,28 @@ export class FirebaseService {
             documentDto => documentDto.payload.doc,
           );
         }),
+      );
+  }
+
+  /**
+   * Get a document data by id.
+   * @param path Path to collection.
+   * @param id Document id.
+   */
+  public fetchDocumentDataById(path: string, id: string): Observable<DocumentData> {
+    return this.firestones.doc(`${path + id}`).snapshotChanges()
+      .pipe(
+        map(v => v.payload),
+      );
+  }
+
+  public fetchDocumentData(path: string, valueField: number[]): Observable<readonly DocumentData[]> {
+    return this.firestones.collection(path, refCollection => refCollection.where('pk', 'in', valueField))
+      .snapshotChanges()
+      .pipe(
+        map(documentsDto => documentsDto.map(
+            documentDto => documentDto.payload.doc,
+        )),
       );
   }
 

@@ -29,13 +29,20 @@ export class FilmsListComponent implements AfterViewInit, OnDestroy {
   @ViewChild('paginator') public paginator!: MatPaginator;
 
   /** Number of films per page.*/
-  public readonly pageSize = 1;
+  public readonly pageSize = 3;
 
   /** The set of provided page size options to display to the user. */
   public readonly pageSizeOptions = [this.pageSize, 5, 20];
 
   /** Films table column headings.*/
   public readonly displayedColumns: string[] = ['title', 'director', 'created'];
+
+  private DEFAULT_PAGINATOR_OPTIONS = {
+    length: 6,
+    pageIndex: 0,
+    pageSize: this.pageSize,
+    previousPageIndex: 0,
+  };
 
   private searchOption$ = new BehaviorSubject('');
 
@@ -88,7 +95,10 @@ export class FilmsListComponent implements AfterViewInit, OnDestroy {
       map((i: Event) => (i.currentTarget as HTMLInputElement).value),
       debounceTime(500),
     )
-      .subscribe(value => this.searchOption$.next(value));
+      .subscribe(value => {
+        this.searchOption$.next(value);
+        this.paginator.firstPage();
+      });
   }
 
   /** Changing pagination parameters by the user.

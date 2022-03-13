@@ -22,4 +22,9 @@ export interface FilmFieldsDto {
   /** The title of this film.*/
   readonly title: string;
 
+  /** The episode number of this film. */
+  readonly episode_id: number;
+
+  /** Number of planets that are in this film. */
+  readonly planets: number[];
 }

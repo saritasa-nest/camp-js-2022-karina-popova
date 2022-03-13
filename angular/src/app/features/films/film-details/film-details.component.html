@@ -1,0 +1,23 @@
+<sw-main-page></sw-main-page>
+<div class="container">
+  <table *ngIf="film$ | async as film">
+    <tr>
+      <td>Title</td>
+      <td>{{ film.title }}</td>
+    </tr>
+    <tr>
+      <td>Opening crawl</td>
+      <td>{{ film.openingCrawl }}</td>
+    </tr>
+    <tr>
+      <td>Episode number</td>
+      <td>{{ film.episodeId }}</td>
+    </tr>
+    <tr>
+      <td >Planets</td>
+      <td *ngIf="planetsName$ | async | slice:0 as planetName">
+        {{ planetName }}
+      </td>
+    </tr>
+  </table>
+</div>

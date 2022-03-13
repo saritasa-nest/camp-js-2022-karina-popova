@@ -20,3 +20,7 @@
 .mat-row:hover {
   background-color: #8f858521;
 }
+
+.search-input{
+  background-color: rgb(66 66 66);
+}

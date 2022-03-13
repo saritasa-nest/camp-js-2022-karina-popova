@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Router } from '@angular/router';
 import { FirebaseError } from 'firebase/app';
 import { catchError, defer, map, Observable, throwError } from 'rxjs';
 
@@ -14,10 +15,23 @@ import { UserMapper } from './mappers/user.mapper';
   providedIn: 'root',
 })
 export class UserService {
+
+  /** Current user. Null when user is not logged in. */
+  public readonly currentUser$: Observable<User | null>;
+
+  /** Whether the user is authorized. */
+  public readonly isAuthorized$: Observable<boolean>;
+
   public constructor(
     private readonly auth: AngularFireAuth,
     private readonly userMapper: UserMapper,
-  ) { }
+    private readonly route: Router,
+  ) {
+    this.currentUser$ = this.getCurrentUser();
+    this.isAuthorized$ = this.currentUser$.pipe(
+      map(currentUser => currentUser !== null),
+    );
+  }
 
   /** Checking the current user on page load. */
   public getCurrentUser(): Observable<User | null> {
@@ -53,6 +67,7 @@ export class UserService {
   /** Logout user profile. */
   public logout(): void {
     this.auth.signOut();
+    this.route.navigate(['']);
   }
 
   /** Error handling.

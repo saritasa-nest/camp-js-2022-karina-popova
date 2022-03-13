@@ -20,6 +20,8 @@ export class FilmMapper {
       openingCrawl: fields.opening_crawl,
       producer: fields.producer.split(','),
       releaseDate: new Date(fields.release_date),
+      episodeId: fields.episode_id,
+      planets: fields.planets,
     };
   }
 }
