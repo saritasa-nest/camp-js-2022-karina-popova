@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ReplaySubject, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { AppError } from 'src/app/core/models/app-error';
+import { FormValue } from 'src/app/core/models/form-value';
 import { UserService } from 'src/app/core/services/user.service';
 
 import { RegisterFormComponent } from '../register-form/register-form.component';
@@ -18,8 +18,7 @@ export class LoginFormComponent implements OnDestroy {
   public readonly nameLink = 'Create New Account';
 
   /** Error message. */
-  public readonly errorMessage$: Subject<AppError | null> =
-    new ReplaySubject<AppError | null>();
+  public readonly errorMessage$: Subject<AppError | null> = new Subject();
 
   private readonly destroy$: Subject<void> = new Subject<void>();
 
@@ -40,15 +39,12 @@ export class LoginFormComponent implements OnDestroy {
     this.dialog.open(RegisterFormComponent);
   }
 
-  /** User authorization.
-   * @param loginForm Form.
+  /** Submit an authorization form.
+   * @param formValue Value of form fields.
    */
-  public onLogin(loginForm: FormGroup): void {
-    if (!loginForm.valid) {
-      return;
-    }
+  public onLogin(formValue: FormValue): void {
     this.userService
-      .signIn(loginForm.value.email, loginForm.value.password)
+      .signIn(formValue.email, formValue.password)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         error: (errors: AppError) => {

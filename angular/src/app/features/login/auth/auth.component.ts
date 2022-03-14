@@ -41,7 +41,8 @@ export class AuthComponent {
 
   /** Emits an event containing a form. */
   public submitForm(): void {
-    this.sendForm.emit(this.authForm);
+    if (this.authForm.valid) {
+      this.sendForm.emit(this.authForm.value);
+    }
   }
-
 }

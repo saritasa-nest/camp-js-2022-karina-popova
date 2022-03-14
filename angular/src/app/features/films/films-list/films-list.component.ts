@@ -25,11 +25,11 @@ export class FilmsListComponent {
 
   public constructor(private readonly filmsService: FilmsService) { }
 
-  /** Get a unique film id.
+  /** Film id.
    * @param _index Film index.
    * @param film Film.
    */
-  public trackByFn(_index: number, film: Film): string {
+  public trackById(_index: number, film: Film): string {
     return film.id;
   }
 }

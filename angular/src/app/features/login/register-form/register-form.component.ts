@@ -1,9 +1,10 @@
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { ReplaySubject, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AppError } from 'src/app/core/models/app-error';
+
+import { FormValue } from 'src/app/core/models/form-value';
 
 import { LoginFormComponent } from '../login-form/login-form.component';
 
@@ -24,8 +25,7 @@ export class RegisterFormComponent implements OnDestroy {
   public readonly nameLink = 'Go to Sign In';
 
   /** Error message. */
-  public readonly errorMessage$: Subject<AppError | null> =
-    new ReplaySubject<AppError | null>();
+  public readonly errorMessage$: Subject<AppError | null> = new Subject();
 
   private readonly destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -46,15 +46,12 @@ export class RegisterFormComponent implements OnDestroy {
     this.dialog.open(LoginFormComponent);
   }
 
-  /** User registration.
-   * @param registerForm Form.
+  /** Submit registration form.
+   * @param formValue Value of form fields.
    */
-  public onSignUp(registerForm: FormGroup): void {
-    if (!registerForm.valid) {
-      return;
-    }
+  public onSignUp(formValue: FormValue): void {
     this.userService
-      .signUp(registerForm.value.email, registerForm.value.password)
+      .signUp(formValue.email, formValue.password)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         error: (errors: AppError) => {

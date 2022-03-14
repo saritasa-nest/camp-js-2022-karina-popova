@@ -2,9 +2,10 @@
 <div class="container">
   <table
     mat-table
-    class="mat-elevation-z8 demo-table"
+    class="mat-elevation-z8 demo-table table-film"
     [dataSource]="films$"
-    class="table-film"
+    aria-label="films"
+    [trackBy]="trackById"
   >
     <mat-text-column name="title"></mat-text-column>
     <mat-text-column name="director"></mat-text-column>
