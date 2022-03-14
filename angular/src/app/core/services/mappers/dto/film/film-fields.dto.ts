@@ -27,4 +27,7 @@ export interface FilmFieldsDto {
 
   /** Number of planets that are in this film. */
   readonly planets: number[];
+
+  /** People that are in this film. */
+  readonly characters: number[];
 }

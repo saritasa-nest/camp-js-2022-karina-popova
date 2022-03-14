@@ -6,11 +6,20 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   flex-direction: row;
 }
 
 .user-menu {
-  width: 10%;
   display: flex;
   justify-content: space-between;
+}
+
+.logo-link {
+  text-decoration: none;
+  color: var(--font-color);
+}
+
+.button-menu {
+  margin: 10px;
 }

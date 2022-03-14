@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, map, merge, Observable, of, switchMap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { Film } from '../models/film';
 import { Path } from '../models/pathFields';
@@ -54,16 +54,31 @@ export class FilmsService {
   }
 
   /**
-   * List of planet that are in this film.
-   * @param id Planet number.
+   * List of planets that are in this film.
+   * @param id List of planet numbers.
    */
-  public fetchPlanets(id: number[]): Observable<Planet[]> {
-    return this.firebaseService.fetchDocumentData('planets', id).pipe(
+  public fetchPlanets(id: number[]): Observable<readonly Planet[]> {
+    return this.firebaseService.fetchDocumentsDataByField('planets', 'pk', id).pipe(
       map(planetsDoc => planetsDoc.map(
-        planetDoc => {
-            const data = planetDoc['data']();
-           return this.planetMapper.fromDto(data);
-          },
+        doc => {
+          const data = doc['data']();
+          return this.planetMapper.fromDto(data);
+        },
+      )),
+    );
+  }
+
+  /**
+   * List of characters that are in this film.
+   * @param id List of character numbers.
+   */
+  public fetchPeople(id: number[]): Observable<Planet[]> {
+    return this.firebaseService.fetchDocumentsDataByField('people', 'pk', id).pipe(
+      map(peopleDoc => peopleDoc.map(
+        doc => {
+          const data = doc['data']();
+          return this.planetMapper.fromDto(data);
+        },
       )),
     );
   }

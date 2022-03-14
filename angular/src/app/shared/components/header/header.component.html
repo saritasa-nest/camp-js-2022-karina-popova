@@ -1,20 +1,35 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
     <div class="header-wrapper container">
-      <span routerLink="/">SW-FILMS</span>
+      <a routerLink="/" class="logo-link">SW-FILMS</a>
       <div class="user-menu">
         <div *ngIf="user$ | async as user; else linksAuthorization">
           {{ user.email }}
-          <button type="button" mat-raised-button (click)="signOut()">
+          <button
+            type="button"
+            class="button-menu"
+            mat-raised-button
+            (click)="signOut()"
+          >
             Sign out
           </button>
         </div>
       </div>
-      <ng-template #linksAuthorization>
-        <button type="button" mat-raised-button (click)="openDialogSignIn()">
+      <ng-template #linksAuthorization class="user-menu">
+        <button
+          type="button"
+          class="button-menu"
+          mat-raised-button
+          (click)="openDialogSignIn()"
+        >
           Sign In
         </button>
-        <button type="button" mat-raised-button (click)="openDialogSignUp()">
+        <button
+          type="button"
+          class="button-menu"
+          mat-raised-button
+          (click)="openDialogSignUp()"
+        >
           Sign Up
         </button>
       </ng-template>

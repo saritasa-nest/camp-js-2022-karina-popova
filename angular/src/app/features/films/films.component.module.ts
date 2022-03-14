@@ -41,4 +41,4 @@ const routes: Routes = [
     FormsModule,
   ],
 })
-export class FilmsModule {}
+export class FilmsModule { }

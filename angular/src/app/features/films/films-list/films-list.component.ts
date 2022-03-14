@@ -37,13 +37,6 @@ export class FilmsListComponent implements AfterViewInit, OnDestroy {
   /** Films table column headings.*/
   public readonly displayedColumns: string[] = ['title', 'director', 'created'];
 
-  private DEFAULT_PAGINATOR_OPTIONS = {
-    length: 6,
-    pageIndex: 0,
-    pageSize: this.pageSize,
-    previousPageIndex: 0,
-  };
-
   private searchOption$ = new BehaviorSubject('');
 
   private paginationOptions$ = new BehaviorSubject({
@@ -126,11 +119,11 @@ export class FilmsListComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  /** Get a unique film id.
+  /** Film id.
    * @param _index Film index.
    * @param film Film.
    */
-  public trackByFn(_index: number, film: Film): string {
+  public trackById(_index: number, film: Film): string {
     return film.id;
   }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { Action, AngularFirestore, AngularFirestoreDocument, CollectionReference, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
+import { AngularFirestore, CollectionReference, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat';
 
 import { Path } from '../models/pathFields';
@@ -63,12 +63,18 @@ export class FirebaseService {
       );
   }
 
-  public fetchDocumentData(path: string, valueField: number[]): Observable<readonly DocumentData[]> {
-    return this.firestones.collection(path, refCollection => refCollection.where('pk', 'in', valueField))
+  /**
+   * Documents with specified field.
+   * @param path Path to collection.
+   * @param pathCompare The path to compare.
+   * @param value The value for comparison.Array must be up to 10 elements.
+   */
+  public fetchDocumentsDataByField(path: string, pathCompare: string, value: number[]): Observable<readonly DocumentData[]> {
+    return this.firestones.collection(path, refCollection => refCollection.where(pathCompare, 'in', value))
       .snapshotChanges()
       .pipe(
         map(documentsDto => documentsDto.map(
-            documentDto => documentDto.payload.doc,
+          documentDto => documentDto.payload.doc,
         )),
       );
   }

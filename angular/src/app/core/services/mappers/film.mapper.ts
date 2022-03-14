@@ -22,6 +22,7 @@ export class FilmMapper {
       releaseDate: new Date(fields.release_date),
       episodeId: fields.episode_id,
       planets: fields.planets,
+      characters: fields.characters,
     };
   }
 }
