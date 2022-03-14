@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { AngularFirestore, CollectionReference, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
+import { AngularFirestore, CollectionReference, DocumentReference, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat';
 
 import { Path } from '../models/pathFields';
@@ -138,5 +138,31 @@ export class FirebaseService {
       .pipe(
         map(documentsDto => documentsDto.length),
       );
+  }
+
+  /**
+   * Deleting a document.
+   * @param path Path to document.
+   */
+  public deleteDocumentData(path: string): Promise<void> {
+    return this.firestones.doc(path).delete();
+  }
+
+  /**
+   * Adding a document.
+   * @param path Path to collection.
+   * @param value Document data.
+   */
+  public addDocumentData(path: string, value: unknown): Promise<DocumentReference<unknown>> {
+    return this.firestones.collection(path).add(value);
+  }
+
+  /**
+   * Document editing.
+   * @param path Path to document.
+   * @param value Document data.
+   */
+  public editDocumentData(path: string, value: Partial<unknown>): Promise<void> {
+    return this.firestones.doc(path).update(value);
   }
 }

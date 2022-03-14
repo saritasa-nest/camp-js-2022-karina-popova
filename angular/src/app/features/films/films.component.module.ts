@@ -1,37 +1,31 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CommonSharedModule } from 'src/app/shared/common-shared.module';
 import { MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule } from '@angular/forms';
-import { AuthorizationGuard } from 'src/app/core/guards/authorization.guard';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 
 import { FilmsListComponent } from './films-list/films-list.component';
 import { FilmDetailsComponent } from './film-details/film-details.component';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: FilmsListComponent,
-  },
-  {
-    path: ':id',
-    canActivate: [AuthorizationGuard],
-    component: FilmDetailsComponent,
-  },
-];
+import { FilmsRoutingModule } from './films-routing.component.module';
+import { FilmsManagementComponent } from './films-management/films-management.component';
+import { FilmCreateComponent } from './films-management/film-create/film-create.component';
 
 /** Functions for working with the films table.*/
 @NgModule({
-  declarations: [FilmsListComponent, FilmDetailsComponent],
-  providers: [AuthorizationGuard],
+  declarations: [
+    FilmsListComponent,
+    FilmDetailsComponent,
+    FilmsManagementComponent,
+    FilmCreateComponent,
+  ],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),
+    FilmsRoutingModule,
     CommonSharedModule,
     MatTableModule,
     MatPaginatorModule,
@@ -39,6 +33,8 @@ const routes: Routes = [
     MatInputModule,
     MatIconModule,
     FormsModule,
+    MatButtonModule,
+    ReactiveFormsModule,
   ],
 })
-export class FilmsModule { }
+export class FilmsModule {}

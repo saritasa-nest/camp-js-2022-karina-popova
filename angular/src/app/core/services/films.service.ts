@@ -7,6 +7,7 @@ import { Planet } from '../models/planet';
 import { TableOptions } from '../models/table-options';
 
 import { FirebaseService } from './firebase.service';
+import { FilmDto } from './mappers/dto/film/film.dto';
 import { FilmMapper } from './mappers/film.mapper';
 import { PlanetMapper } from './mappers/planet.mapper';
 
@@ -90,4 +91,28 @@ export class FilmsService {
     return this.firebaseService.getCountDocumentData('films', options, Path.Fields);
   }
 
+  /** Deleting film.
+   * @param id Film id.
+   */
+  public deleteFilm(id: string): void {
+    this.firebaseService.deleteDocumentData(`films${id}`);
+  }
+
+  /**
+   * Adding a document.
+   * @param id Film id.
+   * @param value Film.
+   */
+  public addFilm(id: string, value: FilmDto): void {
+    this.firebaseService.addDocumentData(`films${id}`, value);
+  }
+
+  /**
+   * Document editing.
+   * @param id Film id.
+   * @param value Film.
+   */
+  public editDocumentData(id: string, value: FilmDto): void {
+    this.firebaseService.editDocumentData(`films${id}`, value);
+  }
 }

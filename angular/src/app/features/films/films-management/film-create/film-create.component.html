@@ -1,0 +1,14 @@
+<div [formGroup]="filmForm">
+  <mat-form-field appearance="outline">
+    <mat-label>Title</mat-label>
+    <input
+      formControlName="title"
+      matInput
+      placeholder="Enter title film"
+      required
+    />
+    <mat-error *ngIf="!filmForm.controls['title'].valid">
+      Title is required
+    </mat-error>
+  </mat-form-field>
+</div>
