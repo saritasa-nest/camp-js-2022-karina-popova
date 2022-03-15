@@ -23,6 +23,8 @@ export class FilmDetailsComponent {
 
   private readonly filmId = this.activatedRoute.snapshot.paramMap.get('id') ?? '';
 
+  private readonly filmId = this.activatedRoute.snapshot.paramMap.get('id') ?? null;
+
   public constructor(
     private readonly filmsService: FilmsService,
     private readonly activatedRoute: ActivatedRoute,

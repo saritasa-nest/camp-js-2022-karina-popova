@@ -1,9 +1,3 @@
 :host {
   display: block;
 }
-
-.form-film-buttons {
-  display: flex;
-  justify-content: space-evenly;
-  padding-bottom: 25px;
-}

@@ -1,20 +1,15 @@
 <sw-header></sw-header>
 <div class="container">
-  <sw-films-management
-    [filmForm]="editForm"
-    [title]="title"
-    (sendForm)="submitForm()"
-  >
+  <sw-films-management [filmForm]="editForm" [title]="title" (sendForm)="submitForm()">
     <div class="form-film-buttons">
       <button type="submit" mat-flat-button color="primary">SAVE</button>
-      <button
-        type="button"
-        mat-flat-button
-        color="primary"
-        (click)="closeForm()"
-      >
+      <button type="button" mat-flat-button color="primary" (click)="closeForm()">
         CANCEL
       </button>
     </div>
+    (sendForm)="submitForm($event)"
+    title="Edit film"
+    (closeForm)="closeForm()"
+    >
   </sw-films-management>
 </div>

@@ -1,18 +1,9 @@
 <sw-header></sw-header>
 <div class="container">
-  <sw-films-management
-    [filmForm]="addForm"
-    [title]="title"
-    (sendForm)="submitForm()"
-  >
+  <sw-films-management [filmForm]="addForm" [title]="title" (sendForm)="submitForm()">
     <div class="form-film-buttons">
       <button type="submit" mat-flat-button color="primary">SAVE</button>
-      <button
-        type="button"
-        mat-flat-button
-        color="primary"
-        (click)="closeForm()"
-      >
+      <button type="button" mat-flat-button color="primary" (click)="closeForm()">
         CANCEL
       </button>
     </div>

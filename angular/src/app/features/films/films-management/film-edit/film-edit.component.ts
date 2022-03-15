@@ -2,6 +2,7 @@ import {
   Component,
   ChangeDetectionStrategy,
   AfterViewInit,
+  ViewChild,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -53,19 +54,18 @@ export class FilmEditComponent implements AfterViewInit {
   /** @inheritdoc */
   public ngAfterViewInit(): void {
     this.film$.subscribe(value => {
-      this.editForm.patchValue(
-        {
-          created: value.created,
-          director: value.director,
-          edited: value.edited,
-          openingCrawl: value.openingCrawl,
-          producer: value.producer.toLocaleString(),
-          releaseDate: value.releaseDate,
-          title: value.title,
-          planets: value.planets,
-          characters: value.characters,
-          episodeId: value.episodeId,
-        },
+      this.editForm.patchValue({
+        created: value.created,
+        director: value.director,
+        edited: value.edited,
+        openingCrawl: value.openingCrawl,
+        producer: value.producer.toLocaleString(),
+        releaseDate: value.releaseDate,
+        title: value.title,
+        planets: value.planets,
+        characters: value.characters,
+        episodeId: value.episodeId,
+      },
       );
     });
   }

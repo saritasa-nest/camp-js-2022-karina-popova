@@ -10,6 +10,7 @@ import { FilmsService } from 'src/app/core/services/films.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilmsManagementComponent {
+
   /** Form name. */
   @Input()
   public title = '';
