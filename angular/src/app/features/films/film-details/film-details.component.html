@@ -25,6 +25,17 @@
         {{ peopleNames }}
       </td>
     </tr>
+    <tfoot class="table-detail-footer">
+      <button mat-fab color="primary" routerLink='/create'>
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-fab color="primary" routerLink="edit">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-fab color="primary" (click)="onClick()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </tfoot>
   </table>
-  <sw-films-management></sw-films-management>
 </div>
+<router-outlet></router-outlet>

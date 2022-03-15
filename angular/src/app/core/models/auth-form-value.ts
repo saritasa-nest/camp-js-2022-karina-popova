@@ -1,5 +1,5 @@
 /** Form fields. */
-export interface FormValue {
+export interface AuthFormValue {
 
   /** Email. */
   readonly email: string;

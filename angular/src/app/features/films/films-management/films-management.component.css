@@ -1,0 +1,23 @@
+.form-film {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: #424242;
+}
+
+.form-film__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  color: var(--font-color);
+  padding: 25px;
+  width: 600px;
+}
+
+.form-film-buttons {
+  display: flex;
+  justify-content: space-evenly;
+}

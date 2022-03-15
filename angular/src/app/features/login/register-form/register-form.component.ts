@@ -4,7 +4,7 @@ import { UserService } from 'src/app/core/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AppError } from 'src/app/core/models/app-error';
 
-import { FormValue } from 'src/app/core/models/form-value';
+import { AuthFormValue } from 'src/app/core/models/auth-form-value';
 
 import { LoginFormComponent } from '../login-form/login-form.component';
 
@@ -49,7 +49,7 @@ export class RegisterFormComponent implements OnDestroy {
   /** Submit registration form.
    * @param formValue Value of form fields.
    */
-  public onSignUp(formValue: FormValue): void {
+  public onSignUp(formValue: AuthFormValue): void {
     this.userService
       .signUp(formValue.email, formValue.password)
       .pipe(takeUntil(this.destroy$))

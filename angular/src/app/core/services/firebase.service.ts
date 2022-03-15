@@ -57,7 +57,7 @@ export class FirebaseService {
    * @param id Document id.
    */
   public fetchDocumentDataById(path: string, id: string): Observable<DocumentData> {
-    return this.firestones.doc(`${path + id}`).snapshotChanges()
+    return this.firestones.doc(`${path}/${id}`).snapshotChanges()
       .pipe(
         map(v => v.payload),
       );
@@ -149,12 +149,14 @@ export class FirebaseService {
   }
 
   /**
-   * Adding a document.
+   * Adding a document Promise<DocumentReference<unknown>>.
    * @param path Path to collection.
    * @param value Document data.
    */
-  public addDocumentData(path: string, value: unknown): Promise<DocumentReference<unknown>> {
-    return this.firestones.collection(path).add(value);
+  public addDocumentData(path: string, value: unknown): void {
+    console.log(value);
+
+    // return this.firestones.collection(path).add(value);
   }
 
   /**

@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { AppError } from 'src/app/core/models/app-error';
-import { FormValue } from 'src/app/core/models/form-value';
+import { AuthFormValue } from 'src/app/core/models/auth-form-value';
 import { UserService } from 'src/app/core/services/user.service';
 
 import { RegisterFormComponent } from '../register-form/register-form.component';
@@ -42,7 +42,7 @@ export class LoginFormComponent implements OnDestroy {
   /** Submit an authorization form.
    * @param formValue Value of form fields.
    */
-  public onLogin(formValue: FormValue): void {
+  public onLogin(formValue: AuthFormValue): void {
     this.userService
       .signIn(formValue.email, formValue.password)
       .pipe(takeUntil(this.destroy$))

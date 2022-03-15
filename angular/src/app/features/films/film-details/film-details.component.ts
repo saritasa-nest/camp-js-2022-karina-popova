@@ -1,8 +1,11 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Router } from '@angular/router';
-import { map, Observable, switchMap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { filter, map, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
 import { Film } from 'src/app/core/models/film';
 import { FilmsService } from 'src/app/core/services/films.service';
+
+import { FilmCreateComponent } from '../films-management/film-create/film-create.component';
 
 /** Film. */
 @Component({
@@ -23,22 +26,38 @@ export class FilmDetailsComponent {
 
   public constructor(
     private readonly filmsService: FilmsService,
-    private readonly route: Router,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly dialog: MatDialog,
   ) {
-    this.film$ = this.filmsService.fetchFilmById(this.route.url);
-    this.planetNames$ = this.filmsService.fetchFilmById(this.route.url).pipe(
+    // this.route.paramMap.pipe(
+    //   map(params => params.get('id') ?? ''),
+    //   switchMap(id => this.filmsService.fetchFilmById(id)),
+    // );
+
+    this.film$ = this.filmsService.fetchFilmById(this.route.snapshot.paramMap.get('id') ?? '').pipe(
+      shareReplay({ bufferSize: 1, refCount: true }),
+    );
+    this.planetNames$ = this.film$.pipe(
+      filter(Boolean),
       switchMap(v => this.filmsService.fetchPlanets(v.planets.slice(0, 9)).pipe(
         map(planets => planets.map(
           planet => planet.name,
         )),
       )),
     );
-    this.peopleNames$ = this.filmsService.fetchFilmById(this.route.url).pipe(
+    this.peopleNames$ = this.film$.pipe(
+      filter(Boolean),
       switchMap(v => this.filmsService.fetchPeople(v.characters.slice(0, 9)).pipe(
         map(characters => characters.map(
           character => character.name,
         )),
       )),
     );
+  }
+
+  /** Button click. */
+  public onClick(): void {
+    this.filmsService.deleteFilm(this.route.snapshot.paramMap.get('id') ?? '');
   }
 }

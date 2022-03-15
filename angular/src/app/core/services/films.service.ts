@@ -95,16 +95,15 @@ export class FilmsService {
    * @param id Film id.
    */
   public deleteFilm(id: string): void {
-    this.firebaseService.deleteDocumentData(`films${id}`);
+    this.firebaseService.deleteDocumentData(`films/${id}`);
   }
 
   /**
    * Adding a document.
-   * @param id Film id.
    * @param value Film.
    */
-  public addFilm(id: string, value: FilmDto): void {
-    this.firebaseService.addDocumentData(`films${id}`, value);
+  public addFilm(value: Film): void {
+    this.firebaseService.addDocumentData(`films`, this.filmMapper.toDto(value));
   }
 
   /**
@@ -112,7 +111,7 @@ export class FilmsService {
    * @param id Film id.
    * @param value Film.
    */
-  public editDocumentData(id: string, value: FilmDto): void {
-    this.firebaseService.editDocumentData(`films${id}`, value);
+  public editFilm(id: string, value: FilmDto): void {
+    this.firebaseService.editDocumentData(`films/${id}`, value);
   }
 }

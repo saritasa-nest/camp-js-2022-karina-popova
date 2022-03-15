@@ -13,9 +13,17 @@ const routes: Routes = [
     component: FilmsListComponent,
   },
   {
-    path: ':id',
+    path: 'details/:id',
     canActivate: [AuthorizationGuard],
     component: FilmDetailsComponent,
+
+    // children: [
+    //   {
+    //     path: 'create',
+    //     canActivate: [AuthorizationGuard],
+    //     component: FilmCreateComponent,
+    //   },
+    // ],
   },
   {
     path: 'create',
@@ -41,4 +49,4 @@ const routes: Routes = [
   imports: [CommonModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class FilmsRoutingModule {}
+export class FilmsRoutingModule { }

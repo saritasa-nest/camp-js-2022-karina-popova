@@ -1,3 +1,7 @@
 :host {
   display: block;
 }
+
+.table-detail-footer {
+  display: flex;
+}

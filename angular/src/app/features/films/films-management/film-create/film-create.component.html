@@ -1,14 +1,5 @@
-<div [formGroup]="filmForm">
-  <mat-form-field appearance="outline">
-    <mat-label>Title</mat-label>
-    <input
-      formControlName="title"
-      matInput
-      placeholder="Enter title film"
-      required
-    />
-    <mat-error *ngIf="!filmForm.controls['title'].valid">
-      Title is required
-    </mat-error>
-  </mat-form-field>
+<sw-header></sw-header>
+<div class="container">
+  <sw-films-management (sendForm)="submitForm($event)" title="Create film" (closeForm)="closeForm()">
+  </sw-films-management>
 </div>

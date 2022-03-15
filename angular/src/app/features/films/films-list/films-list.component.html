@@ -4,15 +4,8 @@
     <mat-label>Search film</mat-label>
     <input matInput type="text" #searchInput />
   </mat-form-field>
-  <table
-    mat-table
-    class="mat-elevation-z8 demo-table table-film"
-    [dataSource]="films$"
-    matSort
-    (matSortChange)="changeSortOptions($event)"
-    aria-label="films"
-    [trackBy]="trackById"
-  >
+  <table mat-table class="mat-elevation-z8 demo-table table-film" [dataSource]="films$" matSort
+    (matSortChange)="changeSortOptions($event)" aria-label="films" [trackBy]="trackById">
     <ng-container matColumnDef="title">
       <th mat-header-cell *matHeaderCellDef="" mat-sort-header="title">
         Title
@@ -38,19 +31,9 @@
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr
-      mat-row
-      *matRowDef="let film; columns: displayedColumns"
-      [routerLink]="'/' + film.id"
-    ></tr>
+    <tr mat-row *matRowDef="let film; columns: displayedColumns" [routerLink]="['details', film.id]"></tr>
   </table>
-  <mat-paginator
-    #paginator
-    [length]="length | async"
-    [pageSize]="pageSize"
-    [pageSizeOptions]="pageSizeOptions"
-    aria-label="Select page"
-    (page)="changePaginationOptions($event)"
-  >
+  <mat-paginator #paginator [length]="length | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+    aria-label="Select page" (page)="changePaginationOptions($event)">
   </mat-paginator>
 </div>
