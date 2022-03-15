@@ -1,6 +1,9 @@
 <sw-main-page></sw-main-page>
 <div class="container">
-  <table *ngIf="film$ | async as film">
+  <table *ngIf="film$ | async as film" aria-label="film-details" class="table-details">
+    <tr>
+      <th>Film details</th>
+    </tr>
     <tr>
       <td>Title</td>
       <td>{{ film.title }}</td>
@@ -15,13 +18,13 @@
     </tr>
     <tr>
       <td>Planets</td>
-      <td *ngIf="planetNames$ | async | slice: 0 as planetNames">
+      <td *ngIf="planetNames$ | async as planetNames">
         {{ planetNames }}
       </td>
     </tr>
     <tr>
       <td>Characters</td>
-      <td *ngIf="peopleNames$ | async | slice: 0 as peopleNames">
+      <td *ngIf="peopleNames$ | async as peopleNames">
         {{ peopleNames }}
       </td>
     </tr>

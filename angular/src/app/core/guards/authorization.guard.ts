@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
-import { first, map, Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { UserService } from '../services/user.service';
 
@@ -14,13 +14,12 @@ export class AuthorizationGuard implements CanActivate {
   public constructor(
     private readonly userService: UserService,
     private readonly router: Router,
-  ) {}
+  ) { }
 
   /** @inheritdoc */
   public canActivate(): Observable<boolean | UrlTree> {
     return this.userService.isAuthorized$.pipe(
-      map(isAuthorized => (isAuthorized ? true : this.router.parseUrl('/'))),
-      first(),
+      map(isAuthorized => isAuthorized ? true : this.router.parseUrl('/')),
     );
   }
 }

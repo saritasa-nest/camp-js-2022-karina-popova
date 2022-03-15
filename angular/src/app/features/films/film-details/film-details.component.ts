@@ -16,12 +16,12 @@ export class FilmDetailsComponent {
   public readonly film$: Observable<Film | null>;
 
   /** Planet names. */
-  public readonly planetNames$: Observable<string[]>;
+  public readonly planetNames$: Observable<string[] | null>;
 
   /** People names. */
-  public readonly peopleNames$: Observable<string[]>;
+  public readonly peopleNames$: Observable<string[] | null>;
 
-  private readonly filmId = this.activatedRoute.snapshot.paramMap.get('id') ?? null;
+  private readonly filmId = this.activatedRoute.snapshot.paramMap.get('id') ?? '';
 
   public constructor(
     private readonly filmsService: FilmsService,

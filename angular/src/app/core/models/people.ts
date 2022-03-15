@@ -2,5 +2,5 @@
 export interface People {
 
   /** The name of this character. */
-  name: string;
+  readonly name: string;
 }
