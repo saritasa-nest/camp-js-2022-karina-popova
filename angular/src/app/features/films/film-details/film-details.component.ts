@@ -1,11 +1,8 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, map, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
+import { filter, map, Observable, shareReplay, switchMap } from 'rxjs';
 import { Film } from 'src/app/core/models/film';
 import { FilmsService } from 'src/app/core/services/films.service';
-
-import { FilmCreateComponent } from '../films-management/film-create/film-create.component';
 
 /** Film. */
 @Component({
@@ -24,18 +21,14 @@ export class FilmDetailsComponent {
   /** People names. */
   public readonly peopleNames$: Observable<string[]>;
 
+  private readonly filmId = this.activatedRoute.snapshot.paramMap.get('id') ?? null;
+
   public constructor(
     private readonly filmsService: FilmsService,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
-    private readonly dialog: MatDialog,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly route: Router,
   ) {
-    // this.route.paramMap.pipe(
-    //   map(params => params.get('id') ?? ''),
-    //   switchMap(id => this.filmsService.fetchFilmById(id)),
-    // );
-
-    this.film$ = this.filmsService.fetchFilmById(this.route.snapshot.paramMap.get('id') ?? '').pipe(
+    this.film$ = this.filmsService.fetchFilmById(this.activatedRoute.snapshot.paramMap.get('id') ?? '').pipe(
       shareReplay({ bufferSize: 1, refCount: true }),
     );
     this.planetNames$ = this.film$.pipe(
@@ -58,6 +51,10 @@ export class FilmDetailsComponent {
 
   /** Button click. */
   public onClick(): void {
-    this.filmsService.deleteFilm(this.route.snapshot.paramMap.get('id') ?? '');
+    if (this.filmId) {
+      this.filmsService.deleteFilm(this.filmId).then(
+        () => this.route.navigate(['']),
+      );
+    }
   }
 }

@@ -5,7 +5,8 @@ import { AuthorizationGuard } from 'src/app/core/guards/authorization.guard';
 
 import { FilmsListComponent } from './films-list/films-list.component';
 import { FilmDetailsComponent } from './film-details/film-details.component';
-import { FilmCreateComponent } from './films-management/film-create/film-create.component';
+import { FilmAddComponent } from './films-management/film-add/film-add.component';
+import { FilmEditComponent } from './films-management/film-edit/film-edit.component';
 
 const routes: Routes = [
   {
@@ -16,30 +17,21 @@ const routes: Routes = [
     path: 'details/:id',
     canActivate: [AuthorizationGuard],
     component: FilmDetailsComponent,
-
-    // children: [
-    //   {
-    //     path: 'create',
-    //     canActivate: [AuthorizationGuard],
-    //     component: FilmCreateComponent,
-    //   },
-    // ],
+  },
+  {
+    path: 'edit',
+    canActivate: [AuthorizationGuard],
+    component: FilmEditComponent,
   },
   {
     path: 'create',
     canActivate: [AuthorizationGuard],
-    component: FilmCreateComponent,
+    component: FilmAddComponent,
   },
   {
     path: '**',
     redirectTo: '',
   },
-
-  // {
-  //   path: ':id/create',
-  //   canActivate: [AuthorizationGuard],
-  //   component: FilmCreateComponent,
-  // },
 ];
 
 /** Films routing module.*/
@@ -49,4 +41,4 @@ const routes: Routes = [
   imports: [CommonModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class FilmsRoutingModule { }
+export class FilmsRoutingModule {}

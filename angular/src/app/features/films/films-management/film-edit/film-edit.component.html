@@ -1,0 +1,36 @@
+<sw-header></sw-header>
+<div class="container">
+  <sw-films-management
+    (sendForm)="submitForm($event)"
+    title="Edit film"
+    (closeForm)="closeForm()"
+  >
+    <mat-form-field appearance="fill">
+      <mat-label>The date film was edited.</mat-label>
+      <input matInput [matDatepicker]="edited" formControlName="edited" />
+      <mat-datepicker-toggle matSuffix [for]="edited"></mat-datepicker-toggle>
+      <mat-datepicker #edited></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Producer</mat-label>
+      <input
+        formControlName="producer"
+        matInput
+        placeholder="The name(s) of the producer(s) of this film."
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>The date release at original creator country.</mat-label>
+      <input
+        matInput
+        [matDatepicker]="releaseDate"
+        formControlName="releaseDate"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="releaseDate"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #releaseDate></mat-datepicker>
+    </mat-form-field>
+  </sw-films-management>
+</div>

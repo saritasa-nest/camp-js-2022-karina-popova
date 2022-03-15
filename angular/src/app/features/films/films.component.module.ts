@@ -18,7 +18,8 @@ import { FilmsListComponent } from './films-list/films-list.component';
 import { FilmDetailsComponent } from './film-details/film-details.component';
 import { FilmsRoutingModule } from './films-routing.component.module';
 import { FilmsManagementComponent } from './films-management/films-management.component';
-import { FilmCreateComponent } from './films-management/film-create/film-create.component';
+import { FilmAddComponent } from './films-management/film-add/film-add.component';
+import { FilmEditComponent } from './films-management/film-edit/film-edit.component';
 
 /** Functions for working with the films table.*/
 @NgModule({
@@ -26,7 +27,8 @@ import { FilmCreateComponent } from './films-management/film-create/film-create.
     FilmsListComponent,
     FilmDetailsComponent,
     FilmsManagementComponent,
-    FilmCreateComponent,
+    FilmAddComponent,
+    FilmEditComponent,
   ],
   imports: [
     CommonModule,

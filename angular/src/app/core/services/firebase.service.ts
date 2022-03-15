@@ -37,7 +37,7 @@ export class FirebaseService {
    * @param options Pagination options.
    * @param pathField Path to a field with nested fields in the document data.
    */
-  public fetchDocumentsData(path: string, options: TableOptions, pathField: Path): Observable<readonly DocumentData[]> {
+  public fetchSortFilterDocumentsData(path: string, options: TableOptions, pathField: Path): Observable<readonly DocumentData[]> {
     return this.firestones.collection(path, refCollection => this.getQueryConstraint(refCollection, options, pathField))
       .snapshotChanges()
       .pipe(
@@ -48,6 +48,20 @@ export class FirebaseService {
             documentDto => documentDto.payload.doc,
           );
         }),
+      );
+  }
+
+  /**
+   * List of document data.
+   * @param path Path to collection.
+   */
+  public fetchDocumentsData(path: string): Observable<readonly DocumentData[]> {
+    return this.firestones.collection(path)
+      .snapshotChanges()
+      .pipe(
+        map(documentsDto => documentsDto.map(
+            documentDto => documentDto.payload.doc,
+        )),
       );
   }
 
@@ -149,14 +163,16 @@ export class FirebaseService {
   }
 
   /**
-   * Adding a document Promise<DocumentReference<unknown>>.
+   * Adding a document.
    * @param path Path to collection.
    * @param value Document data.
    */
-  public addDocumentData(path: string, value: unknown): void {
+  public addDocumentData(path: string, value: unknown): Promise<void> {
     console.log(value);
-
-    // return this.firestones.collection(path).add(value);
+    return new Promise(resolve => {
+      this.firestones.collection(path).add(value)
+        .then(() => resolve());
+    });
   }
 
   /**

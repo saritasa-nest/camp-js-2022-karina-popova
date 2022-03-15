@@ -7,7 +7,6 @@ import { Planet } from '../models/planet';
 import { TableOptions } from '../models/table-options';
 
 import { FirebaseService } from './firebase.service';
-import { FilmDto } from './mappers/dto/film/film.dto';
 import { FilmMapper } from './mappers/film.mapper';
 import { PlanetMapper } from './mappers/planet.mapper';
 
@@ -30,7 +29,7 @@ export class FilmsService {
    * @param options Pagination, sorting and filtering options.
    */
   public fetchFilms(options: TableOptions): Observable<readonly Film[]> {
-    return this.firebaseService.fetchDocumentsData('films', options, Path.Fields)
+    return this.firebaseService.fetchSortFilterDocumentsData('films', options, Path.Fields)
       .pipe(
         map(filmsDto => filmsDto.map(filmDto => {
           const data = filmDto['data']();
@@ -58,8 +57,18 @@ export class FilmsService {
    * List of planets that are in this film.
    * @param id List of planet numbers.
    */
-  public fetchPlanets(id: number[]): Observable<readonly Planet[]> {
-    return this.firebaseService.fetchDocumentsDataByField('planets', 'pk', id).pipe(
+  public fetchPlanets(id?: number[]): Observable<readonly Planet[]> {
+    if (id) {
+      return this.firebaseService.fetchDocumentsDataByField('planets', 'pk', id).pipe(
+        map(planetsDoc => planetsDoc.map(
+        doc => {
+          const data = doc['data']();
+          return this.planetMapper.fromDto(data);
+        },
+        )),
+      );
+    }
+    return this.firebaseService.fetchDocumentsData('planets').pipe(
       map(planetsDoc => planetsDoc.map(
         doc => {
           const data = doc['data']();
@@ -73,9 +82,19 @@ export class FilmsService {
    * List of characters that are in this film.
    * @param id List of character numbers.
    */
-  public fetchPeople(id: number[]): Observable<Planet[]> {
-    return this.firebaseService.fetchDocumentsDataByField('people', 'pk', id).pipe(
-      map(peopleDoc => peopleDoc.map(
+  public fetchPeople(id?: number[]): Observable<Planet[]> {
+    if (id) {
+      return this.firebaseService.fetchDocumentsDataByField('people', 'pk', id).pipe(
+        map(characterDoc => characterDoc.map(
+        doc => {
+          const data = doc['data']();
+          return this.planetMapper.fromDto(data);
+        },
+        )),
+      );
+    }
+    return this.firebaseService.fetchDocumentsData('people').pipe(
+      map(characterDoc => characterDoc.map(
         doc => {
           const data = doc['data']();
           return this.planetMapper.fromDto(data);
@@ -94,16 +113,16 @@ export class FilmsService {
   /** Deleting film.
    * @param id Film id.
    */
-  public deleteFilm(id: string): void {
-    this.firebaseService.deleteDocumentData(`films/${id}`);
+  public deleteFilm(id: string): Promise<void> {
+    return this.firebaseService.deleteDocumentData(`films/${id}`);
   }
 
   /**
    * Adding a document.
    * @param value Film.
    */
-  public addFilm(value: Film): void {
-    this.firebaseService.addDocumentData(`films`, this.filmMapper.toDto(value));
+  public addFilm(value: Film): Promise<void> {
+    return this.firebaseService.addDocumentData(`films`, this.filmMapper.toDto(value));
   }
 
   /**
@@ -111,7 +130,7 @@ export class FilmsService {
    * @param id Film id.
    * @param value Film.
    */
-  public editFilm(id: string, value: FilmDto): void {
-    this.firebaseService.editDocumentData(`films/${id}`, value);
+  public editFilm(id: string, value: Film): Promise<void> {
+    return this.firebaseService.editDocumentData(`films/${id}`, this.filmMapper.toDto(value));
   }
 }

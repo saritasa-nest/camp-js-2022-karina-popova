@@ -29,7 +29,7 @@
       <button mat-fab color="primary" routerLink='/create'>
         <mat-icon>add</mat-icon>
       </button>
-      <button mat-fab color="primary" routerLink="edit">
+      <button mat-fab color="primary" routerLink="/edit" [queryParams]="{id:film.id}">
         <mat-icon>edit</mat-icon>
       </button>
       <button mat-fab color="primary" (click)="onClick()">

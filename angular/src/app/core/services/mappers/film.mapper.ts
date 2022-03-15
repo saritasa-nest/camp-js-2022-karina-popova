@@ -7,6 +7,11 @@ import { FilmFieldsDto } from './dto/film/film-fields.dto';
 
 import { FilmDto } from './dto/film/film.dto';
 
+type RecursivePartial<T> = {
+  [P in keyof T]?: RecursivePartial<T[P]>;
+};
+type PartialExcept<T, K extends keyof T> = RecursivePartial<T> & Pick<T, K>;
+type Test = PartialExcept<FilmDto, 'id' | 'pk'>;
 /** Film mapper. */
 @Injectable({
   providedIn: 'root',
@@ -30,18 +35,20 @@ export class FilmMapper {
   }
 
   /** @inheritdoc */
-  public toDto(fields: Film): FilmFieldsDto {
+  public toDto(fields: Partial<Film>): Partial<Test> {
     return {
-      created: fields.created.toDateString(),
-      director: fields.director,
-      title: fields.title,
-      edited: fields.edited.toDateString(),
-      opening_crawl: fields.openingCrawl,
-      producer: fields.producer.join(','),
-      release_date: fields.releaseDate.toDateString(),
-      episode_id: fields.episodeId,
-      planets: fields.planets,
-      characters: fields.characters,
+      fields: {
+        created: fields.created?.toDateString(),
+        director: fields.director,
+        title: fields.title,
+        edited: fields.edited?.toDateString(),
+        release_date: fields.releaseDate?.toDateString(),
+        opening_crawl: fields.openingCrawl,
+        producer: fields.producer?.toString(),
+        episode_id: fields.episodeId,
+        planets: fields.planets,
+        characters: fields.characters,
+      },
     };
   }
 }
