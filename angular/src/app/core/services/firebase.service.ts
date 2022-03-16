@@ -37,7 +37,7 @@ export class FirebaseService {
    * @param options Pagination options.
    * @param pathField Path to a field with nested fields in the document data.
    */
-  public fetchDocumentsData(path: string, options: TableOptions, pathField: Path): Observable<readonly DocumentData[]> {
+  public fetchSortFilterDocumentsData(path: string, options: TableOptions, pathField: Path): Observable<readonly DocumentData[]> {
     return this.firestones.collection(path, refCollection => this.getQueryConstraint(refCollection, options, pathField))
       .snapshotChanges()
       .pipe(
@@ -52,12 +52,26 @@ export class FirebaseService {
   }
 
   /**
+   * List of document data.
+   * @param path Path to collection.
+   */
+  public fetchDocumentsData(path: string): Observable<readonly DocumentData[]> {
+    return this.firestones.collection(path)
+      .snapshotChanges()
+      .pipe(
+        map(documentsDto => documentsDto.map(
+          documentDto => documentDto.payload.doc,
+        )),
+      );
+  }
+
+  /**
    * Get a document data by id.
    * @param path Path to collection.
    * @param id Document id.
    */
   public fetchDocumentDataById(path: string, id: string): Observable<DocumentData> {
-    return this.firestones.doc(`${path + id}`).snapshotChanges()
+    return this.firestones.doc(`${path}/${id}`).snapshotChanges()
       .pipe(
         map(v => v.payload),
       );
