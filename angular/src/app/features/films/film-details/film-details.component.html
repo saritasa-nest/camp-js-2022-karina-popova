@@ -1,6 +1,6 @@
 <sw-main-page></sw-main-page>
 <div class="container">
-  <table *ngIf="film$ | async as film">
+  <table *ngIf="film$ | async as film" aria-label="film-details">
     <tr>
       <td>Title</td>
       <td>{{ film.title }}</td>
