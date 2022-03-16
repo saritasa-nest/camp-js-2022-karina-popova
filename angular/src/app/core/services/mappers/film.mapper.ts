@@ -3,15 +3,12 @@ import { Injectable } from '@angular/core';
 
 import { Film } from '../../models/film';
 
-import { FilmFieldsDto } from './dto/film/film-fields.dto';
-
 import { FilmDto } from './dto/film/film.dto';
 
-type RecursivePartial<T> = {
-  [P in keyof T]?: RecursivePartial<T[P]>;
-};
+type RecursivePartial<T> = { [P in keyof T]?: RecursivePartial<T[P]>; };
 type PartialExcept<T, K extends keyof T> = RecursivePartial<T> & Pick<T, K>;
 type Test = PartialExcept<FilmDto, 'id' | 'pk'>;
+
 /** Film mapper. */
 @Injectable({
   providedIn: 'root',

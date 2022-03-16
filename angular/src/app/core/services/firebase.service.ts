@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { AngularFirestore, CollectionReference, DocumentReference, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
+import { AngularFirestore, CollectionReference, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat';
 
 import { Path } from '../models/pathFields';
@@ -60,7 +60,7 @@ export class FirebaseService {
       .snapshotChanges()
       .pipe(
         map(documentsDto => documentsDto.map(
-            documentDto => documentDto.payload.doc,
+          documentDto => documentDto.payload.doc,
         )),
       );
   }
@@ -168,7 +168,6 @@ export class FirebaseService {
    * @param value Document data.
    */
   public addDocumentData(path: string, value: unknown): Promise<void> {
-    console.log(value);
     return new Promise(resolve => {
       this.firestones.collection(path).add(value)
         .then(() => resolve());
