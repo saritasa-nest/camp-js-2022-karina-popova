@@ -1,36 +1,33 @@
 <sw-header></sw-header>
 <div class="container">
-  <sw-films-management
-    (sendForm)="submitForm($event)"
-    title="Edit film"
-    (closeForm)="closeForm()"
-  >
-    <mat-form-field appearance="fill">
-      <mat-label>The date film was edited.</mat-label>
-      <input matInput [matDatepicker]="edited" formControlName="edited" />
-      <mat-datepicker-toggle matSuffix [for]="edited"></mat-datepicker-toggle>
-      <mat-datepicker #edited></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Producer</mat-label>
-      <input
-        formControlName="producer"
-        matInput
-        placeholder="The name(s) of the producer(s) of this film."
-      />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>The date release at original creator country.</mat-label>
-      <input
-        matInput
-        [matDatepicker]="releaseDate"
-        formControlName="releaseDate"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="releaseDate"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #releaseDate></mat-datepicker>
-    </mat-form-field>
-  </sw-films-management>
+  <form class="form-film" [formGroup]="editForm" (ngSubmit)="submitForm()">
+    <div class="form-film__wrapper">
+      <!-- <h2>{{ title }}</h2> -->
+      <sw-films-management [filmForm]="editForm"></sw-films-management>
+      <mat-form-field appearance="fill">
+        <mat-label>The date film was edited.</mat-label>
+        <input matInput [matDatepicker]="edited" formControlName="edited" />
+        <mat-datepicker-toggle matSuffix [for]="edited"></mat-datepicker-toggle>
+        <mat-datepicker #edited></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Producer</mat-label>
+        <input formControlName="producer" matInput placeholder="The name(s) of the producer(s) of this film." />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>The date release at original creator country.</mat-label>
+        <input matInput [matDatepicker]="releaseDate" formControlName="releaseDate" />
+        <mat-datepicker-toggle matSuffix [for]="releaseDate"></mat-datepicker-toggle>
+        <mat-datepicker #releaseDate></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="form-film-buttons">
+      <button type="submit" mat-flat-button color="primary">SAVE</button>
+      <button type="button" mat-flat-button color="primary" (click)="closeForm()">
+        CANCEL
+      </button>
+    </div>
+  </form>
+  <!-- <sw-films-management (sendForm)="submitForm($event)" title="Edit film" (closeForm)="closeForm()"
+    [filmForm]="editForm"> -->
 </div>

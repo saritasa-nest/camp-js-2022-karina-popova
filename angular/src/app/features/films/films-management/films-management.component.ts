@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy, EventEmitter, Output, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, EventEmitter, Output, Input, TemplateRef, ContentChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { FilmsService } from 'src/app/core/services/films.service';
 
 /** Films management. */
@@ -10,7 +11,6 @@ import { FilmsService } from 'src/app/core/services/films.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilmsManagementComponent {
-
   public constructor(
     private readonly fb: FormBuilder,
     private readonly filmsService: FilmsService,
@@ -28,18 +28,7 @@ export class FilmsManagementComponent {
 
   /** Form field validator. */
   @Input()
-  public filmForm: FormGroup = this.fb.group({
-    title: ['', [Validators.required]],
-    created: [new Date(), [Validators.required]],
-    director: ['', [Validators.required]],
-    edited: new Date(),
-    releaseDate: new Date(),
-    openingCrawl: ['', [Validators.required]],
-    episodeId: 1,
-    planets: [[3, 2], Validators.required],
-    characters: [[1, 2], Validators.required],
-    producer: '',
-  });
+  public filmForm!: FormGroup;
 
   /** Form submit. */
   @Output()
@@ -51,7 +40,9 @@ export class FilmsManagementComponent {
 
   /** Emits an event containing a form. */
   public submitForm(): void {
+    console.log(this.filmForm.value);
     if (this.filmForm.valid) {
+
       this.sendForm.emit(this.filmForm.value);
     }
   }

@@ -1,15 +1,13 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  ViewChild,
   AfterViewInit,
 } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Film } from 'src/app/core/models/film';
 import { FilmsService } from 'src/app/core/services/films.service';
-
-import { FilmsManagementComponent } from '../films-management.component';
 
 /** Edit film. */
 @Component({
@@ -19,29 +17,41 @@ import { FilmsManagementComponent } from '../films-management.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilmEditComponent implements AfterViewInit {
-  /** Films management component. */
-  @ViewChild(FilmsManagementComponent)
-  public readonly filmsManagement!: FilmsManagementComponent;
-
   private readonly filmId =
     this.activatedRoute.snapshot.queryParamMap.get('id') ?? null;
 
   private readonly film$: Observable<Film> = new Observable();
 
+  /** Form field controls. */
+  public editForm = this.fb.group({
+    title: ['', [Validators.required]],
+    created: [new Date(), [Validators.required]],
+    director: ['', [Validators.required]],
+    edited: new Date(),
+    releaseDate: new Date(),
+    openingCrawl: ['', [Validators.required]],
+    episodeId: 6,
+    planets: [[3, 2], Validators.required],
+    characters: [[1, 2], Validators.required],
+    producer: '',
+  });
+
   public constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly route: Router,
     private readonly filmsService: FilmsService,
+    private readonly fb: FormBuilder,
   ) {
     if (this.filmId) {
       this.film$ = this.filmsService.fetchFilmById(this.filmId);
     }
+
   }
 
   /** @inheritdoc */
   public ngAfterViewInit(): void {
     this.film$.subscribe(value => {
-      this.filmsManagement.filmForm.patchValue(
+      this.editForm.patchValue(
         {
           created: value.created,
           director: value.director,
@@ -54,7 +64,6 @@ export class FilmEditComponent implements AfterViewInit {
           characters: value.characters,
           episodeId: value.episodeId,
         },
-        { onlySelf: false },
       );
     });
   }
@@ -62,10 +71,12 @@ export class FilmEditComponent implements AfterViewInit {
   /** Submit form.
    * @param value Film information.
    */
-  public submitForm(value: Film): void {
-    if (this.filmId) {
-      this.filmsService.editFilm(this.filmId, value).then(() => this.route.navigate(['']));
-    }
+  public submitForm(): void {
+    console.log(this.editForm.value);
+
+    // if (this.filmId) {
+    //   this.filmsService.editFilm(this.filmId, value).then(() => this.route.navigate(['']));
+    // }
   }
 
   /** Close form. */
