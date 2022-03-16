@@ -39,7 +39,7 @@ export class FilmAddComponent implements AfterViewInit {
     );
   }
 
-
+  /** Close form. */
   public closeForm(): void {
     this.route.navigate(['']);
   }
