@@ -49,6 +49,7 @@ export class FilmEditComponent implements AfterViewInit {
     if (this.filmId) {
       this.film$ = this.filmsService.fetchFilmById(this.filmId);
     }
+
   }
 
   /** @inheritdoc */

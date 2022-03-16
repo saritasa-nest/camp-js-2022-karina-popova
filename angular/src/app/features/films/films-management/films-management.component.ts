@@ -10,7 +10,6 @@ import { FilmsService } from 'src/app/core/services/films.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilmsManagementComponent {
-
   /** Form name. */
   @Input()
   public title = '';
@@ -35,7 +34,9 @@ export class FilmsManagementComponent {
 
   /** Emits an event containing a form. */
   public submitForm(): void {
+    console.log(this.filmForm.value);
     if (this.filmForm.valid) {
+
       this.sendForm.emit(this.filmForm.value);
     }
   }
