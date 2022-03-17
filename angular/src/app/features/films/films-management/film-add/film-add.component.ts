@@ -1,7 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Film } from 'src/app/core/models/film';
 import { FilmsService } from 'src/app/core/services/films.service';
 
 /** Create film. */
@@ -12,18 +11,21 @@ import { FilmsService } from 'src/app/core/services/films.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilmAddComponent {
+  /** Form name. */
+  public title = 'Add film';
+
   /** Form field controls. */
   public addForm = this.fb.group({
     title: ['', [Validators.required]],
     created: [new Date(), [Validators.required]],
     director: ['', [Validators.required]],
-    edited: new Date(),
-    releaseDate: new Date(),
     openingCrawl: ['', [Validators.required]],
     episodeId: 6,
     planets: [[3, 2], Validators.required],
     characters: [[1, 2], Validators.required],
-    producer: '',
+    edited: [new Date(), [Validators.required]],
+    releaseDate: [new Date(), [Validators.required]],
+    producer: ['', [Validators.required]],
   });
 
   public constructor(
@@ -32,11 +34,9 @@ export class FilmAddComponent {
     private readonly fb: FormBuilder,
   ) { }
 
-  /** Submit form.
-   * @param value Film information.
-   */
-  public submitForm(value: Film): void {
-    this.filmsService.addFilm(value).then(
+  /** Submit form. */
+  public submitForm(): void {
+    this.filmsService.addFilm(this.addForm.value).then(
       () => this.route.navigate(['']),
     );
   }
