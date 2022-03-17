@@ -1,6 +1,5 @@
-import { Component, ChangeDetectionStrategy, EventEmitter, Output, Input, TemplateRef, ContentChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { FilmsService } from 'src/app/core/services/films.service';
 
 /** Films management. */
@@ -11,14 +10,13 @@ import { FilmsService } from 'src/app/core/services/films.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilmsManagementComponent {
-  public constructor(
-    private readonly fb: FormBuilder,
-    private readonly filmsService: FilmsService,
-  ) { }
-
   /** Form name. */
   @Input()
   public title = '';
+
+  public constructor(
+    private readonly filmsService: FilmsService,
+  ) { }
 
   /** Planets. */
   public planets$ = this.filmsService.fetchPlanets();
@@ -26,7 +24,7 @@ export class FilmsManagementComponent {
   /** Characters. */
   public characters$ = this.filmsService.fetchPeople();
 
-  /** Form field validator. */
+  /** Form field controls. */
   @Input()
   public filmForm!: FormGroup;
 
@@ -34,22 +32,10 @@ export class FilmsManagementComponent {
   @Output()
   public sendForm = new EventEmitter();
 
-  /** Form close. */
-  @Output()
-  public closeForm = new EventEmitter();
-
   /** Emits an event containing a form. */
   public submitForm(): void {
-    console.log(this.filmForm.value);
     if (this.filmForm.valid) {
-
       this.sendForm.emit(this.filmForm.value);
     }
   }
-
-  /** Generates a form close event. */
-  public close(): void {
-    this.closeForm.emit();
-  }
-
 }

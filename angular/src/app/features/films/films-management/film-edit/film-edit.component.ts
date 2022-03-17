@@ -17,6 +17,9 @@ import { FilmsService } from 'src/app/core/services/films.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilmEditComponent implements AfterViewInit {
+  /** Form name. */
+  public title = 'Edit film';
+
   private readonly filmId =
     this.activatedRoute.snapshot.queryParamMap.get('id') ?? null;
 
@@ -45,7 +48,6 @@ export class FilmEditComponent implements AfterViewInit {
     if (this.filmId) {
       this.film$ = this.filmsService.fetchFilmById(this.filmId);
     }
-
   }
 
   /** @inheritdoc */
@@ -68,15 +70,11 @@ export class FilmEditComponent implements AfterViewInit {
     });
   }
 
-  /** Submit form.
-   * @param value Film information.
-   */
+  /** Submit form. */
   public submitForm(): void {
-    console.log(this.editForm.value);
-
-    // if (this.filmId) {
-    //   this.filmsService.editFilm(this.filmId, value).then(() => this.route.navigate(['']));
-    // }
+    if (this.filmId) {
+      this.filmsService.editFilm(this.filmId, this.editForm.value).then(() => this.route.navigate(['']));
+    }
   }
 
   /** Close form. */

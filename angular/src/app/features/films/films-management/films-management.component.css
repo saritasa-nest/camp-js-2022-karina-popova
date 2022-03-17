@@ -5,7 +5,6 @@
   width: 100%;
   background-color: #424242;
 }
-
 .form-film__wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -13,11 +12,6 @@
   justify-content: center;
   text-align: center;
   color: var(--font-color);
-  padding: 25px;
+  padding-top: 25px;
   width: 600px;
-}
-
-.form-film-buttons {
-  display: flex;
-  justify-content: space-evenly;
 }
