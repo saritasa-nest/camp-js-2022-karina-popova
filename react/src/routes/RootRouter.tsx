@@ -21,14 +21,6 @@ const routes: RouteObject[] = [
     path: 'register',
     element: <RegisterPage />,
   },
-  {
-    path: 'home',
-    element: (
-      <IsAuthenticatedGuard>
-        <HomePage />
-      </IsAuthenticatedGuard>
-    ),
-  },
 ];
 
 export const RootRouter: React.VFC = () => useRoutes(routes);

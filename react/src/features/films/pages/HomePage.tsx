@@ -8,9 +8,12 @@ import IconButton from '@mui/material/IconButton';
 import { useAppDispatch } from 'src/store';
 import { resetUser } from 'src/store/user/slice';
 import { AuthService } from 'src/api/services/auth.service';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'src/store/user/selectors';
 
 export const HomePage: VFC = () => {
   const dispatch = useAppDispatch();
+  const user = useSelector(selectUser);
   const handleLogout = (): void => {
     AuthService.logOut().then(() => dispatch(resetUser()));
   };
@@ -28,6 +31,7 @@ export const HomePage: VFC = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             SW-FILMS
           </Typography>
+          <Typography>{user.user ? user.user.email : ''}</Typography>
           <Button color="inherit" onClick={handleLogout}>
             SIGN OUT
           </Button>
