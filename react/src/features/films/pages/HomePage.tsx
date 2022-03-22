@@ -1,4 +1,4 @@
-import { VFC } from 'react';
+import { useEffect, VFC } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { useAppDispatch, useAppSelector } from 'src/store';
-import { selectUser } from 'src/store/user/selectors';
+import { selectIsAuth, selectUser } from 'src/store/user/selectors';
 import { signOut } from 'src/store/user/dispatchers';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,10 +14,15 @@ export const HomePage: VFC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useAppSelector(selectUser);
+  const isAuth = useAppSelector(selectIsAuth);
   const handleLogout = (): void => {
-    dispatch(signOut())
-      .then(() => navigate('/login'));
+    dispatch(signOut());
   };
+  useEffect(() => {
+    if (isAuth) {
+      navigate('/home');
+    }
+  }, [isAuth, navigate]);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">

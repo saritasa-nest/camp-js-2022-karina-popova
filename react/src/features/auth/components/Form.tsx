@@ -10,11 +10,19 @@ import * as yup from 'yup';
 import { Link } from 'react-router-dom';
 import { FormHelperText } from '@mui/material';
 
+/** Authorization form . */
+export interface AuthForm {
+  /** Email. */
+  readonly email: string;
+  /** Password. */
+  readonly password: string;
+}
+
 interface Props {
   /** Form name . */
   readonly title: string;
   /** Event handler on form submit. */
-  readonly handleSubmit: Function;
+  readonly handleSubmit: (data: AuthForm) => void;
   /** Link path. */
   readonly redirectLink: string;
   /** Link name. */
@@ -46,8 +54,8 @@ const FormComponent: VFC<Props> = ({
       password: '',
     },
     validationSchema,
-    onSubmit: values => {
-      handleSubmit(values.email, values.password);
+    onSubmit: ({ email, password }) => {
+      handleSubmit({ email, password });
     },
   });
 

@@ -1,19 +1,24 @@
-import { VFC } from 'react';
+import { useEffect, VFC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'src/store/store';
 import { signInUser } from 'src/store/user/dispatchers';
-import { selectUserError } from 'src/store/user/selectors';
-import { Form } from './Form';
+import { selectIsAuth, selectUserError } from 'src/store/user/selectors';
+import { AuthForm, Form } from './Form';
 
 const LoginFormComponent: VFC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const error = useAppSelector(selectUserError);
-  const handleLogin = (email: string, password: string): void => {
+  const isAuth = useAppSelector(selectIsAuth);
+  const handleLogin = ({ email, password }: AuthForm): void => {
     dispatch(signInUser({ email, password }))
-      .unwrap()
-      .then(() => navigate('/home'));
+      .catch(err => err);
   };
+  useEffect(() => {
+    if (isAuth) {
+      navigate('/home');
+    }
+  }, [isAuth, navigate]);
   return (
     <Form
       title="Login"
