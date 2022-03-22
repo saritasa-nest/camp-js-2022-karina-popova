@@ -1,0 +1,16 @@
+<sw-auth
+  [title]="title"
+  [nameButton]="nameButton"
+  (sendForm)="onSignUp($event)"
+>
+  <button
+    type="button"
+    (click)="openSignInDialog()"
+    class="button-row button-link"
+  >
+    {{ nameLink }}
+  </button>
+  <mat-error class="form-error" *ngIf="errorMessage$ | async as error">
+    {{ error.message }}
+  </mat-error>
+</sw-auth>
