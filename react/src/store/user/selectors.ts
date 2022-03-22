@@ -8,5 +8,5 @@ export const selectUser = createSelector((state: RootState) => state.user, user 
 /** Selects the user is authorized from store. */
 export const selectIsAuth = createSelector((state: RootState) => state.user, user => user.isAuthenticated);
 
-/** . */
-export const userError = createSelector((state: RootState) => state.user, user => user.error);
+/** Selects authorization error. */
+export const selectUserError = createSelector((state: RootState) => state.user, user => user.error);

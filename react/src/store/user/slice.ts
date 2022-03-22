@@ -9,10 +9,12 @@ export const userSlice = createSlice({
     resetUser(state) {
       state.user = null;
       state.isAuthenticated = false;
+      state.error = '';
     },
   },
   extraReducers: builder => builder
     .addCase(signInUser.fulfilled, (state, { payload }) => {
+      state.error = '';
       state.user = payload;
       state.isAuthenticated = true;
     })
@@ -24,6 +26,7 @@ export const userSlice = createSlice({
       state.isAuthenticated = false;
     })
     .addCase(signUpUser.fulfilled, (state, { payload }) => {
+      state.error = '';
       state.user = payload;
       state.isAuthenticated = true;
     })
