@@ -2,4 +2,7 @@
 export enum Path {
   Fields = 'fields.',
   None = '',
-}
+};
+
+/** Path to the collection. */
+export type CollectionPath = 'films' | 'planets' | 'people';

@@ -1,12 +1,21 @@
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
-import { AngularFirestore, CollectionReference, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
+import { filter, map, Observable, tap } from 'rxjs';
+import {
+  AngularFirestore,
+  CollectionReference,
+  QueryDocumentSnapshot,
+} from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat';
 
-import { Path } from '../models/pathFields';
-import { TableOptions } from '../models/table-options';
+import { CollectionPath, Path } from '../models/path';
+import { QueryParameters } from '../models/query-parameters';
 
 import DocumentData = firebase.firestore.DocumentData;
+
+/**
+ * Character to search for the first letters in the string.
+ */
+const SEARCH_SYMBOL = '~';
 
 /**
  * Firebase service.
@@ -16,52 +25,53 @@ import DocumentData = firebase.firestore.DocumentData;
 })
 export class FirebaseService {
   /** Last document on the page. */
-  public lastDoc: QueryDocumentSnapshot<unknown> | null = null;
+  private lastDoc: QueryDocumentSnapshot<unknown> | null = null;
 
   /**  First document on the page. */
-  public firstDoc: QueryDocumentSnapshot<unknown> | null = null;
+  private firstDoc: QueryDocumentSnapshot<unknown> | null = null;
+
+  public constructor(private readonly firestore: AngularFirestore) {}
 
   /**
-   * Character to search for the first letters in the string.
-   */
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  public SEARCH_SYMBOL = '~';
-
-  public constructor(
-    private readonly firestones: AngularFirestore,
-  ) { }
-
-  /**
-   * List of document data with pagination, filtering and sorting.
+   * Fetch list of document data with pagination, filtering and sorting.
    * @param path Path to collection.
-   * @param options Pagination options.
+   * @param parameters Parameters for generating a query constraint.
    * @param pathField Path to a field with nested fields in the document data.
    */
-  public fetchSortFilterDocumentsData(path: string, options: TableOptions, pathField: Path): Observable<readonly DocumentData[]> {
-    return this.firestones.collection(path, refCollection => this.getQueryConstraint(refCollection, options, pathField))
+  public fetchSortedDocumentsData(
+    path: CollectionPath,
+    parameters: QueryParameters,
+    pathField: Path
+  ): Observable<DocumentData[]> {
+    return this.firestore
+      .collection(path, refCollection =>
+        this.getQueryConstraint(refCollection, parameters, pathField)
+      )
       .snapshotChanges()
       .pipe(
-        map(documentsDto => {
+        filter(documentsDto => documentsDto.length > 0),
+        tap(documentsDto => {
           this.lastDoc = documentsDto[documentsDto.length - 1].payload.doc;
           this.firstDoc = documentsDto[0].payload.doc;
-          return documentsDto.map(
-            documentDto => documentDto.payload.doc,
-          );
         }),
+        map((documentsDto) => {
+          return documentsDto.map((documentDto) => documentDto.payload.doc);
+        })
       );
   }
 
   /**
-   * List of document data.
+   * Fetch list of document data.
    * @param path Path to collection.
    */
-  public fetchDocumentsData(path: string): Observable<readonly DocumentData[]> {
-    return this.firestones.collection(path)
+  public fetchDocumentsData(path: CollectionPath): Observable<DocumentData[]> {
+    return this.firestore
+      .collection(path)
       .snapshotChanges()
       .pipe(
-        map(documentsDto => documentsDto.map(
-          documentDto => documentDto.payload.doc,
-        )),
+        map(documentsDto =>
+          documentsDto.map(documentDto => documentDto.payload.doc)
+        )
       );
   }
 
@@ -70,87 +80,133 @@ export class FirebaseService {
    * @param path Path to collection.
    * @param id Document id.
    */
-  public fetchDocumentDataById(path: string, id: string): Observable<DocumentData> {
-    return this.firestones.doc(`${path}/${id}`).snapshotChanges()
-      .pipe(
-        map(v => v.payload),
-      );
+  public fetchDocumentDataById(
+    path: CollectionPath,
+    id: string
+  ): Observable<DocumentData> {
+    return this.firestore
+      .doc(`${path}/${id}`)
+      .snapshotChanges()
+      .pipe(map(documentDto => documentDto.payload));
   }
 
   /**
-   * Documents with specified field.
+   * Fetch documents with specified field.
    * @param path Path to collection.
    * @param pathCompare The path to compare.
    * @param value The value for comparison.Array must be up to 10 elements.
    */
-  public fetchDocumentsDataByField(path: string, pathCompare: string, value: number[]): Observable<readonly DocumentData[]> {
-    return this.firestones.collection(path, refCollection => refCollection.where(pathCompare, 'in', value))
+  public fetchDocumentsDataByField(
+    path: CollectionPath,
+    pathCompare: string,
+    value: readonly number[]
+  ): Observable<DocumentData[]> {
+    return this.firestore
+      .collection(path, refCollection =>
+        refCollection.where(pathCompare, 'in', value)
+      )
       .snapshotChanges()
       .pipe(
-        map(documentsDto => documentsDto.map(
-          documentDto => documentDto.payload.doc,
-        )),
+        map(documentsDto =>
+          documentsDto.map(documentDto => documentDto.payload.doc)
+        )
       );
-  }
-
-  /** Returns a query, including filtering and sorting, pagination.
-   * @param refCollection Link to collection.
-   * @param options - Parameters for generating a query constraint.
-   * @param pathField Path to a field with nested fields in the document data.
-   */
-  public getQueryConstraint(refCollection: CollectionReference<DocumentData>, options: TableOptions, pathField: Path):
-    firebase.firestore.Query<DocumentData> {
-    const queryFilterSort = this.getQueryFilterSort(refCollection, options, pathField);
-    if (options.previousPageIndex !== undefined && options.pageIndex === 0) {
-      return queryFilterSort.limit(options.pageSize);
-    }
-    if (options.previousPageIndex !== undefined && options.previousPageIndex < options.pageIndex) {
-      return queryFilterSort
-        .startAfter(this.lastDoc)
-        .limit(options.pageSize);
-    }
-    if (options.previousPageIndex !== undefined && options.previousPageIndex > options.pageIndex) {
-      return queryFilterSort
-        .limitToLast(options.pageSize)
-        .endBefore(this.firstDoc);
-
-    }
-    return queryFilterSort.limit(options.pageSize);
-  }
-
-  /** Returns a query including filtering and sorting.
-   * @param refCollection Link to collection.
-   * @param options - Parameters for generating a query constraint.
-   * @param pathField Path to a field with nested fields in the document data.
-   */
-  public getQueryFilterSort(refCollection: CollectionReference<DocumentData>, options: TableOptions, pathField: Path):
-    firebase.firestore.Query<DocumentData> {
-    if (options.direction === '') {
-      options.direction = 'asc';
-    }
-    if (options.searchValue) {
-      options.active = 'title';
-    }
-    if (options.direction && options.previousPageIndex !== undefined && options.searchValue) {
-      return refCollection
-        .where(`${pathField}${options.active}`, '>=', options.searchValue)
-        .where(`${pathField}${options.active}`, '<=', options.searchValue + this.SEARCH_SYMBOL)
-        .orderBy(`${pathField}${options.active}`, options.direction);
-    }
-    return refCollection
-      .orderBy(`${pathField}${options.active}`, options.direction);
   }
 
   /**
-   * Number of documents in the collection.
-   * @param path Path to collection.
-   * @param options Pagination, sorting and filtering options.
+   * Returns a query, including filtering and sorting, pagination.
+   * @param refCollection Link to collection.
+   * @param parameters Parameters for generating a query constraint.
    * @param pathField Path to a field with nested fields in the document data.
    */
-  public getCountDocumentData(path: string, options: TableOptions, pathField: Path): Observable<number> {
-    return this.firestones.collection(path, refCollection => this.getQueryFilterSort(refCollection, options, pathField)).snapshotChanges()
-      .pipe(
-        map(documentsDto => documentsDto.length),
-      );
+  private getQueryConstraint(
+    refCollection: CollectionReference<DocumentData>,
+    parameters: QueryParameters,
+    pathField: Path
+  ): firebase.firestore.Query<DocumentData> {
+    const queryFilterSort = this.getQueryFilterSort(
+      refCollection,
+      parameters,
+      pathField
+    );
+    if (
+      parameters.previousPageIndex !== undefined &&
+      parameters.pageIndex === 0
+    ) {
+      return queryFilterSort.limit(parameters.pageSize);
+    }
+    if (
+      parameters.previousPageIndex !== undefined &&
+      parameters.previousPageIndex < parameters.pageIndex
+    ) {
+      return queryFilterSort
+        .startAfter(this.lastDoc)
+        .limit(parameters.pageSize);
+    }
+    if (
+      parameters.previousPageIndex !== undefined &&
+      parameters.previousPageIndex > parameters.pageIndex
+    ) {
+      return queryFilterSort
+        .limitToLast(parameters.pageSize)
+        .endBefore(this.firstDoc);
+    }
+    return queryFilterSort.limit(parameters.pageSize);
+  }
+
+  /**
+   * Returns a query including filtering and sorting.
+   * @param refCollection Link to collection.
+   * @param parameters Parameters for generating a query constraint.
+   * @param pathField Path to a field with nested fields in the document data.
+   */
+  private getQueryFilterSort(
+    refCollection: CollectionReference<DocumentData>,
+    parameters: QueryParameters,
+    pathField: Path
+  ): firebase.firestore.Query<DocumentData> {
+    if (parameters.direction === '') {
+      parameters.direction = 'asc';
+    }
+    if (parameters.searchValue) {
+      parameters.active = 'title';
+    }
+    if (
+      parameters.direction &&
+      parameters.previousPageIndex !== undefined &&
+      parameters.searchValue
+    ) {
+      return refCollection
+        .where(`${pathField}${parameters.active}`, '>=', parameters.searchValue)
+        .where(
+          `${pathField}${parameters.active}`,
+          '<=',
+          parameters.searchValue + SEARCH_SYMBOL
+        )
+        .orderBy(`${pathField}${parameters.active}`, parameters.direction);
+    }
+    return refCollection.orderBy(
+      `${pathField}${parameters.active}`,
+      parameters.direction
+    );
+  }
+
+  /**
+   * Returns number of documents in the collection.
+   * @param path Path to collection.
+   * @param parameters Pagination, sorting and filtering options.
+   * @param pathField Path to a field with nested fields in the document data.
+   */
+  public getCountDocumentData(
+    path: CollectionPath,
+    parameters: QueryParameters,
+    pathField: Path
+  ): Observable<number> {
+    return this.firestore
+      .collection(path, refCollection =>
+        this.getQueryFilterSort(refCollection, parameters, pathField)
+      )
+      .snapshotChanges()
+      .pipe(map(documentsDto => documentsDto.length));
   }
 }
