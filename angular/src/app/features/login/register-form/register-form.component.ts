@@ -4,7 +4,7 @@ import { UserService } from 'src/app/core/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AppError } from 'src/app/core/models/app-error';
 
-import { AuthFormFields } from 'src/app/core/models/form-value';
+import { AuthFormFields } from 'src/app/core/models/auth-form-fields';
 
 import { LoginFormComponent } from '../login-form/login-form.component';
 

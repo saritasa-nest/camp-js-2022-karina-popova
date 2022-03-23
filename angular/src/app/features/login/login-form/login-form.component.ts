@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, takeUntil } from 'rxjs';
 import { AppError } from 'src/app/core/models/app-error';
-import { AuthFormFields } from 'src/app/core/models/form-value';
+import { AuthFormFields } from 'src/app/core/models/auth-form-fields';
 import { UserService } from 'src/app/core/services/user.service';
 
 import { RegisterFormComponent } from '../register-form/register-form.component';
