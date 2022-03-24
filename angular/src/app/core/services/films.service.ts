@@ -21,7 +21,7 @@ export class FilmsService {
   public constructor(
     private readonly firebaseService: FirebaseService,
     private readonly filmMapper: FilmMapper,
-    private readonly planetMapper: PlanetMapper
+    private readonly planetMapper: PlanetMapper,
   ) {}
 
   /**
@@ -34,13 +34,13 @@ export class FilmsService {
       .pipe(
         map(filmsDto => {
           if (filmsDto) {
-            return filmsDto.map((filmDto) => {
+            return filmsDto.map(filmDto => {
               const { id } = filmDto;
               return this.filmMapper.fromDto({ ...filmDto['data'](), id });
             });
           }
           return [];
-        })
+        }),
       );
   }
 
@@ -50,9 +50,7 @@ export class FilmsService {
    */
   public fetchFilmById(id: string): Observable<Film> {
     return this.firebaseService.fetchDocumentDataById('films', id).pipe(
-      map(filmDto => {
-        return this.filmMapper.fromDto({...filmDto['data'](), id });
-      })
+      map(filmDto => this.filmMapper.fromDto({ ...filmDto['data'](), id })),
     );
   }
 
@@ -66,17 +64,14 @@ export class FilmsService {
       planetsDocuments$ = this.firebaseService.fetchDocumentsDataByField(
         'planets',
         'pk',
-        ids
+        ids,
       );
     } else {
       planetsDocuments$ = this.firebaseService.fetchDocumentsData('planets');
     }
     return planetsDocuments$.pipe(
       map(planetsDoc =>
-        planetsDoc.map(doc => {
-          return this.planetMapper.fromDto(doc['data']());
-        })
-      )
+        planetsDoc.map(doc => this.planetMapper.fromDto(doc['data']()))),
     );
   }
 
@@ -90,17 +85,14 @@ export class FilmsService {
       charactersDocuments$ = this.firebaseService.fetchDocumentsDataByField(
         'people',
         'pk',
-        ids
+        ids,
       );
     } else {
       charactersDocuments$ = this.firebaseService.fetchDocumentsData('people');
     }
     return charactersDocuments$.pipe(
       map(characterDoc =>
-        characterDoc.map(doc => {
-          return this.planetMapper.fromDto(doc['data']());
-        })
-      )
+        characterDoc.map(doc => this.planetMapper.fromDto(doc['data']()))),
     );
   }
 
@@ -112,7 +104,7 @@ export class FilmsService {
     return this.firebaseService.getCountDocumentData(
       'films',
       options,
-      Path.Fields
+      Path.Fields,
     );
   }
 }
