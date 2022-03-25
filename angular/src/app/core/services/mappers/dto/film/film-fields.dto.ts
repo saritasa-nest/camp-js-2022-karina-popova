@@ -25,7 +25,7 @@ export interface FilmFieldsDto {
   /** The episode number of this film. */
   readonly episode_id: number;
 
-  /** Number of planets that are in this film. */
+  /** Array of planet keys from this film. */
   readonly planets: number[];
 
   /** People that are in this film. */

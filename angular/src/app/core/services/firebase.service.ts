@@ -30,7 +30,7 @@ export class FirebaseService {
   /**  First document on the page. */
   private firstDoc: QueryDocumentSnapshot<unknown> | null = null;
 
-  public constructor(private readonly firestore: AngularFirestore) {}
+  public constructor(private readonly firestore: AngularFirestore) { }
 
   /**
    * Fetch list of document data with pagination, filtering and sorting.
@@ -123,24 +123,15 @@ export class FirebaseService {
       parameters,
       pathField,
     );
-    if (
-      parameters.previousPageIndex !== undefined &&
-      parameters.pageIndex === 0
-    ) {
+    if (parameters.pageIndex === 0) {
       return queryFilterSort.limit(parameters.pageSize);
     }
-    if (
-      parameters.previousPageIndex !== undefined &&
-      parameters.previousPageIndex < parameters.pageIndex
-    ) {
+    if (parameters.previousPageIndex < parameters.pageIndex) {
       return queryFilterSort
         .startAfter(this.lastDoc)
         .limit(parameters.pageSize);
     }
-    if (
-      parameters.previousPageIndex !== undefined &&
-      parameters.previousPageIndex > parameters.pageIndex
-    ) {
+    if (parameters.previousPageIndex > parameters.pageIndex) {
       return queryFilterSort
         .limitToLast(parameters.pageSize)
         .endBefore(this.firstDoc);
@@ -159,28 +150,21 @@ export class FirebaseService {
     parameters: QueryParameters,
     pathField: Path,
   ): firebase.firestore.Query<DocumentData> {
-    if (parameters.direction === '') {
-      parameters.direction = 'asc';
-    }
     if (parameters.searchValue) {
-      parameters.active = 'title';
+      parameters.sortField = 'title';
     }
-    if (
-      parameters.direction &&
-      parameters.previousPageIndex !== undefined &&
-      parameters.searchValue
-    ) {
+    if (parameters.direction && parameters.searchValue) {
       return refCollection
-        .where(`${pathField}${parameters.active}`, '>=', parameters.searchValue)
+        .where(`${pathField}${parameters.sortField}`, '>=', parameters.searchValue)
         .where(
-          `${pathField}${parameters.active}`,
+          `${pathField}${parameters.sortField}`,
           '<=',
           parameters.searchValue + SEARCH_SYMBOL,
         )
-        .orderBy(`${pathField}${parameters.active}`, parameters.direction);
+        .orderBy(`${pathField}${parameters.sortField}`, parameters.direction);
     }
     return refCollection.orderBy(
-      `${pathField}${parameters.active}`,
+      `${pathField}${parameters.sortField}`,
       parameters.direction,
     );
   }

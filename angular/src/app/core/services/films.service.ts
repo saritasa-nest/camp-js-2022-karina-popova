@@ -22,7 +22,7 @@ export class FilmsService {
     private readonly firebaseService: FirebaseService,
     private readonly filmMapper: FilmMapper,
     private readonly planetMapper: PlanetMapper,
-  ) {}
+  ) { }
 
   /**
    * List of films with pagination, filtering and sorting.

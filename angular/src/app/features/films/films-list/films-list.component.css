@@ -11,10 +11,10 @@
 }
 
 .mat-row:hover {
-  background-color: #8f858521;
+  background-color: var(--hover-color);
 }
 
 .search-input {
-  background-color: rgb(0 0 0 / 0.46);
+  background-color: var(--input-color);
   width: 100%;
 }

@@ -1,31 +1,30 @@
 <sw-main-page></sw-main-page>
 <div class="container">
-  <table
-    *ngIf="film$ | async as film"
-    aria-label="film-details"
-    class="table-details"
-  >
+  <table *ngIf="film$ | async as film" aria-label="film-details" class="table-details">
     <tr>
-      <th>Title</th>
+      <th>Film details</th>
+    </tr>
+    <tr>
+      <td>Title</td>
       <td>{{ film.title }}</td>
     </tr>
     <tr>
-      <th>Opening crawl</th>
+      <td>Opening crawl</td>
       <td>{{ film.openingCrawl }}</td>
     </tr>
     <tr>
-      <th>Episode number</th>
+      <td>Episode number</td>
       <td>{{ film.episodeId }}</td>
     </tr>
     <tr>
-      <th>Planets</th>
-      <td *ngIf="planetNames$ | async | slice: 0 as planetNames">
+      <td>Planets</td>
+      <td *ngIf="planetNames$ | async as planetNames">
         {{ planetNames }}
       </td>
     </tr>
     <tr>
-      <th>Characters</th>
-      <td *ngIf="peopleNames$ | async | slice: 0 as peopleNames">
+      <td>Characters</td>
+      <td *ngIf="peopleNames$ | async as peopleNames">
         {{ peopleNames }}
       </td>
     </tr>

@@ -5,7 +5,7 @@ export interface TableOptions {
   readonly pageIndex: number;
 
   /** Index of the page that was selected previously. */
-  readonly previousPageIndex?: number;
+  readonly previousPageIndex: number;
 
   /** The current page size. */
   readonly pageSize: number;
@@ -13,12 +13,18 @@ export interface TableOptions {
   /** The current total number of items being paged. */
   readonly length: number;
 
-  /** The id of the column being sorted. */
-  readonly active: string;
+  /** Field to sort by. */
+  readonly sortField: string;
 
   /** The sort direction. */
-  readonly direction: 'asc' | 'desc' | '';
+  readonly direction: SortDirection;
 
-  /** The search value. */
+  /** The value to search for. */
   readonly searchValue: string;
+}
+
+/** Sorting direction. */
+export enum SortDirection {
+  Asc = 'asc',
+  Desc = 'desc',
 }

@@ -2,20 +2,20 @@
 export interface QueryParameters {
 
   /** The current page index. */
-  pageIndex: number;
+  readonly pageIndex: number;
 
   /** Index of the page that was selected previously. */
-  previousPageIndex?: number;
+  readonly previousPageIndex: number;
 
   /** The current page size. */
-  pageSize: number;
+  readonly pageSize: number;
 
-  /** The sort field. */
-  active: string;
+  /** Field to sort by. */
+  sortField: string;
 
   /** The sort direction. */
-  direction: 'asc' | 'desc' | '';
+  readonly direction: 'asc' | 'desc';
 
-  /** The search value. */
-  searchValue: string;
+  /** The value to search for. */
+  readonly searchValue: string;
 }

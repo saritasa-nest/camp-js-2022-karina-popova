@@ -6,12 +6,13 @@ import {
   ViewChild,
   AfterViewInit,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { BehaviorSubject, combineLatest, debounceTime, fromEvent, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { Film } from 'src/app/core/models/film';
-
+import { SortDirection } from 'src/app/core/models/table-options';
 import { FilmsService } from 'src/app/core/services/films.service';
 
 /** Films list.*/
@@ -21,7 +22,7 @@ import { FilmsService } from 'src/app/core/services/films.service';
   styleUrls: ['./films-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilmsListComponent implements AfterViewInit, OnDestroy {
+export class FilmsListComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Films search input. */
   @ViewChild('searchInput') public searchInput!: ElementRef<HTMLInputElement>;
 
@@ -44,12 +45,12 @@ export class FilmsListComponent implements AfterViewInit, OnDestroy {
     pageIndex: 0,
     pageSize: this.pageSize,
     previousPageIndex: 0,
-  } as PageEvent);
+  });
 
   private sortOptions$ = new BehaviorSubject({
-    active: 'title',
-    direction: 'asc',
-  } as Sort);
+    sortField: 'title',
+    direction: SortDirection.Asc,
+  });
 
   private tableOptions = combineLatest([this.paginationOptions$, this.sortOptions$, this.searchOption$]);
 
@@ -67,7 +68,10 @@ export class FilmsListComponent implements AfterViewInit, OnDestroy {
       this.filmsService.fetchFilms({ ...paginationOptions, ...sortOptions, searchValue: searchOption })),
   );
 
-  public constructor(private readonly filmsService: FilmsService) {
+  public constructor(private readonly filmsService: FilmsService) { }
+
+  /** @inheritdoc */
+  public ngOnInit(): void {
     this.length
       .pipe(takeUntil(this.destroy$))
       .subscribe(v => {
@@ -99,7 +103,12 @@ export class FilmsListComponent implements AfterViewInit, OnDestroy {
    * the user selects a different page size or navigates to another page.
    */
   public changePaginationOptions(event: PageEvent): void {
-    this.paginationOptions$.next(event);
+    this.paginationOptions$.next({
+      length: event.length,
+      pageIndex: event.pageIndex,
+      pageSize: event.pageSize,
+      previousPageIndex: event.previousPageIndex ?? 0,
+    });
     this.films$ = this.tableOptions.pipe(
       switchMap(([paginationOptions, sortOptions, searchOption]) =>
         this.filmsService.fetchFilms({ ...paginationOptions, ...sortOptions, searchValue: searchOption })),
@@ -111,7 +120,10 @@ export class FilmsListComponent implements AfterViewInit, OnDestroy {
    * when the user selects a different page size or navigates to another page.
    */
   public changeSortOptions(event: Sort): void {
-    this.sortOptions$.next(event);
+    this.sortOptions$.next({
+      sortField: event.active,
+      direction: event.direction === 'desc' ? SortDirection.Desc : SortDirection.Asc,
+    });
     this.paginator.firstPage();
     this.films$ = this.tableOptions.pipe(
       switchMap(([paginationOptions, sortOptions, searchOption]) =>
