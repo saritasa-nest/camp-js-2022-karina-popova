@@ -6,12 +6,14 @@ import { IsAuthenticatedGuard } from './guards/isAuthenticatedGuard';
 
 const routes: RouteObject[] = [
   {
-    path: '*',
-    element: (
-      <IsAuthenticatedGuard>
-        <HomePage />
-      </IsAuthenticatedGuard>
-    ),
+    path: '/',
+    element: <IsAuthenticatedGuard />,
+    children: [
+      {
+        path: 'home',
+        element: <HomePage />,
+      },
+    ],
   },
   {
     path: 'login',

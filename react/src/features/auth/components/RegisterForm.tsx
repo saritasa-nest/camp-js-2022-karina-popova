@@ -1,9 +1,10 @@
 import { useEffect, VFC } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthForm } from 'src/models/authorization-form';
 import { useAppDispatch, useAppSelector } from 'src/store/store';
 import { signUpUser } from 'src/store/user/dispatchers';
 import { selectIsAuth, selectUserError } from 'src/store/user/selectors';
-import { AuthForm, Form } from './Form';
+import { Form } from './Form';
 
 const RegisterFormComponent: VFC = () => {
   const dispatch = useAppDispatch();
@@ -11,8 +12,7 @@ const RegisterFormComponent: VFC = () => {
   const error = useAppSelector(selectUserError);
   const isAuth = useAppSelector(selectIsAuth);
   const handleRegister = ({ email, password }: AuthForm): void => {
-    dispatch(signUpUser({ email, password }))
-      .catch(err => err);
+    dispatch(signUpUser({ email, password }));
   };
   useEffect(() => {
     if (isAuth) {
@@ -22,7 +22,7 @@ const RegisterFormComponent: VFC = () => {
   return (
     <Form
       title="Sign up"
-      handleSubmit={handleRegister}
+      onSubmit={handleRegister}
       redirectLink="/login"
       redirectLinkName="sign in"
       error={error}

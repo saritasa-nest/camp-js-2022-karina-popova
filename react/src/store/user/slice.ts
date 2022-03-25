@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { signInUser, signUpUser, signOut } from './dispatchers';
+import {
+  signInUser,
+  signUpUser,
+  signOut,
+  fetchCurrentUser,
+} from './dispatchers';
 import { initialUserState } from './state';
 
 export const userSlice = createSlice({
@@ -40,6 +45,11 @@ export const userSlice = createSlice({
     .addCase(signOut.fulfilled, state => {
       state.user = null;
       state.isAuthenticated = false;
+    })
+    .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.isAuthenticated = state.user !== null;
+      state.isLoading = false;
     }),
 });
 

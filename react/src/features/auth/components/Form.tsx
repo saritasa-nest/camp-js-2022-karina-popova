@@ -1,28 +1,18 @@
-import React, { VFC } from 'react';
+import { VFC } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Link } from 'react-router-dom';
-import { FormHelperText } from '@mui/material';
-
-/** Authorization form . */
-export interface AuthForm {
-  /** Email. */
-  readonly email: string;
-  /** Password. */
-  readonly password: string;
-}
+import { FormHelperText, Typography } from '@mui/material';
+import { AuthForm } from 'src/models/authorization-form';
+import styles from './form.module.css';
 
 interface Props {
   /** Form name . */
   readonly title: string;
   /** Event handler on form submit. */
-  readonly handleSubmit: (data: AuthForm) => void;
+  readonly onSubmit: (data: AuthForm) => void;
   /** Link path. */
   readonly redirectLink: string;
   /** Link name. */
@@ -44,10 +34,9 @@ const FormComponent: VFC<Props> = ({
   title,
   redirectLinkName,
   redirectLink,
-  handleSubmit,
+  onSubmit,
   error,
 }) => {
-  const [open] = React.useState(true);
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -55,48 +44,46 @@ const FormComponent: VFC<Props> = ({
     },
     validationSchema,
     onSubmit: ({ email, password }) => {
-      handleSubmit({ email, password });
+      onSubmit({ email, password });
     },
   });
 
   return (
-    <Dialog open={open}>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <form onSubmit={formik.handleSubmit}>
-          <TextField
-            variant="standard"
-            fullWidth
-            id="email"
-            name="email"
-            label="Email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-          />
-          <TextField
-            variant="standard"
-            fullWidth
-            id="password"
-            name="password"
-            label="Password"
-            type="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
-          />
-          <FormHelperText error>{ error }</FormHelperText>
-          <DialogActions>
-            <Link to={redirectLink}>{redirectLinkName}</Link>
-            <Button color="primary" variant="contained" type="submit">
-              {title}
-            </Button>
-          </DialogActions>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <div className={styles.container}>
+      <form onSubmit={formik.handleSubmit}>
+        <Typography variant="h4">{title}</Typography>
+        <TextField
+          variant="standard"
+          fullWidth
+          id="email"
+          name="email"
+          label="Email"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          error={formik.touched.email && Boolean(formik.errors.email)}
+          helperText={formik.touched.email && formik.errors.email}
+        />
+        <TextField
+          variant="standard"
+          fullWidth
+          id="password"
+          name="password"
+          label="Password"
+          type="password"
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          error={formik.touched.password && Boolean(formik.errors.password)}
+          helperText={formik.touched.password && formik.errors.password}
+        />
+        <FormHelperText error>{error}</FormHelperText>
+        <div className={styles.form_footer}>
+          <Link to={redirectLink}>{redirectLinkName}</Link>
+          <Button color="primary" variant="contained" type="submit">
+            {title}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 };
 

@@ -1,4 +1,3 @@
-import { AuthService } from 'src/api/services/auth.service';
 import { User } from 'src/models/user';
 
 /**
@@ -11,8 +10,11 @@ export interface UserState {
   readonly isAuthenticated: boolean;
   /** Authorization error. */
   readonly error?: string;
+  /** Loading current user. */
+  readonly isLoading: boolean;
 }
 export const initialUserState: UserState = {
-  user: AuthService.getCurrentUser(),
-  isAuthenticated: AuthService.getCurrentUser() !== null,
+  user: null,
+  isAuthenticated: false,
+  isLoading: true,
 };

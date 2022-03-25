@@ -3,17 +3,21 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   signOut,
+  User,
   UserCredential,
 } from 'firebase/auth';
-import { User } from 'src/models/user';
-import { UserMapper } from '../mappers/user.mapper';
 import { app } from './initializeApp';
 
 export namespace AuthService {
   const auth = getAuth(app);
+
   /** Fetch current user. */
-  export function getCurrentUser(): User | null {
-    return auth.currentUser ? UserMapper.fromDto(auth.currentUser) : null;
+  export function fetchCurrentUser(): Promise<User | null> {
+    return new Promise(resolve => {
+      auth.onAuthStateChanged(user => {
+        resolve(user);
+      });
+    });
   }
 
   /**

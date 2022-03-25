@@ -1,4 +1,4 @@
-import { useEffect, VFC } from 'react';
+import { VFC } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -6,23 +6,31 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { useAppDispatch, useAppSelector } from 'src/store';
-import { selectIsAuth, selectUser } from 'src/store/user/selectors';
+import { selectUser } from 'src/store/user/selectors';
 import { signOut } from 'src/store/user/dispatchers';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export const HomePage: VFC = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const user = useAppSelector(selectUser);
-  const isAuth = useAppSelector(selectIsAuth);
   const handleLogout = (): void => {
     dispatch(signOut());
   };
-  useEffect(() => {
-    if (isAuth) {
-      navigate('/home');
-    }
-  }, [isAuth, navigate]);
+  const userMenu = user ? (
+    <>
+      <Typography>{user.email}</Typography>
+      <Button color="inherit" onClick={handleLogout}>
+        SIGN OUT
+      </Button>
+    </>
+  ) : (
+    <Link
+      color="inherit"
+      to="login"
+    >
+      Login
+    </Link>
+  );
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -37,10 +45,7 @@ export const HomePage: VFC = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             SW-FILMS
           </Typography>
-          <Typography>{user.user ? user.user.email : ''}</Typography>
-          <Button color="inherit" onClick={handleLogout}>
-            SIGN OUT
-          </Button>
+          {userMenu}
         </Toolbar>
       </AppBar>
     </Box>

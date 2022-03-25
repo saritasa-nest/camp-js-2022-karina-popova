@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.form_footer {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 20px;
+  align-items: center;
+}
