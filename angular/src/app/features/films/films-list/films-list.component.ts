@@ -12,7 +12,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { BehaviorSubject, combineLatest, debounceTime, fromEvent, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { Film } from 'src/app/core/models/film';
-import { SortDirection } from 'src/app/core/models/table-options';
+import { SortDirection } from 'src/app/core/models/query-parameters';
 import { FilmsService } from 'src/app/core/services/films.service';
 
 /** Films list.*/
@@ -24,10 +24,10 @@ import { FilmsService } from 'src/app/core/services/films.service';
 })
 export class FilmsListComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Films search input. */
-  @ViewChild('searchInput') public searchInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('searchInput') public searchInput?: ElementRef<HTMLInputElement>;
 
   /** Paginator. */
-  @ViewChild('paginator') public paginator!: MatPaginator;
+  @ViewChild('paginator') public paginator?: MatPaginator;
 
   /** Number of films per page.*/
   public readonly pageSize = 3;
@@ -38,7 +38,7 @@ export class FilmsListComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Films table column headings.*/
   public readonly displayedColumns: string[] = ['title', 'director', 'created'];
 
-  private searchOption$ = new BehaviorSubject('');
+  private readonly searchOption$ = new BehaviorSubject('');
 
   private paginationOptions$ = new BehaviorSubject({
     length: 6,
@@ -52,18 +52,18 @@ export class FilmsListComponent implements OnInit, AfterViewInit, OnDestroy {
     direction: SortDirection.Asc,
   });
 
-  private tableOptions = combineLatest([this.paginationOptions$, this.sortOptions$, this.searchOption$]);
+  private tableOptions$ = combineLatest([this.paginationOptions$, this.sortOptions$, this.searchOption$]);
 
-  private readonly destroy$: Subject<void> = new Subject<void>();
+  private readonly destroy$: Subject<void> = new Subject();
 
   /** Number of films in the collection. */
-  public length = this.tableOptions.pipe(
+  public length = this.tableOptions$.pipe(
     switchMap(([paginationOptions, sortOptions, searchOption]) =>
       this.filmsService.getCountFilms({ ...paginationOptions, ...sortOptions, searchValue: searchOption })),
   );
 
   /** Films.*/
-  public films$ = this.tableOptions.pipe(
+  public films$ = this.tableOptions$.pipe(
     switchMap(([paginationOptions, sortOptions, searchOption]) =>
       this.filmsService.fetchFilms({ ...paginationOptions, ...sortOptions, searchValue: searchOption })),
   );
@@ -75,7 +75,9 @@ export class FilmsListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.length
       .pipe(takeUntil(this.destroy$))
       .subscribe(v => {
-        this.paginator.length = v;
+        if (this.paginator) {
+          this.paginator.length = v;
+        }
         return v;
       });
   }
@@ -88,14 +90,19 @@ export class FilmsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** @inheritdoc */
   public ngAfterViewInit(): void {
-    fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
-      map((i: Event) => (i.currentTarget as HTMLInputElement).value),
-      debounceTime(500),
-    )
-      .subscribe(value => {
-        this.searchOption$.next(value);
-        this.paginator.firstPage();
-      });
+    if (this.searchInput) {
+      fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+        map((i: Event) => (i.currentTarget as HTMLInputElement).value),
+        debounceTime(500),
+      )
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(value => {
+          this.searchOption$.next(value);
+          if (this.paginator) {
+            this.paginator.firstPage();
+          }
+        });
+    }
   }
 
   /** Changing pagination parameters by the user.
@@ -109,10 +116,6 @@ export class FilmsListComponent implements OnInit, AfterViewInit, OnDestroy {
       pageSize: event.pageSize,
       previousPageIndex: event.previousPageIndex ?? 0,
     });
-    this.films$ = this.tableOptions.pipe(
-      switchMap(([paginationOptions, sortOptions, searchOption]) =>
-        this.filmsService.fetchFilms({ ...paginationOptions, ...sortOptions, searchValue: searchOption })),
-    );
   }
 
   /** Change sort options.
@@ -124,11 +127,9 @@ export class FilmsListComponent implements OnInit, AfterViewInit, OnDestroy {
       sortField: event.active,
       direction: event.direction === 'desc' ? SortDirection.Desc : SortDirection.Asc,
     });
-    this.paginator.firstPage();
-    this.films$ = this.tableOptions.pipe(
-      switchMap(([paginationOptions, sortOptions, searchOption]) =>
-        this.filmsService.fetchFilms({ ...paginationOptions, ...sortOptions, searchValue: searchOption })),
-    );
+    if (this.paginator) {
+      this.paginator.firstPage();
+    }
   }
 
   /** Film id.

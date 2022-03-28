@@ -14,12 +14,12 @@ export class AuthorizationGuard implements CanActivate {
   public constructor(
     private readonly userService: UserService,
     private readonly router: Router,
-  ) {}
+  ) { }
 
   /** @inheritdoc */
   public canActivate(): Observable<boolean | UrlTree> {
     return this.userService.isAuthorized$.pipe(
-      map(isAuthorized => (isAuthorized ? true : this.router.parseUrl('/'))),
+      map(isAuthorized => isAuthorized ? true : this.router.parseUrl('/')),
     );
   }
 }

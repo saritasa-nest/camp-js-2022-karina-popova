@@ -14,8 +14,17 @@ export interface QueryParameters {
   sortField: string;
 
   /** The sort direction. */
-  readonly direction: 'asc' | 'desc';
+  readonly direction: SortDirection;
 
   /** The value to search for. */
   readonly searchValue: string;
+
+  /** The current total number of items being paged. */
+  readonly length: number;
+}
+
+/** Sorting direction. */
+export enum SortDirection {
+  Asc = 'asc',
+  Desc = 'desc',
 }

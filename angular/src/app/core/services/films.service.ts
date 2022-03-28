@@ -5,7 +5,7 @@ import { map, Observable } from 'rxjs';
 import { Film } from '../models/film';
 import { Path } from '../models/path';
 import { Planet } from '../models/planet';
-import { TableOptions } from '../models/table-options';
+import { QueryParameters } from '../models/query-parameters';
 
 import { FirebaseService } from './firebase.service';
 import { FilmMapper } from './mappers/film.mapper';
@@ -28,7 +28,7 @@ export class FilmsService {
    * List of films with pagination, filtering and sorting.
    * @param options Pagination, sorting and filtering options.
    */
-  public fetchFilms(options: TableOptions): Observable<Film[]> {
+  public fetchFilms(options: QueryParameters): Observable<Film[]> {
     return this.firebaseService
       .fetchSortedDocumentsData('films', options, Path.Fields)
       .pipe(
@@ -100,7 +100,7 @@ export class FilmsService {
    * Returns number of films.
    * @param options Pagination, sorting and filtering options.
    */
-  public getCountFilms(options: TableOptions): Observable<number> {
+  public getCountFilms(options: QueryParameters): Observable<number> {
     return this.firebaseService.getCountDocumentData(
       'films',
       options,
