@@ -3,6 +3,7 @@ import { filter, map, Observable, tap } from 'rxjs';
 import {
   AngularFirestore,
   CollectionReference,
+  DocumentSnapshot,
   QueryDocumentSnapshot,
 } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat';
@@ -42,7 +43,7 @@ export class FirebaseService {
     path: CollectionPath,
     parameters: QueryParameters,
     pathField: Path,
-  ): Observable<DocumentData[]> {
+  ): Observable<QueryDocumentSnapshot<unknown>[]> {
     return this.firestore
       .collection(path, refCollection =>
         this.getQueryConstraint(refCollection, parameters, pathField))
@@ -61,7 +62,7 @@ export class FirebaseService {
    * Fetch list of document data.
    * @param path Path to collection.
    */
-  public fetchDocumentsData(path: CollectionPath): Observable<DocumentData[]> {
+  public fetchDocumentsData(path: CollectionPath): Observable<QueryDocumentSnapshot<unknown>[]> {
     return this.firestore
       .collection(path)
       .snapshotChanges()
@@ -79,7 +80,7 @@ export class FirebaseService {
   public fetchDocumentDataById(
     path: CollectionPath,
     id: string,
-  ): Observable<DocumentData> {
+  ): Observable<DocumentSnapshot<unknown>> {
     return this.firestore
       .doc(`${path}/${id}`)
       .snapshotChanges()
@@ -96,7 +97,7 @@ export class FirebaseService {
     path: CollectionPath,
     pathCompare: string,
     value: readonly number[],
-  ): Observable<DocumentData[]> {
+  ): Observable<QueryDocumentSnapshot<unknown>[]> {
     return this.firestore
       .collection(path, refCollection =>
         refCollection.where(pathCompare, 'in', value))

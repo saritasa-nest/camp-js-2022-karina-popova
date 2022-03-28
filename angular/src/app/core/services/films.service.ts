@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DocumentData } from '@angular/fire/compat/firestore';
+import { DocumentData, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
 import { map, Observable } from 'rxjs';
 
 import { Film } from '../models/film';
@@ -8,6 +8,9 @@ import { Planet } from '../models/planet';
 import { QueryParameters } from '../models/query-parameters';
 
 import { FirebaseService } from './firebase.service';
+import { FilmDto } from './mappers/dto/film/film.dto';
+import { PeopleDto } from './mappers/dto/people/people.dto';
+import { PlanetDto } from './mappers/dto/planet/planet.dto';
 import { FilmMapper } from './mappers/film.mapper';
 import { PlanetMapper } from './mappers/planet.mapper';
 
@@ -36,7 +39,7 @@ export class FilmsService {
           if (filmsDto) {
             return filmsDto.map(filmDto => {
               const { id } = filmDto;
-              return this.filmMapper.fromDto({ ...filmDto['data'](), id });
+              return this.filmMapper.fromDto({ ...(filmDto.data() as FilmDto), id });
             });
           }
           return [];
@@ -50,7 +53,7 @@ export class FilmsService {
    */
   public fetchFilmById(id: string): Observable<Film> {
     return this.firebaseService.fetchDocumentDataById('films', id).pipe(
-      map(filmDto => this.filmMapper.fromDto({ ...filmDto['data'](), id })),
+      map(filmDto => this.filmMapper.fromDto({ ...(filmDto.data() as FilmDto), id })),
     );
   }
 
@@ -59,7 +62,7 @@ export class FilmsService {
    * @param ids List of planet ids.
    */
   public fetchPlanets(ids?: readonly number[]): Observable<Planet[]> {
-    let planetsDocuments$: Observable<DocumentData[]>;
+    let planetsDocuments$: Observable<QueryDocumentSnapshot<unknown>[]>;
     if (ids != null) {
       planetsDocuments$ = this.firebaseService.fetchDocumentsDataByField(
         'planets',
@@ -71,7 +74,7 @@ export class FilmsService {
     }
     return planetsDocuments$.pipe(
       map(planetsDoc =>
-        planetsDoc.map(doc => this.planetMapper.fromDto(doc['data']()))),
+        planetsDoc.map(doc => this.planetMapper.fromDto(doc.data() as PlanetDto))),
     );
   }
 
@@ -80,7 +83,7 @@ export class FilmsService {
    * @param ids List of character ids.
    */
   public fetchPeople(ids?: readonly number[]): Observable<Planet[]> {
-    let charactersDocuments$: Observable<DocumentData[]>;
+    let charactersDocuments$: Observable<QueryDocumentSnapshot<unknown>[]>;
     if (ids != null) {
       charactersDocuments$ = this.firebaseService.fetchDocumentsDataByField(
         'people',
@@ -92,7 +95,7 @@ export class FilmsService {
     }
     return charactersDocuments$.pipe(
       map(characterDoc =>
-        characterDoc.map(doc => this.planetMapper.fromDto(doc['data']()))),
+        characterDoc.map(doc => this.planetMapper.fromDto(doc.data() as PeopleDto))),
     );
   }
 
