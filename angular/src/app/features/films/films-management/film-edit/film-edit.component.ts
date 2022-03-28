@@ -2,7 +2,6 @@ import {
   Component,
   ChangeDetectionStrategy,
   AfterViewInit,
-  ViewChild,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';

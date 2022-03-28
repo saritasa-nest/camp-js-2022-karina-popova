@@ -1,60 +1,80 @@
-<form [formGroup]="filmForm">
-  <mat-form-field appearance="fill">
-    <mat-label>Title</mat-label>
-    <input formControlName="title" matInput placeholder="Enter title film" />
-    <mat-error *ngIf="!filmForm.controls['title'].valid">
-      Title is required
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>The date film was created.</mat-label>
-    <input matInput [matDatepicker]="created" formControlName="created" />
-    <mat-datepicker-toggle matSuffix [for]="created"></mat-datepicker-toggle>
-    <mat-datepicker #created></mat-datepicker>
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>Director</mat-label>
-    <input formControlName="director" matInput placeholder="Enter director film" />
-    <mat-error *ngIf="!filmForm.controls['director'].valid">
-      Director is required
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>Opening crawl</mat-label>
-    <textarea matInput placeholder="The opening paragraphs at the beginning of this film."
-      formControlName="openingCrawl"></textarea>
-    <mat-error *ngIf="!filmForm.controls['openingCrawl'].valid">
-      Opening crawl is required
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>Episode Id</mat-label>
-    <mat-select formControlName="episodeId" placeholder=" The episode number of this film.">
-      <mat-option [value]="i" *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9]">{{i}}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="!filmForm.controls['episodeId'].valid">
-      Episode Id is required
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>Planets</mat-label>
-    <mat-select formControlName="planets" placeholder="Number of planets that are in this film." multiple>
-      <mat-option [value]="i + 1" *ngFor="let planet of planets$ | async; let i = index">{{ planet.name }}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="!filmForm.controls['planets'].valid">
-      Planets is required
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>Characters</mat-label>
-    <mat-select formControlName="characters" placeholder="People that are in this film." multiple>
-      <mat-option [value]="i + 1" *ngFor="let character of characters$ | async; let i = index">{{ character.name }}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="!filmForm.controls['characters'].valid">
-      Characters is required
-    </mat-error>
-  </mat-form-field>
+<form [formGroup]="filmForm" class="form-film" (ngSubmit)="submitForm()">
+  <div class="form-film__wrapper">
+    <h2>{{ title }}</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Title</mat-label>
+      <input formControlName="title" matInput placeholder="Enter title film" />
+      <mat-error *ngIf="!filmForm.controls['title'].valid">
+        Title is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>The date film was created.</mat-label>
+      <input matInput [matDatepicker]="created" formControlName="created" />
+      <mat-datepicker-toggle matSuffix [for]="created"></mat-datepicker-toggle>
+      <mat-datepicker #created></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Director</mat-label>
+      <input formControlName="director" matInput placeholder="Enter director film" />
+      <mat-error *ngIf="!filmForm.controls['director'].valid">
+        Director is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Opening crawl</mat-label>
+      <textarea matInput placeholder="The opening paragraphs at the beginning of this film."
+        formControlName="openingCrawl"></textarea>
+      <mat-error *ngIf="!filmForm.controls['openingCrawl'].valid">
+        Opening crawl is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Episode Id</mat-label>
+      <mat-select formControlName="episodeId" placeholder=" The episode number of this film.">
+        <mat-option [value]="i" *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9]">{{ i }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!filmForm.controls['episodeId'].valid">
+        Episode Id is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Planets</mat-label>
+      <mat-select formControlName="planets" placeholder="Number of planets that are in this film." multiple>
+        <mat-option [value]="i + 1" *ngFor="let planet of planets$ | async; let i = index">{{ planet.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!filmForm.controls['planets'].valid">
+        Planets is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Characters</mat-label>
+      <mat-select formControlName="characters" placeholder="People that are in this film." multiple>
+        <mat-option [value]="i + 1" *ngFor="let character of characters$ | async; let i = index">{{ character.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="!filmForm.controls['characters'].valid">
+        Characters is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>The date film was edited.</mat-label>
+      <input matInput [matDatepicker]="edited" formControlName="edited" />
+      <mat-datepicker-toggle matSuffix [for]="edited"></mat-datepicker-toggle>
+      <mat-datepicker #edited></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Producer</mat-label>
+      <input formControlName="producer" matInput placeholder="The name(s) of the producer(s) of this film." />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>The date release at original creator country.</mat-label>
+      <input matInput [matDatepicker]="releaseDate" formControlName="releaseDate" />
+      <mat-datepicker-toggle matSuffix [for]="releaseDate"></mat-datepicker-toggle>
+      <mat-datepicker #releaseDate></mat-datepicker>
+    </mat-form-field>
+    <ng-content></ng-content>
+  </div>
 </form>
