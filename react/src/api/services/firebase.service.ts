@@ -51,7 +51,7 @@ export namespace FirebaseService {
    * @param path Path to collection.
    * @param id Document id.
    */
-   export async function fetchDocumentDataById(path: string, id: string): Promise<DocumentData> {
+  export async function fetchDocumentDataById(path: string, id: string): Promise<DocumentData> {
     const querySnapshot = await getDoc(doc(db, path, id));
     return querySnapshot;
   }

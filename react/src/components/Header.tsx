@@ -10,6 +10,7 @@ import { selectUser } from 'src/store/user/selectors';
 import { searching } from 'src/store/films/slice';
 import { DebounceInput } from 'react-debounce-input';
 import TextField from '@mui/material/TextField';
+import { Box } from '@mui/material';
 
 export const Header: VFC = () => {
   const dispatch = useAppDispatch();
@@ -21,12 +22,12 @@ export const Header: VFC = () => {
     dispatch(searching((e.target as HTMLInputElement).value));
   };
   const userMenu = user ? (
-    <>
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Typography>{user.email}</Typography>
       <Button color="inherit" onClick={handleLogout} variant="outlined">
         SIGN OUT
       </Button>
-    </>
+    </Box>
   ) : (
     <Link
       color="inherit"
@@ -37,8 +38,8 @@ export const Header: VFC = () => {
   );
   return (
     <AppBar position="fixed" sx={{ zIndex: theme => theme.zIndex.drawer + 1 }}>
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <Toolbar sx={{ justifyContent: 'space-between' }}>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 0 }}>
           SW-FILMS
         </Typography>
         <DebounceInput

@@ -3,6 +3,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import MovieIcon from '@mui/icons-material/Movie';
 import { Film } from 'src/models/film';
 import { Link } from 'react-router-dom';
 
@@ -15,7 +16,9 @@ const FilmComponent: VFC<Props> = ({ film }) => (
   <Link to={`${film.id}`}>
     <ListItem button>
       <ListItemAvatar>
-        <Avatar />
+        <Avatar>
+          <MovieIcon />
+        </Avatar>
       </ListItemAvatar>
       <ListItemText primary={film.title} />
     </ListItem>

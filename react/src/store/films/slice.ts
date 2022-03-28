@@ -1,11 +1,7 @@
-import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
+import { createSlice, EntityState } from '@reduxjs/toolkit';
 import { Film } from 'src/models/film';
 import { fetchFilmById, fetchFilms } from './dispatchers';
-import { initialFilmsState } from './state';
-
-export const filmAdapter = createEntityAdapter<Film>({
-  selectId: film => film.id,
-});
+import { filmAdapter, initialFilmsState } from './state';
 
 export const filmsSlice = createSlice({
   name: 'films',
@@ -13,19 +9,22 @@ export const filmsSlice = createSlice({
   reducers: {
     searching(state, { payload }) {
       state.searchValue = payload;
-      state.films = [];
+      filmAdapter.setAll(state.films as EntityState<Film>, []);
       state.lastFilmOnPage = null;
     },
     sorting(state, { payload }) {
       state.sort = payload;
-      state.films = [];
+      filmAdapter.setAll(state.films as EntityState<Film>, []);
       state.lastFilmOnPage = null;
     },
   },
   extraReducers: builder => builder
     .addCase(fetchFilms.fulfilled, (state, { payload }) => {
-      state.films = [...state.films, ...payload.films];
+      filmAdapter.upsertMany(state.films as EntityState<Film>, payload.films);
       state.lastFilmOnPage = payload.lastFilmOnPage;
+    })
+    .addCase(fetchFilmById.fulfilled, (state, { payload }) => {
+      filmAdapter.upsertOne(state.films as EntityState<Film>, payload);
     }),
 });
 

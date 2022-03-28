@@ -20,7 +20,7 @@ export namespace FilmService {
   /** Fetches film by id.
    * @param id Film id.
    */
-   export async function fetchFilmById(id: string): Promise<Film> {
+  export async function fetchFilmById(id: string): Promise<Film> {
     const film = await FirebaseService.fetchDocumentDataById(DEFAULT_PATH_FILMS, id);
     return FilmMapper.fromDto({ id: film.id, ...film.data() });
   }
