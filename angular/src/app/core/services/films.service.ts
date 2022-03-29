@@ -66,48 +66,6 @@ export class FilmsService {
   }
 
   /**
-   * List of planets that are in this film.
-   * @param ids List of planet ids.
-   */
-  public fetchPlanets(ids?: readonly number[]): Observable<Planet[]> {
-    let planetsDocuments$: Observable<QueryDocumentSnapshot<unknown>[]>;
-    if (ids != null) {
-      planetsDocuments$ = this.firebaseService.fetchDocumentsDataByField(
-        'planets',
-        'pk',
-        ids,
-      );
-    } else {
-      planetsDocuments$ = this.firebaseService.fetchDocumentsData('planets');
-    }
-    return planetsDocuments$.pipe(
-      map(planetsDoc =>
-        planetsDoc.map(doc => this.planetMapper.fromDto(doc.data() as PlanetDto))),
-    );
-  }
-
-  /**
-   * List of characters that are in this film.
-   * @param ids List of character ids.
-   */
-  public fetchPeople(ids?: readonly number[]): Observable<Planet[]> {
-    let charactersDocuments$: Observable<QueryDocumentSnapshot<unknown>[]>;
-    if (ids != null) {
-      charactersDocuments$ = this.firebaseService.fetchDocumentsDataByField(
-        'people',
-        'pk',
-        ids,
-      );
-    } else {
-      charactersDocuments$ = this.firebaseService.fetchDocumentsData('people');
-    }
-    return charactersDocuments$.pipe(
-      map(characterDoc =>
-        characterDoc.map(doc => this.planetMapper.fromDto(doc.data() as PeopleDto))),
-    );
-  }
-
-  /**
    * Returns number of films.
    * @param options Pagination, sorting and filtering options.
    */

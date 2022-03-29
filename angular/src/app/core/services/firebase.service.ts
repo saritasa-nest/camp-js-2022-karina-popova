@@ -126,12 +126,12 @@ export class FirebaseService {
     if (parameters.pageIndex === 0) {
       return queryFilterSort.limit(parameters.pageSize);
     }
-    if (parameters.previousPageIndex < parameters.pageIndex) {
+    if (parameters.previousPageIndex != null && parameters.previousPageIndex < parameters.pageIndex) {
       return queryFilterSort
         .startAfter(lastDoc)
         .limit(parameters.pageSize);
     }
-    if (parameters.previousPageIndex > parameters.pageIndex) {
+    if (parameters.previousPageIndex != null && parameters.previousPageIndex > parameters.pageIndex) {
       return queryFilterSort
         .limitToLast(parameters.pageSize)
         .endBefore(firstDoc);
