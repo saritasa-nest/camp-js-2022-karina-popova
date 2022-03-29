@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { DocumentData, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
-import { map, Observable } from 'rxjs';
+import { QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
+import { map, Observable, tap } from 'rxjs';
 
 import { Film } from '../models/film';
 import { Path } from '../models/path';
@@ -21,6 +21,10 @@ import { PlanetMapper } from './mappers/planet.mapper';
   providedIn: 'root',
 })
 export class FilmsService {
+  private lastFilm: QueryDocumentSnapshot<unknown> | null = null;
+
+  private firstFilm: QueryDocumentSnapshot<unknown> | null = null;
+
   public constructor(
     private readonly firebaseService: FirebaseService,
     private readonly filmMapper: FilmMapper,
@@ -33,8 +37,12 @@ export class FilmsService {
    */
   public fetchFilms(options: QueryParameters): Observable<Film[]> {
     return this.firebaseService
-      .fetchSortedDocumentsData('films', options, Path.Fields)
+      .fetchSortedDocumentsData('films', options, Path.Fields, this.lastFilm, this.firstFilm)
       .pipe(
+        tap(v => {
+          this.lastFilm = v[v.length - 1];
+          this.firstFilm = v[0];
+        }),
         map(filmsDto => {
           if (filmsDto) {
             return filmsDto.map(filmDto => {

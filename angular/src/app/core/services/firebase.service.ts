@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { filter, map, Observable, tap } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import {
   AngularFirestore,
   CollectionReference,
@@ -25,11 +25,6 @@ const SEARCH_SYMBOL = '~';
   providedIn: 'root',
 })
 export class FirebaseService {
-  /** Last document on the page. */
-  private lastDoc: QueryDocumentSnapshot<unknown> | null = null;
-
-  /**  First document on the page. */
-  private firstDoc: QueryDocumentSnapshot<unknown> | null = null;
 
   public constructor(private readonly firestore: AngularFirestore) { }
 
@@ -38,22 +33,22 @@ export class FirebaseService {
    * @param path Path to collection.
    * @param parameters Parameters for generating a query constraint.
    * @param pathField Path to a field with nested fields in the document data.
+   * @param lastDoc Last document in previous request.
+   * @param firstDoc First document in previous request.
    */
   public fetchSortedDocumentsData(
     path: CollectionPath,
     parameters: QueryParameters,
     pathField: Path,
+    lastDoc: QueryDocumentSnapshot<unknown> | null,
+    firstDoc: QueryDocumentSnapshot<unknown> | null,
   ): Observable<QueryDocumentSnapshot<unknown>[]> {
     return this.firestore
       .collection(path, refCollection =>
-        this.getQueryConstraint(refCollection, parameters, pathField))
+        this.getQueryConstraint(refCollection, parameters, pathField, lastDoc, firstDoc))
       .snapshotChanges()
       .pipe(
         filter(documentsDto => documentsDto.length > 0),
-        tap(documentsDto => {
-          this.lastDoc = documentsDto[documentsDto.length - 1].payload.doc;
-          this.firstDoc = documentsDto[0].payload.doc;
-        }),
         map(documentsDto => documentsDto.map(documentDto => documentDto.payload.doc)),
       );
   }
@@ -113,11 +108,15 @@ export class FirebaseService {
    * @param refCollection Link to collection.
    * @param parameters Parameters for generating a query constraint.
    * @param pathField Path to a field with nested fields in the document data.
+   * @param lastDoc QueryDocumentSnapshot<unknown> | null.
+   * @param firstDoc QueryDocumentSnapshot<unknown> | null.
    */
   private getQueryConstraint(
     refCollection: CollectionReference<DocumentData>,
     parameters: QueryParameters,
     pathField: Path,
+    lastDoc: QueryDocumentSnapshot<unknown> | null,
+    firstDoc: QueryDocumentSnapshot<unknown> | null,
   ): firebase.firestore.Query<DocumentData> {
     const queryFilterSort = this.getQueryFilterSort(
       refCollection,
@@ -129,13 +128,13 @@ export class FirebaseService {
     }
     if (parameters.previousPageIndex < parameters.pageIndex) {
       return queryFilterSort
-        .startAfter(this.lastDoc)
+        .startAfter(lastDoc)
         .limit(parameters.pageSize);
     }
     if (parameters.previousPageIndex > parameters.pageIndex) {
       return queryFilterSort
         .limitToLast(parameters.pageSize)
-        .endBefore(this.firstDoc);
+        .endBefore(firstDoc);
     }
     return queryFilterSort.limit(parameters.pageSize);
   }
