@@ -3,6 +3,7 @@ import { combineLatest, map, Observable } from 'rxjs';
 import {
   AngularFirestore,
   CollectionReference,
+  DocumentReference,
   DocumentSnapshot,
   QueryDocumentSnapshot,
 } from '@angular/fire/compat/firestore';
@@ -222,11 +223,8 @@ export class FirebaseService {
    * @param path Path to collection.
    * @param value Document data.
    */
-  public addDocumentData(path: string, value: unknown): Promise<void> {
-    return new Promise(resolve => {
-      this.firestore.collection(path).add(value)
-        .then(() => resolve());
-    });
+  public addDocumentData(path: string, value: unknown): Promise<DocumentReference<unknown>> {
+    return this.firestore.collection(path).add(value);
   }
 
   /**

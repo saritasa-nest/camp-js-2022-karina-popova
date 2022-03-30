@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { first, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { Film } from 'src/app/core/models/film';
 import { FilmsService } from 'src/app/core/services/films.service';
 
@@ -24,6 +24,8 @@ export class FilmEditComponent implements AfterViewInit {
     this.activatedRoute.snapshot.queryParamMap.get('id') ?? null;
 
   private readonly film$: Observable<Film> = new Observable();
+
+  private readonly destroy$: Subject<boolean> = new Subject<boolean>();
 
   /** Form field controls. */
   public editForm = this.fb.group({
@@ -51,6 +53,12 @@ export class FilmEditComponent implements AfterViewInit {
   }
 
   /** @inheritdoc */
+  public ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
+  /** @inheritdoc */
   public ngAfterViewInit(): void {
     this.film$.subscribe(value => {
       this.editForm.patchValue({
@@ -72,7 +80,13 @@ export class FilmEditComponent implements AfterViewInit {
   /** Submit form. */
   public submitForm(): void {
     if (this.filmId != null) {
-      this.filmsService.editFilm(this.filmId, this.editForm.value).then(() => this.route.navigate(['']));
+      this.filmsService.editFilm(this.filmId, this.editForm.value)
+        .pipe(
+          first(),
+          tap(() => this.route.navigate([''])),
+          takeUntil(this.destroy$),
+        )
+        .subscribe()
     }
   }
 

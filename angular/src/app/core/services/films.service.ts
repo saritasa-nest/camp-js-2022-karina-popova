@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
-import { map, Observable, tap } from 'rxjs';
+import { DocumentReference, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
+import { defer, map, Observable, tap } from 'rxjs';
 
 import { Film } from '../models/film';
 import { Path } from '../models/path';
@@ -81,16 +81,16 @@ export class FilmsService {
   /** Deleting film.
    * @param id Film id.
    */
-  public deleteFilm(id: string): Promise<void> {
-    return this.firebaseService.deleteDocumentData(`films/${id}`);
+  public deleteFilm(id: string): Observable<void> {
+    return defer(() => this.firebaseService.deleteDocumentData(`films/${id}`));
   }
 
   /**
    * Adding a document.
    * @param value Film.
    */
-  public addFilm(value: Film): Promise<void> {
-    return this.firebaseService.addDocumentData(`films`, this.filmMapper.toDto(value));
+  public addFilm(value: Film): Observable<DocumentReference<unknown>> {
+    return defer(() => this.firebaseService.addDocumentData(`films`, this.filmMapper.toDto(value)));
   }
 
   /**
@@ -98,7 +98,7 @@ export class FilmsService {
    * @param id Film id.
    * @param value Film.
    */
-  public editFilm(id: string, value: Film): Promise<void> {
-    return this.firebaseService.editDocumentData(`films/${id}`, this.filmMapper.toDto(value));
+  public editFilm(id: string, value: Film): Observable<void> {
+    return defer(() => this.firebaseService.editDocumentData(`films/${id}`, this.filmMapper.toDto(value)));
   }
 }

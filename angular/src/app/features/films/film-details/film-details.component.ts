@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, map, Observable, shareReplay, switchMap } from 'rxjs';
+import { filter, first, map, Observable, shareReplay, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { Film } from 'src/app/core/models/film';
 import { CharacterService } from 'src/app/core/services/characters.service';
 import { FilmsService } from 'src/app/core/services/films.service';
@@ -24,6 +24,8 @@ export class FilmDetailsComponent {
   public readonly peopleNames$: Observable<string[] | null>;
 
   private readonly filmId = this.activatedRoute.snapshot.paramMap.get('id') ?? '';
+
+  private readonly destroy$: Subject<boolean> = new Subject<boolean>();
 
   public constructor(
     private readonly filmsService: FilmsService,
@@ -53,12 +55,22 @@ export class FilmDetailsComponent {
     );
   }
 
+  /** @inheritdoc */
+  public ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
   /** Button click. */
   public onClick(): void {
     if (this.filmId) {
-      this.filmsService.deleteFilm(this.filmId).then(
-        () => this.route.navigate(['']),
-      );
+      this.filmsService.deleteFilm(this.filmId)
+        .pipe(
+          first(),
+          tap(() => this.route.navigate([''])),
+          takeUntil(this.destroy$),
+        )
+        .subscribe()
     }
   }
 }
