@@ -1,14 +1,14 @@
 import { FilmFieldsDto } from './film-fields.dto';
 
-/**  DTO describing the film.*/
+/**  DTO describing the film. */
 export interface FilmDto {
 
-  /** Film id .*/
+  /** Film id . */
   readonly id: string;
 
-  /** Film pk .*/
+  /** Film pk . */
   readonly pk: number;
 
-  /** Film information .*/
+  /** Film information . */
   readonly fields: FilmFieldsDto;
 }

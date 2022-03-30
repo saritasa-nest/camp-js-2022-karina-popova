@@ -1,15 +1,17 @@
-import { DocumentData } from "firebase/firestore";
+import { DocumentData } from 'firebase/firestore';
 
-// * @param path Path to collection.
-//    * @param limitDocs Maximum number of documents.
-//    * @param orderByField Field to sort by.
-//    * @param direction Optional direction to sort by ('asc' or 'desc').
-//    * @param lastDoc Last doc on the page or null if the page is empty.
+/** Parameters for creating query constraint. */
 export interface QueryParameters {
-  path: string,
-  limitDocs: number,
-  orderByField: string,
-  direction: 'asc' | 'desc',
-  lastDoc: DocumentData | null,
-  searchValue: string,
+  /** Path to collection. */
+  path: string;
+  /** Maximum number of documents. */
+  limitDocs: number;
+  /** Field to sort by. */
+  orderByField: string;
+  /** Optional direction to sort by ('asc' or 'desc'). */
+  direction: 'asc' | 'desc';
+  /** Last doc on the page or null if the page is empty. */
+  lastDoc: DocumentData | null;
+  /** The value to search for. */
+  searchValue: string;
 }
