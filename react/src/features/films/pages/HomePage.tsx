@@ -2,14 +2,17 @@ import { useEffect, VFC } from 'react';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Drawer from '@mui/material/Drawer';
+import LinearProgress from '@mui/material/LinearProgress';
+import { Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'src/store';
 import {
   selectFilms,
+  selectIsLoading,
   selectlastFilmsOnPage,
   selectSearchValue,
   selectSort,
 } from 'src/store/films/selectors';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import { fetchFilms } from 'src/store/films/dispatchers';
 import { Header } from 'src/components/Header';
 import { DEFAULT_LIMIT_FILMS, DEFAULT_PATH_FILMS, DEFAULT_SORTING_FIELD } from 'src/utils/constants';
@@ -18,11 +21,13 @@ import { SortFilms } from '../components/sorting/Sort';
 
 const drawerWidth = 250;
 export const HomePage: VFC = () => {
+  const { id } = useParams();
   const dispatch = useAppDispatch();
   const films = useAppSelector(selectFilms);
   const lastFilmOnPage = useAppSelector(selectlastFilmsOnPage);
   const sortDirection = useAppSelector(selectSort);
   const searchValue = useAppSelector(selectSearchValue);
+  const isLoading = useAppSelector(selectIsLoading);
   useEffect(() => {
     dispatch(fetchFilms({
       path: DEFAULT_PATH_FILMS,
@@ -62,12 +67,14 @@ export const HomePage: VFC = () => {
       >
         <Toolbar />
         <SortFilms />
+        {!isLoading && <LinearProgress />}
         <Box onScroll={handleScroll} sx={{ overflow: 'auto' }}>
           <Films films={films} />
         </Box>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
+        {!id && <Typography>Choose film</Typography>}
         <Outlet />
       </Box>
     </Box>

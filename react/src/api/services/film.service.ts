@@ -13,8 +13,11 @@ export namespace FilmService {
     films: Film[];
     lastFilmOnPage: DocumentData | null;
   }> {
-    const docs = await FirebaseService.fetchDocumentsData(parameters);
-    return { films: docs.map(film => FilmMapper.fromDto({ id: film.id, ...film.data() })), lastFilmOnPage: docs[docs.length - 1] ?? null };
+    const docs = await FirebaseService.fetchSortedDocumentsData(parameters);
+    return {
+      films: docs.map(film => FilmMapper.fromDto({ id: film.id, ...film.data() })),
+      lastFilmOnPage: docs[docs.length - 1] ?? null,
+    };
   }
 
   /** Fetches film by id.
