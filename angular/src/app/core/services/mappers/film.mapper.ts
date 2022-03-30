@@ -1,13 +1,8 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { Injectable } from '@angular/core';
 
 import { Film } from '../../models/film';
 
 import { FilmDto } from './dto/film/film.dto';
-
-type RecursivePartial<T> = { [P in keyof T]?: RecursivePartial<T[P]>; };
-type PartialExcept<T, K extends keyof T> = RecursivePartial<T> & Pick<T, K>;
-type Test = PartialExcept<FilmDto, 'id' | 'pk'>;
 
 /** Film mapper. */
 @Injectable({
@@ -32,7 +27,7 @@ export class FilmMapper {
   }
 
   /** @inheritdoc */
-  public toDto(fields: Partial<Film>): Partial<Test> {
+  public toDto(fields: Film): Omit<FilmDto, 'id' | 'pk'> {
     return {
       fields: {
         created: fields.created?.toDateString(),

@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FilmsService } from 'src/app/core/services/films.service';
+import { CharacterService } from 'src/app/core/services/characters.service';
+import { PlanetService } from 'src/app/core/services/planets.service';
 
 /** Films management. */
 @Component({
@@ -15,14 +16,15 @@ export class FilmsManagementComponent {
   public title = '';
 
   public constructor(
-    private readonly filmsService: FilmsService,
+    private readonly planetService: PlanetService,
+    private readonly characterService: CharacterService,
   ) { }
 
   /** Planets. */
-  public planets$ = this.filmsService.fetchPlanets();
+  public planets$ = this.planetService.fetchPlanets();
 
   /** Characters. */
-  public characters$ = this.filmsService.fetchPeople();
+  public characters$ = this.characterService.fetchPeople();
 
   /** Form field controls. */
   @Input()

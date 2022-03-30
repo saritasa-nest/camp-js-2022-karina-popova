@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { filter, map, Observable, tap } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 import {
   AngularFirestore,
   CollectionReference,
+  DocumentSnapshot,
   QueryDocumentSnapshot,
 } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat';
@@ -11,6 +12,24 @@ import { CollectionPath, Path } from '../models/path';
 import { QueryParameters } from '../models/query-parameters';
 
 import DocumentData = firebase.firestore.DocumentData;
+
+interface ParametersReceivingData {
+
+  /** Path  to collection. */
+  path: CollectionPath;
+
+  /** Parameters for generating a query constraint. */
+  parameters: QueryParameters;
+
+  /** Path to a field with nested fields in the document data. */
+  pathField: Path;
+
+  /** Last document in previous request. */
+  lastDoc: QueryDocumentSnapshot<unknown> | null;
+
+  /** First document in previous request. */
+  firstDoc: QueryDocumentSnapshot<unknown> | null;
+}
 
 /**
  * Character to search for the first letters in the string.
@@ -24,36 +43,31 @@ const SEARCH_SYMBOL = '~';
   providedIn: 'root',
 })
 export class FirebaseService {
-  /** Last document on the page. */
-  private lastDoc: QueryDocumentSnapshot<unknown> | null = null;
-
-  /**  First document on the page. */
-  private firstDoc: QueryDocumentSnapshot<unknown> | null = null;
 
   public constructor(private readonly firestore: AngularFirestore) { }
 
   /**
-   * Fetch list of document data with pagination, filtering and sorting.
-   * @param path Path to collection.
-   * @param parameters Parameters for generating a query constraint.
-   * @param pathField Path to a field with nested fields in the document data.
+   * Get list of document data with pagination, filtering and sorting.
+   * @param parametersReceivingData Parameters for getting data.
    */
-  public fetchSortedDocumentsData(
-    path: CollectionPath,
-    parameters: QueryParameters,
-    pathField: Path,
-  ): Observable<DocumentData[]> {
+  public getSortedDocumentsData({
+    path,
+    parameters,
+    pathField,
+    lastDoc,
+    firstDoc,
+  }: ParametersReceivingData): Observable<QueryDocumentSnapshot<unknown>[]> {
     return this.firestore
       .collection(path, refCollection =>
-        this.getQueryConstraint(refCollection, parameters, pathField))
+        this.getQueryConstraint(refCollection, parameters, pathField, lastDoc, firstDoc))
       .snapshotChanges()
       .pipe(
-        filter(documentsDto => documentsDto.length > 0),
-        tap(documentsDto => {
-          this.lastDoc = documentsDto[documentsDto.length - 1].payload.doc;
-          this.firstDoc = documentsDto[0].payload.doc;
+        map(documentsDto => {
+          if (documentsDto.length !== 0) {
+            return documentsDto.map(documentDto => documentDto.payload.doc);
+          }
+          return [];
         }),
-        map(documentsDto => documentsDto.map(documentDto => documentDto.payload.doc)),
       );
   }
 
@@ -61,13 +75,12 @@ export class FirebaseService {
    * Fetch list of document data.
    * @param path Path to collection.
    */
-  public fetchDocumentsData(path: string): Observable<DocumentData[]> {
-    return this.firestore.collection(path)
+  public fetchDocumentsData(path: CollectionPath): Observable<QueryDocumentSnapshot<unknown>[]> {
+    return this.firestore
+      .collection(path)
       .snapshotChanges()
       .pipe(
-        map(documentsDto => documentsDto.map(
-          documentDto => documentDto.payload.doc,
-        )),
+        map(documentsDto => documentsDto.map(documentDto => documentDto.payload.doc)),
       );
   }
 
@@ -76,7 +89,10 @@ export class FirebaseService {
    * Fetch list of document data.
    * @param path Path to collection.
    */
-  public fetchDocumentDataById(path: string, id: string): Observable<DocumentData> {
+  public fetchDocumentDataById(
+    path: CollectionPath,
+    id: string,
+  ): Observable<DocumentSnapshot<unknown>> {
     return this.firestore
       .doc(`${path}/${id}`)
       .snapshotChanges()
@@ -87,21 +103,26 @@ export class FirebaseService {
    * Fetch documents with specified field.
    * @param path Path to collection.
    * @param pathCompare The path to compare.
-   * @param value The value for comparison.Array must be up to 10 elements.
+   * @param value The value for comparison.
    */
   public fetchDocumentsDataByField(
     path: CollectionPath,
     pathCompare: string,
     value: readonly number[],
-  ): Observable<DocumentData[]> {
-    return this.firestore
-      .collection(path, refCollection =>
-        refCollection.where(pathCompare, 'in', value))
-      .snapshotChanges()
-      .pipe(
-        map(documentsDto =>
-          documentsDto.map(documentDto => documentDto.payload.doc)),
-      );
+  ): Observable<QueryDocumentSnapshot<unknown>[]> {
+    const observables = [];
+    for (let i = 0; i < value.length; i += 10) {
+      const queryDocumentSnapshot$ = this.firestore
+        .collection(path, refCollection =>
+          refCollection.where(pathCompare, 'in', value.slice(i, i + 10)))
+        .snapshotChanges()
+        .pipe(
+          map(documentsDto =>
+            documentsDto.map(documentDto => documentDto.payload.doc)),
+        );
+      observables.push(queryDocumentSnapshot$);
+    }
+    return combineLatest(observables).pipe(map(qs => qs.flat()));
   }
 
   /**
@@ -109,11 +130,15 @@ export class FirebaseService {
    * @param refCollection Link to collection.
    * @param parameters Parameters for generating a query constraint.
    * @param pathField Path to a field with nested fields in the document data.
+   * @param lastDoc QueryDocumentSnapshot<unknown> | null.
+   * @param firstDoc QueryDocumentSnapshot<unknown> | null.
    */
   private getQueryConstraint(
     refCollection: CollectionReference<DocumentData>,
     parameters: QueryParameters,
     pathField: Path,
+    lastDoc: QueryDocumentSnapshot<unknown> | null,
+    firstDoc: QueryDocumentSnapshot<unknown> | null,
   ): firebase.firestore.Query<DocumentData> {
     const queryFilterSort = this.getQueryFilterSort(
       refCollection,
@@ -123,15 +148,15 @@ export class FirebaseService {
     if (parameters.pageIndex === 0) {
       return queryFilterSort.limit(parameters.pageSize);
     }
-    if (parameters.previousPageIndex < parameters.pageIndex) {
+    if (parameters.previousPageIndex != null && parameters.previousPageIndex < parameters.pageIndex) {
       return queryFilterSort
-        .startAfter(this.lastDoc)
+        .startAfter(lastDoc)
         .limit(parameters.pageSize);
     }
-    if (parameters.previousPageIndex > parameters.pageIndex) {
+    if (parameters.previousPageIndex != null && parameters.previousPageIndex > parameters.pageIndex) {
       return queryFilterSort
         .limitToLast(parameters.pageSize)
-        .endBefore(this.firstDoc);
+        .endBefore(firstDoc);
     }
     return queryFilterSort.limit(parameters.pageSize);
   }

@@ -71,7 +71,7 @@ export class FilmEditComponent implements AfterViewInit {
 
   /** Submit form. */
   public submitForm(): void {
-    if (this.filmId) {
+    if (this.filmId != null) {
       this.filmsService.editFilm(this.filmId, this.editForm.value).then(() => this.route.navigate(['']));
     }
   }

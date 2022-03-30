@@ -2,7 +2,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, Observable, shareReplay, switchMap } from 'rxjs';
 import { Film } from 'src/app/core/models/film';
+import { CharacterService } from 'src/app/core/services/characters.service';
 import { FilmsService } from 'src/app/core/services/films.service';
+import { PlanetService } from 'src/app/core/services/planets.service';
 
 /** Film. */
 @Component({
@@ -25,6 +27,8 @@ export class FilmDetailsComponent {
 
   public constructor(
     private readonly filmsService: FilmsService,
+    private readonly characterService: CharacterService,
+    private readonly planetService: PlanetService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly route: Router,
   ) {
@@ -32,16 +36,16 @@ export class FilmDetailsComponent {
       shareReplay({ bufferSize: 1, refCount: true }),
     );
     this.planetNames$ = this.film$.pipe(
-      filter(Boolean),
-      switchMap(v => this.filmsService.fetchPlanets(v.planets.slice(0, 9)).pipe(
+      filter((film): film is Film => (film != null)),
+      switchMap(v => this.planetService.fetchPlanets(v.planets).pipe(
         map(planets => planets.map(
           planet => planet.name,
         )),
       )),
     );
     this.peopleNames$ = this.film$.pipe(
-      filter(Boolean),
-      switchMap(v => this.filmsService.fetchPeople(v.characters.slice(0, 9)).pipe(
+      filter((film): film is Film => (film != null)),
+      switchMap(v => this.characterService.fetchPeople(v.characters).pipe(
         map(characters => characters.map(
           character => character.name,
         )),

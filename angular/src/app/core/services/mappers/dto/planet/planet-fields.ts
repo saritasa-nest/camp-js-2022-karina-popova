@@ -2,5 +2,5 @@
 export interface PlanetFieldDto {
 
   /** The name of this planet. */
-  name: string;
+  readonly name: string;
 }

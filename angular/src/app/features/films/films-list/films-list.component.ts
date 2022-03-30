@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import {
   Component,
   ChangeDetectionStrategy,
@@ -12,7 +11,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import { BehaviorSubject, combineLatest, debounceTime, fromEvent, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { Film } from 'src/app/core/models/film';
-import { SortDirection } from 'src/app/core/models/query-parameters';
+import { PaginationParameters } from 'src/app/core/models/pagination-parameters';
+import { SortDirection } from 'src/app/core/models/sort-parameters';
 import { FilmsService } from 'src/app/core/services/films.service';
 
 /** Films list.*/
@@ -44,8 +44,7 @@ export class FilmsListComponent implements OnInit, AfterViewInit, OnDestroy {
     length: 6,
     pageIndex: 0,
     pageSize: this.pageSize,
-    previousPageIndex: 0,
-  });
+  } as PaginationParameters);
 
   private sortOptions$ = new BehaviorSubject({
     sortField: 'title',
@@ -114,7 +113,7 @@ export class FilmsListComponent implements OnInit, AfterViewInit, OnDestroy {
       length: event.length,
       pageIndex: event.pageIndex,
       pageSize: event.pageSize,
-      previousPageIndex: event.previousPageIndex ?? 0,
+      previousPageIndex: event.previousPageIndex,
     });
   }
 
