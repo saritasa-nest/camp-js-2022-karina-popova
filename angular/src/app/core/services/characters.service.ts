@@ -40,6 +40,6 @@ export class CharacterService {
       map(characterDoc =>
         characterDoc.map(doc => this.characterMapper.fromDto(doc.data() as PeopleDto))),
     );
-  }
 
+  }
 }

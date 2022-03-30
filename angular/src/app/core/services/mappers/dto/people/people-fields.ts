@@ -2,5 +2,5 @@
 export interface PeopleFieldDto {
 
   /** The name of this character. */
-  name: string;
+  readonly name: string;
 }
