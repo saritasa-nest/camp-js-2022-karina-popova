@@ -36,16 +36,16 @@ export class FilmDetailsComponent {
     );
 
     this.planetNames$ = this.film$.pipe(
-      filter(Boolean),
-      switchMap(v => this.planetService.fetchPlanets(v.planets.slice(0, 9)).pipe(
+      filter((film): film is Film => (film != null)),
+      switchMap(v => this.planetService.fetchPlanets(v.planets).pipe(
         map(planets => planets.map(
           planet => planet.name,
         )),
       )),
     );
     this.peopleNames$ = this.film$.pipe(
-      filter(Boolean),
-      switchMap(v => this.characterService.fetchPeople(v.characters.slice(0, 9)).pipe(
+      filter((film): film is Film => (film != null)),
+      switchMap(v => this.characterService.fetchPeople(v.characters).pipe(
         map(characters => characters.map(
           character => character.name,
         )),
