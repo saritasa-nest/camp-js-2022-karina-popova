@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { filter, map, Observable } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 import {
   AngularFirestore,
   CollectionReference,
@@ -12,6 +12,24 @@ import { CollectionPath, Path } from '../models/path';
 import { QueryParameters } from '../models/query-parameters';
 
 import DocumentData = firebase.firestore.DocumentData;
+
+interface ParametersReceivingData {
+
+  /** Path  to collection. */
+  path: CollectionPath;
+
+  /** Parameters for generating a query constraint. */
+  parameters: QueryParameters;
+
+  /** Path to a field with nested fields in the document data. */
+  pathField: Path;
+
+  /** Last document in previous request. */
+  lastDoc: QueryDocumentSnapshot<unknown> | null;
+
+  /** First document in previous request. */
+  firstDoc: QueryDocumentSnapshot<unknown> | null;
+}
 
 /**
  * Character to search for the first letters in the string.
@@ -29,27 +47,27 @@ export class FirebaseService {
   public constructor(private readonly firestore: AngularFirestore) { }
 
   /**
-   * Fetch list of document data with pagination, filtering and sorting.
-   * @param path Path to collection.
-   * @param parameters Parameters for generating a query constraint.
-   * @param pathField Path to a field with nested fields in the document data.
-   * @param lastDoc Last document in previous request.
-   * @param firstDoc First document in previous request.
+   * Get list of document data with pagination, filtering and sorting.
+   * @param parametersReceivingData Parameters for getting data.
    */
-  public fetchSortedDocumentsData(
-    path: CollectionPath,
-    parameters: QueryParameters,
-    pathField: Path,
-    lastDoc: QueryDocumentSnapshot<unknown> | null,
-    firstDoc: QueryDocumentSnapshot<unknown> | null,
-  ): Observable<QueryDocumentSnapshot<unknown>[]> {
+  public getSortedDocumentsData({
+    path,
+    parameters,
+    pathField,
+    lastDoc,
+    firstDoc,
+  }: ParametersReceivingData): Observable<QueryDocumentSnapshot<unknown>[]> {
     return this.firestore
       .collection(path, refCollection =>
         this.getQueryConstraint(refCollection, parameters, pathField, lastDoc, firstDoc))
       .snapshotChanges()
       .pipe(
-        filter(documentsDto => documentsDto.length > 0),
-        map(documentsDto => documentsDto.map(documentDto => documentDto.payload.doc)),
+        map(documentsDto => {
+          if (documentsDto.length !== 0) {
+            return documentsDto.map(documentDto => documentDto.payload.doc);
+          }
+          return [];
+        }),
       );
   }
 
@@ -62,8 +80,7 @@ export class FirebaseService {
       .collection(path)
       .snapshotChanges()
       .pipe(
-        map(documentsDto =>
-          documentsDto.map(documentDto => documentDto.payload.doc)),
+        map(documentsDto => documentsDto.map(documentDto => documentDto.payload.doc)),
       );
   }
 
@@ -86,21 +103,26 @@ export class FirebaseService {
    * Fetch documents with specified field.
    * @param path Path to collection.
    * @param pathCompare The path to compare.
-   * @param value The value for comparison.Array must be up to 10 elements.
+   * @param value The value for comparison.
    */
   public fetchDocumentsDataByField(
     path: CollectionPath,
     pathCompare: string,
     value: readonly number[],
   ): Observable<QueryDocumentSnapshot<unknown>[]> {
-    return this.firestore
-      .collection(path, refCollection =>
-        refCollection.where(pathCompare, 'in', value))
-      .snapshotChanges()
-      .pipe(
-        map(documentsDto =>
-          documentsDto.map(documentDto => documentDto.payload.doc)),
-      );
+    const observables = [];
+    for (let i = 0; i < value.length; i += 10) {
+      const queryDocumentSnapshot$ = this.firestore
+        .collection(path, refCollection =>
+          refCollection.where(pathCompare, 'in', value.slice(i, i + 10)))
+        .snapshotChanges()
+        .pipe(
+          map(documentsDto =>
+            documentsDto.map(documentDto => documentDto.payload.doc)),
+        );
+      observables.push(queryDocumentSnapshot$);
+    }
+    return combineLatest(observables).pipe(map(qs => qs.flat()));
   }
 
   /**

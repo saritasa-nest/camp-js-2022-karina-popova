@@ -4,15 +4,11 @@ import { map, Observable, tap } from 'rxjs';
 
 import { Film } from '../models/film';
 import { Path } from '../models/path';
-import { Planet } from '../models/planet';
 import { QueryParameters } from '../models/query-parameters';
 
 import { FirebaseService } from './firebase.service';
 import { FilmDto } from './mappers/dto/film/film.dto';
-import { PeopleDto } from './mappers/dto/people/people.dto';
-import { PlanetDto } from './mappers/dto/planet/planet.dto';
 import { FilmMapper } from './mappers/film.mapper';
-import { PlanetMapper } from './mappers/planet.mapper';
 
 /**
  * Film service.
@@ -28,7 +24,6 @@ export class FilmsService {
   public constructor(
     private readonly firebaseService: FirebaseService,
     private readonly filmMapper: FilmMapper,
-    private readonly planetMapper: PlanetMapper,
   ) { }
 
   /**
@@ -37,7 +32,13 @@ export class FilmsService {
    */
   public fetchFilms(options: QueryParameters): Observable<Film[]> {
     return this.firebaseService
-      .fetchSortedDocumentsData('films', options, Path.Fields, this.lastFilm, this.firstFilm)
+      .getSortedDocumentsData({
+        path: 'films',
+        parameters: options,
+        pathField: Path.Fields,
+        lastDoc: this.lastFilm,
+        firstDoc: this.firstFilm,
+      })
       .pipe(
         tap(v => {
           this.lastFilm = v[v.length - 1];

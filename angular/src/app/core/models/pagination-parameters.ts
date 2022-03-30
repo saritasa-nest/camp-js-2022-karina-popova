@@ -1,3 +1,4 @@
+/**  Pagination parameters that are passed to the service. */
 export interface PaginationParameters {
 
   /** The current page index. */
